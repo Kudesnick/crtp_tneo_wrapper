@@ -1,0 +1,6 @@
+[submodule "tneo"]
+	path = tneo
+	url = ../tneo.git
+[submodule "littlefs"]
+	path = littlefs
+	url = ../littlefs.git
