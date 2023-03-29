@@ -117,18 +117,18 @@ Revision: $Rev: 25842 $
     #elif (defined __ARM_ARCH_7EM__)              // Cortex-M4/M7
       #define _CORE_HAS_RTT_ASM_SUPPORT 1
       #define _CORE_NEEDS_DMB           1
-      #define RTT__DMB() __asm volatile ("dmb\n" : : :);
+      #define RTT__DMB() __asm volatile ("dmb\n" : : :)
     #elif (defined __ARM_ARCH_8M_BASE__)          // Cortex-M23
       #define _CORE_HAS_RTT_ASM_SUPPORT 0
       #define _CORE_NEEDS_DMB           1
-      #define RTT__DMB() __asm volatile ("dmb\n" : : :);
+      #define RTT__DMB() __asm volatile ("dmb\n" : : :)
     #elif (defined __ARM_ARCH_8M_MAIN__)          // Cortex-M33
       #define _CORE_HAS_RTT_ASM_SUPPORT 1
       #define _CORE_NEEDS_DMB           1
-      #define RTT__DMB() __asm volatile ("dmb\n" : : :);
+      #define RTT__DMB() __asm volatile ("dmb\n" : : :)
     #elif ((defined __ARM_ARCH_7A__) || (defined __ARM_ARCH_7R__))  // Cortex-A/R 32-bit ARMv7-A/R
       #define _CORE_NEEDS_DMB           1
-      #define RTT__DMB() __asm volatile ("dmb\n" : : :);
+      #define RTT__DMB() __asm volatile ("dmb\n" : : :)
     #else
       #define _CORE_HAS_RTT_ASM_SUPPORT 0
     #endif

@@ -120,7 +120,7 @@ Revision: $Rev: 24316 $
 *       such as on Cortex-A devices with MMU.
 */
 #ifndef   SEGGER_RTT_MEMCPY_USE_BYTELOOP
-  #define SEGGER_RTT_MEMCPY_USE_BYTELOOP              0 // 0: Use memcpy/SEGGER_RTT_MEMCPY, 1: Use a simple byte-loop
+  #define SEGGER_RTT_MEMCPY_USE_BYTELOOP              1 // 0: Use memcpy/SEGGER_RTT_MEMCPY, 1: Use a simple byte-loop
 #endif
 //
 // Example definition of SEGGER_RTT_MEMCPY to external memcpy with GCC toolchains and Cortex-A targets
@@ -182,14 +182,15 @@ Revision: $Rev: 24316 $
                                                   : "=r" (_SEGGER_RTT__LockState)                                \
                                                   : "i"(SEGGER_RTT_MAX_INTERRUPT_PRIORITY)          \
                                                   : "r1", "cc"                                      \
-                                                  );
+                                                  )
 
     #define SEGGER_RTT_UNLOCK()   __asm volatile ("msr   basepri, %0  \n\t"                         \
                                                   :                                                 \
                                                   : "r" (_SEGGER_RTT__LockState)                                 \
                                                   :                                                 \
                                                   );                                                \
-                                }
+                                }                                                                   \
+                                __asm volatile ("\n")
 
   #elif (defined(__ARM_ARCH_7A__) || defined(__ARM_ARCH_7R__))
     #define SEGGER_RTT_LOCK() {                                                \

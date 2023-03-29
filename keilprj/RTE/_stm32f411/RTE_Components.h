@@ -16,18 +16,18 @@
  */
 #define CMSIS_device_header "stm32f4xx.h"
 
-/* Keil.ARM Compiler::Compiler:I/O:STDERR:Breakpoint:1.2.0 */
+/* Keil.ARM Compiler::Compiler:I/O:STDERR:User:1.2.0 */
 #define RTE_Compiler_IO_STDERR          /* Compiler I/O: STDERR */
-          #define RTE_Compiler_IO_STDERR_BKPT     /* Compiler I/O: STDERR Breakpoint */
-/* Keil.ARM Compiler::Compiler:I/O:STDIN:Breakpoint:1.2.0 */
+          #define RTE_Compiler_IO_STDERR_User     /* Compiler I/O: STDERR User */
+/* Keil.ARM Compiler::Compiler:I/O:STDIN:User:1.2.0 */
 #define RTE_Compiler_IO_STDIN           /* Compiler I/O: STDIN */
-          #define RTE_Compiler_IO_STDIN_BKPT      /* Compiler I/O: STDIN Breakpoint */
-/* Keil.ARM Compiler::Compiler:I/O:STDOUT:Breakpoint:1.2.0 */
+          #define RTE_Compiler_IO_STDIN_User      /* Compiler I/O: STDIN User */
+/* Keil.ARM Compiler::Compiler:I/O:STDOUT:User:1.2.0 */
 #define RTE_Compiler_IO_STDOUT          /* Compiler I/O: STDOUT */
-          #define RTE_Compiler_IO_STDOUT_BKPT     /* Compiler I/O: STDOUT Breakpoint */
-/* Keil.ARM Compiler::Compiler:I/O:TTY:Breakpoint:1.2.0 */
+          #define RTE_Compiler_IO_STDOUT_User     /* Compiler I/O: STDOUT User */
+/* Keil.ARM Compiler::Compiler:I/O:TTY:User:1.2.0 */
 #define RTE_Compiler_IO_TTY             /* Compiler I/O: TTY */
-          #define RTE_Compiler_IO_TTY_BKPT        /* Compiler I/O: TTY Breakpoint */
+          #define RTE_Compiler_IO_TTY_User        /* Compiler I/O: TTY User */
 /* Keil::Device:Startup:2.6.3 */
 #define RTE_DEVICE_STARTUP_STM32F4XX    /* Device Startup for STM32F4 */
 

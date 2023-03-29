@@ -4,7 +4,7 @@
 
 int main(void)
 {
-    printf("\033[31mC\033[32mO\033[33mL\033[34mO\033[35mR\033[42m \033[0m \033[36mT\033[37mE\033[30m\033[47mS\033[0mT\n"); // Color test
+    printf("\x1B[31mC\x1B[32mO\x1B[33mL\x1B[34mO\x1B[35mR\x1B[42m \x1B[0m \x1B[36mT\x1B[37mE\x1B[30m\x1B[47mS\x1B[0mT\n"); // Color test
 
     for (;;);
 }
