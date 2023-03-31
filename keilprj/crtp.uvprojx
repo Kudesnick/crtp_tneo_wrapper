@@ -340,7 +340,7 @@
               <MiscControls></MiscControls>
               <Define>DEBUG</Define>
               <Undefine></Undefine>
-              <IncludePath>..\rtt</IncludePath>
+              <IncludePath>..\rtt;..\tneo\src;..\tneo\src\arch;..\tneo\src\arch\cortex_m;..\tneo\src\core;..\tneo\src\core\internal;..\src\os</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -353,12 +353,12 @@
             <NoWarn>0</NoWarn>
             <uSurpInc>0</uSurpInc>
             <useXO>0</useXO>
-            <ClangAsOpt>1</ClangAsOpt>
+            <ClangAsOpt>3</ClangAsOpt>
             <VariousControls>
-              <MiscControls></MiscControls>
-              <Define></Define>
+              <MiscControls>-x assembler-with-cpp</MiscControls>
+              <Define>DEBUG</Define>
               <Undefine></Undefine>
-              <IncludePath></IncludePath>
+              <IncludePath>..\tneo\src;..\tneo\src\core;..\src\os</IncludePath>
             </VariousControls>
           </Aads>
           <LDads>
@@ -392,6 +392,21 @@
           </Files>
         </Group>
         <Group>
+          <GroupName>os</GroupName>
+          <Files>
+            <File>
+              <FileName>os.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\src\os\os.h</FilePath>
+            </File>
+            <File>
+              <FileName>tn_cfg.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\src\os\tn_cfg.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
           <GroupName>rtt</GroupName>
           <Files>
             <File>
@@ -413,6 +428,151 @@
               <FileName>SEGGER_RTT_Conf.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\rtt\SEGGER_RTT_Conf.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>tneo</GroupName>
+          <Files>
+            <File>
+              <FileName>tn.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\tneo\src\tn.h</FilePath>
+            </File>
+            <File>
+              <FileName>tn_arch_cortex_m.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\tneo\src\arch\cortex_m\tn_arch_cortex_m.h</FilePath>
+            </File>
+            <File>
+              <FileName>tn_arch_cortex_m.S</FileName>
+              <FileType>2</FileType>
+              <FilePath>..\tneo\src\arch\cortex_m\tn_arch_cortex_m.S</FilePath>
+            </File>
+            <File>
+              <FileName>tn_arch_cortex_m_c.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\tneo\src\arch\cortex_m\tn_arch_cortex_m_c.c</FilePath>
+            </File>
+            <File>
+              <FileName>tn_cfg_dispatch.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\tneo\src\core\tn_cfg_dispatch.h</FilePath>
+            </File>
+            <File>
+              <FileName>tn_common.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\tneo\src\core\tn_common.h</FilePath>
+            </File>
+            <File>
+              <FileName>tn_common_macros.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\tneo\src\core\tn_common_macros.h</FilePath>
+            </File>
+            <File>
+              <FileName>tn_dqueue.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\tneo\src\core\tn_dqueue.c</FilePath>
+            </File>
+            <File>
+              <FileName>tn_dqueue.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\tneo\src\core\tn_dqueue.h</FilePath>
+            </File>
+            <File>
+              <FileName>tn_eventgrp.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\tneo\src\core\tn_eventgrp.c</FilePath>
+            </File>
+            <File>
+              <FileName>tn_eventgrp.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\tneo\src\core\tn_eventgrp.h</FilePath>
+            </File>
+            <File>
+              <FileName>tn_fmem.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\tneo\src\core\tn_fmem.c</FilePath>
+            </File>
+            <File>
+              <FileName>tn_fmem.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\tneo\src\core\tn_fmem.h</FilePath>
+            </File>
+            <File>
+              <FileName>tn_list.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\tneo\src\core\tn_list.c</FilePath>
+            </File>
+            <File>
+              <FileName>tn_list.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\tneo\src\core\tn_list.h</FilePath>
+            </File>
+            <File>
+              <FileName>tn_mutex.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\tneo\src\core\tn_mutex.c</FilePath>
+            </File>
+            <File>
+              <FileName>tn_mutex.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\tneo\src\core\tn_mutex.h</FilePath>
+            </File>
+            <File>
+              <FileName>tn_oldsymbols.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\tneo\src\core\tn_oldsymbols.h</FilePath>
+            </File>
+            <File>
+              <FileName>tn_sem.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\tneo\src\core\tn_sem.c</FilePath>
+            </File>
+            <File>
+              <FileName>tn_sem.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\tneo\src\core\tn_sem.h</FilePath>
+            </File>
+            <File>
+              <FileName>tn_sys.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\tneo\src\core\tn_sys.c</FilePath>
+            </File>
+            <File>
+              <FileName>tn_sys.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\tneo\src\core\tn_sys.h</FilePath>
+            </File>
+            <File>
+              <FileName>tn_tasks.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\tneo\src\core\tn_tasks.c</FilePath>
+            </File>
+            <File>
+              <FileName>tn_tasks.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\tneo\src\core\tn_tasks.h</FilePath>
+            </File>
+            <File>
+              <FileName>tn_timer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\tneo\src\core\tn_timer.c</FilePath>
+            </File>
+            <File>
+              <FileName>tn_timer.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\tneo\src\core\tn_timer.h</FilePath>
+            </File>
+            <File>
+              <FileName>tn_timer_dyn.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\tneo\src\core\tn_timer_dyn.c</FilePath>
+            </File>
+            <File>
+              <FileName>tn_timer_static.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\tneo\src\core\tn_timer_static.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -470,6 +630,24 @@
       </component>
     </components>
     <files>
+      <file attr="config" category="header" name="RTE_Driver\Config\RTE_Device.h" version="1.1.2">
+        <instance index="0" removed="1">RTE\Device\STM32F103CB\RTE_Device.h</instance>
+        <component Cclass="Device" Cgroup="Startup" Cvendor="Keil" Cversion="1.0.0" condition="STM32F1xx CMSIS"/>
+        <package name="STM32F1xx_DFP" schemaVersion="1.7.2" url="http://www.keil.com/pack/" vendor="Keil" version="2.4.0"/>
+        <targetInfos/>
+      </file>
+      <file attr="config" category="source" condition="STM32F1xx MD ARMCC" name="Device\Source\ARM\startup_stm32f10x_md.s" version="1.0.1">
+        <instance index="0" removed="1">RTE\Device\STM32F103CB\startup_stm32f10x_md.s</instance>
+        <component Cclass="Device" Cgroup="Startup" Cvendor="Keil" Cversion="1.0.0" condition="STM32F1xx CMSIS"/>
+        <package name="STM32F1xx_DFP" schemaVersion="1.7.2" url="http://www.keil.com/pack/" vendor="Keil" version="2.4.0"/>
+        <targetInfos/>
+      </file>
+      <file attr="config" category="source" name="Device\Source\system_stm32f10x.c" version="1.0.1">
+        <instance index="0" removed="1">RTE\Device\STM32F103CB\system_stm32f10x.c</instance>
+        <component Cclass="Device" Cgroup="Startup" Cvendor="Keil" Cversion="1.0.0" condition="STM32F1xx CMSIS"/>
+        <package name="STM32F1xx_DFP" schemaVersion="1.7.2" url="http://www.keil.com/pack/" vendor="Keil" version="2.4.0"/>
+        <targetInfos/>
+      </file>
       <file attr="config" category="source" condition="STM32F411xE_ARMCC" name="Drivers\CMSIS\Device\ST\STM32F4xx\Source\Templates\arm\startup_stm32f411xe.s" version="2.6.8">
         <instance index="0">RTE\Device\STM32F411CEUx\startup_stm32f411xe.s</instance>
         <component Cclass="Device" Cgroup="Startup" Cvendor="Keil" Cversion="2.6.3" condition="STM32F4 CMSIS"/>
