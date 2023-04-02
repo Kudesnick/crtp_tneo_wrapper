@@ -66,31 +66,12 @@ protected:
     }
 
 public:
-    enum class opt: uint8_t
-    {
-        start,
-        idle
-    };
-
     task(const char *const _name):
-        task(priority::normal, opt::start, _name)
-        {}
-
-            task(
-        const opt _opt,
-        const char *const _name = nullptr
-        ): task(priority::normal, _opt, _name)
-        {}
-
-    task(
-        const priority _priority,
-        const char *const _name = nullptr
-        ): task(_priority, opt::start, _name)
+        task(priority::normal, _name)
         {}
 
     task(
         const priority _priority = priority::normal,
-        const opt _opt = opt::start,
         const char *const _name = nullptr
         )
     {
@@ -102,7 +83,7 @@ public:
                 base->stack.word,
                 base->stack.size,
                 base,
-                (_opt == opt::start) ? TN_TASK_CREATE_OPT_START : _TN_TASK_CREATE_OPT_IDLE,
+                TN_TASK_CREATE_OPT_START,
                 _name
                 ) != TN_RC_OK)
         {
