@@ -1,5 +1,5 @@
 DebugConfig
 *.uvguix.*
 *.uvoptx
-*.scvd
+EventRecorderStub.scvd
 JLink*

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<component_viewer schemaVersion="0.1" xmlns:xs="http://www.w3.org/2001/XMLSchema-instance" xs:noNamespaceSchemaLocation="Component_Viewer.xsd">
+
+<component name="TNeo" version="1.0.0"/>  <!--name and version of the component-->
+  <typedefs>
+    <typedef name="TN_StateFlag" size="1" info="">
+      <member name="id" type="uint8_t" offset="0" info="System state flags">
+        <enum name="system is stoped"    value="0x00" info=""/>
+        <enum name="system is running"   value="0x01" info=""/>
+        <enum name="deadlock is active"  value="0x03" info=""/>
+      </member>
+    </typedef>
+
+    <!-- Task -->
+    <typedef name="TN_TaskState" size="1" info="">
+      <member name="id" type="uint8_t" offset="0" info="">
+        <enum name="TN_TASK_STATE_NONE"     value="0x00" info="It may be stored in task_state only temporarily, while some system service is in progress."/>
+        <enum name="TN_TASK_STATE_RUNNABLE" value="0x01" info="Task is ready to run (it doesn't mean that it is running at the moment)"/>
+        <enum name="TN_TASK_STATE_WAIT"     value="0x02" info="Task is waiting. The reason of waiting can be obtained from `task_wait_reason` field of the `struct TN_Task`."/>
+        <enum name="TN_TASK_STATE_SUSPEND"  value="0x04" info="Task is suspended (by some other task)"/>
+        <enum name="TN_TASK_STATE_WAITSUSP" value="0x06" info="Task was previously waiting, and after this it was suspended"/>
+        <enum name="TN_TASK_STATE_DORMANT"  value="0x08" info="Task isn't yet activated or it was terminated by `tn_task_terminate()`."/>
+      </member>
+    </typedef>
+
+    <typedef name="TN_WaitReason" size="1" info="Task wait reason">
+      <member name="id" type="uint8_t" offset="0" info="Task wait reason">
+        <enum name="TN_WAIT_REASON_NONE"          value="0x00" info="Task isn't waiting for anything"/>
+        <enum name="TN_WAIT_REASON_SLEEP"         value="0x01" info="Task has called `tn_task_sleep()`"/>
+        <enum name="TN_WAIT_REASON_SEM"           value="0x02" info="Task waits to acquire a semaphore"/>
+        <enum name="TN_WAIT_REASON_EVENT"         value="0x03" info="Task waits for some event in the event group to be set"/>
+        <enum name="TN_WAIT_REASON_DQUE_WSEND"    value="0x04" info="Task wants to put some data to the data queue, and there's no space in the queue."/>
+        <enum name="TN_WAIT_REASON_DQUE_WRECEIVE" value="0x05" info="Task wants to receive some data to the data queue, and there's no data in the queue"/>
+        <enum name="TN_WAIT_REASON_MUTEX_C"       value="0x06" info="Task wants to lock a mutex with priority ceiling"/>
+        <enum name="TN_WAIT_REASON_MUTEX_I"       value="0x07" info="Task wants to lock a mutex with priority inheritance"/>
+        <enum name="TN_WAIT_REASON_WFIXMEM"       value="0x08" info="Task wants to get memory block from memory pool, and there's no free memory blocks"/>
+        <enum name="TN_WAIT_REASONS_CNT"          value="0x09" info="Wait reasons count"/>
+      </member>
+    </typedef>
+
+    
+
+  </typedefs>
+
+  <objects>
+    <object name="TNeo">
+      <read name="_tn_tasks_created_cnt" type="int32_t"      symbol="_tn_tasks_created_cnt"   />
+      <read name="_tn_sys_state"         type="TN_StateFlag" symbol="_tn_sys_state"   />
+      <out name="TNeo">
+        <item property="Kernel" value="">
+          <item property="count of created tasks" value="%d[_tn_tasks_created_cnt]" />
+          <item property="system state flags"     value="%E[_tn_sys_state.id]" />
+        </item>
+      </out>
+    </object>
+  </objects>
+
+</component_viewer>
