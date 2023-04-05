@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<component_viewer schemaVersion="0.1" xmlns:xs="http://www.w3.org/2001/XMLSchema-instance" xs:noNamespaceSchemaLocation="Component_Viewer.xsd">
+<component_viewer schemaVersion="1.2.0" xmlns:xs="http://www.w3.org/2001/XMLSchema-instance" xs:noNamespaceSchemaLocation="Component_Viewer.xsd">
 
 <component name="TNeo" version="1.0.0"/>  <!--name and version of the component-->
   <typedefs>
+
     <typedef name="TN_StateFlag" size="1" info="">
       <member name="id" type="uint8_t" offset="0" info="System state flags">
         <enum name="system is stoped"    value="0x00" info=""/>
@@ -12,46 +13,142 @@
       </member>
     </typedef>
 
+    <typedef name="TN_ObjId" size="4">
+      <member name="id" type="uint32_t">
+        <enum name="TN_ID_NONE"          value="0x00000000" info="invalid object"/>
+        <enum name="TN_ID_TASK"          value="0x47ABCF69" info="tasks"/>
+        <enum name="TN_ID_SEMAPHORE"     value="0x6FA173EB" info="semaphores"/>
+        <enum name="TN_ID_EVENTGRP"      value="0x5E224F25" info="event groups"/>
+        <enum name="TN_ID_DATAQUEUE"     value="0x0C8A6C89" info="data queues"/>
+        <enum name="TN_ID_FSMEMORYPOOL"  value="0x26B7CE8B" info="fixed memory pools"/>
+        <enum name="TN_ID_MUTEX"         value="0x17129E45" info="mutexes"/>
+        <enum name="TN_ID_TIMER"         value="0x1A937FBC" info="timers"/>
+        <enum name="TN_ID_EXCHANGE"      value="0x32b7c072" info="exchange objects"/>
+        <enum name="TN_ID_EXCHANGE_LINK" value="0x24d36f35" info="exchange link"/>
+      </member>
+    </typedef>
+
+    <typedef name="TN_ListItem" size="8">
+      <member name="prev" type="*TN_ListItem" info=""/>
+      <member name="next" type="*TN_ListItem" info=""/>
+    </typedef>
+
+    <typedef name="TN_Timer" size="5 * 4">
+      <member name="id_timer"    type="uint32_t" info="TN_ObjId"/>
+      <member name="timer_queue" type="uint32_t" info="TN_ListItem"/>
+      <member name="func"        type="uint32_t" info="TN_TimerFunc *"/>
+      <member name="p_user_data" type="uint32_t" info="void *"/>
+      <member name="timeout_cur" type="uint32_t" info="TN_TickCnt"/>
+    </typedef>
+
+    <typedef name="TN_TaskState" size="1">
+      <member name="id" type="uint8_t">
+        <enum name="TN_TASK_STATE_NONE"     value="0" info=""/>
+        <enum name="TN_TASK_STATE_RUNNABLE" value="1" info=""/>
+        <enum name="TN_TASK_STATE_WAIT"     value="2" info=""/>
+        <enum name="TN_TASK_STATE_SUSPEND"  value="4" info=""/>
+        <enum name="TN_TASK_STATE_WAITSUSP" value="6" info=""/>
+        <enum name="TN_TASK_STATE_DORMANT"  value="8" info=""/>
+      </member>
+    </typedef>
+
+    <typedef name="TN_WaitReason" size="1">
+      <member name="id" type="uint8_t">
+        <enum name="TN_WAIT_REASON_NONE"          value="0" info=""/>
+        <enum name="TN_WAIT_REASON_SLEEP"         value="1" info=""/>
+        <enum name="TN_WAIT_REASON_SEM"           value="2" info=""/>
+        <enum name="TN_WAIT_REASON_EVENT"         value="3" info=""/>
+        <enum name="TN_WAIT_REASON_DQUE_WSEND"    value="4" info=""/>
+        <enum name="TN_WAIT_REASON_DQUE_WRECEIVE" value="5" info=""/>
+        <enum name="TN_WAIT_REASON_MUTEX_C"       value="6" info=""/>
+        <enum name="TN_WAIT_REASON_MUTEX_I"       value="7" info=""/>
+        <enum name="TN_WAIT_REASON_WFIXMEM"       value="8" info=""/>
+        <enum name="TN_WAIT_REASONS_CNT"          value="9" info=""/>
+      </member>
+    </typedef>
+
+    <typedef name="TN_RCode" size="1">
+      <member name="id" type="int8_t">
+        <enum name="TN_RC_OK"          value="0"   info=""/>
+        <enum name="TN_RC_TIMEOUT"     value="-1"  info=""/>
+        <enum name="TN_RC_OVERFLOW"    value="-2"  info=""/>
+        <enum name="TN_RC_WCONTEXT"    value="-3"  info=""/>
+        <enum name="TN_RC_WSTATE"      value="-4"  info=""/>
+        <enum name="TN_RC_WPARAM"      value="-5"  info=""/>
+        <enum name="TN_RC_ILLEGAL_USE" value="-6"  info=""/>
+        <enum name="TN_RC_INVALID_OBJ" value="-7"  info=""/>
+        <enum name="TN_RC_DELETED"     value="-8"  info=""/>
+        <enum name="TN_RC_FORCED"      value="-9"  info=""/>
+        <enum name="TN_RC_INTERNAL"    value="-10" info=""/>
+      </member>
+    </typedef>
+
+    <typedef name="_TN_TaskProfiler" size="28">
+      <member name="last_tick_cnt"              type="uint32_t" info=""/>
+  <!-- member name="last_wait_reason"           type="uint8_t"  info="TN_WaitReason"/ -->
+      <member name="is_running"                 type="int32_t"  info=""/>
+      <!-- TN_TaskTiming -->
+  <!-- member name="total_wait_time"            type="uint64_t" size="8*9"/ -->
+  <!-- member name="max_consecutive_wait_time"  type="uint32_t" size="4*9"/ -->
+      <member name="total_run_time"             type="uint64_t" info="Total time when task was running"/>
+      <member name="got_running_cnt"            type="uint64_t" info="How many times task got running"/>
+      <member name="max_consecutive_run_time"   type="uint32_t" info="Maximum consecutive time task was running"/>
+    </typedef>
+
     <!-- Task -->
-    <typedef name="TN_TaskState" size="1" info="">
-      <member name="id" type="uint8_t" offset="0" info="">
-        <enum name="TN_TASK_STATE_NONE"     value="0x00" info="It may be stored in task_state only temporarily, while some system service is in progress."/>
-        <enum name="TN_TASK_STATE_RUNNABLE" value="0x01" info="Task is ready to run (it doesn't mean that it is running at the moment)"/>
-        <enum name="TN_TASK_STATE_WAIT"     value="0x02" info="Task is waiting. The reason of waiting can be obtained from `task_wait_reason` field of the `struct TN_Task`."/>
-        <enum name="TN_TASK_STATE_SUSPEND"  value="0x04" info="Task is suspended (by some other task)"/>
-        <enum name="TN_TASK_STATE_WAITSUSP" value="0x06" info="Task was previously waiting, and after this it was suspended"/>
-        <enum name="TN_TASK_STATE_DORMANT"  value="0x08" info="Task isn't yet activated or it was terminated by `tn_task_terminate()`."/>
-      </member>
+    <typedef name="TN_Task" size="113" info="" import="_tn_idle_task">
+      <member name="stack_cur_pt"     type="uint32_t"       info="uint32_t*"/>
+      <member name="id_task"          type="uint32_t"       info="TN_ObjId"/>
+      <member name="task_queue"       type="uint32_t"       info="TN_ListItem"/>
+      <member name="timer"            type="uint32_t"       info="TN_Timer"/>
+      <member name="pwait_queue"      type="*TN_ListItem"   info=""/>
+      <member name="create_queue"     type="uint32_t"       info="TN_ListItem"/>
+      <member name="mutex_queue"      type="uint32_t"       info="TN_ListItem"/>
+      <member name="deadlock_list"    type="uint32_t"       info="TN_ListItem"/>
+      <member name="stack_low_addr"   type="uint32_t"       info=""/>
+      <member name="stack_high_addr"  type="uint32_t"       info=""/>
+      <member name="task_func_addr"   type="uint32_t"       info=""/>
+      <member name="task_func_param"  type="uint32_t"       info=""/>
+      <member name="base_priority"    type="int32_t"        info=""/>
+      <member name="priority"         type="int32_t"        info=""/>
+      <member name="state"            type="uint8_t"        info="TN_TaskState"/>
+      <member name="wait_reason"      type="uint8_t"        info="TN_WaitReason"/>
+      <member name="wait_rc"          type="uint8_t"        info="TN_RCode"/>
+      <member name="tslice_count"     type="int32_t"        info=""/>
+      <member name="subsys_wait"      type="int32_t"        info=""/>
+      <member name="name"             type="int32_t"        info="char *"/>
+      <member name="profiler"         type="uint32_t"       info="_TN_TaskProfiler"/>
     </typedef>
-
-    <typedef name="TN_WaitReason" size="1" info="Task wait reason">
-      <member name="id" type="uint8_t" offset="0" info="Task wait reason">
-        <enum name="TN_WAIT_REASON_NONE"          value="0x00" info="Task isn't waiting for anything"/>
-        <enum name="TN_WAIT_REASON_SLEEP"         value="0x01" info="Task has called `tn_task_sleep()`"/>
-        <enum name="TN_WAIT_REASON_SEM"           value="0x02" info="Task waits to acquire a semaphore"/>
-        <enum name="TN_WAIT_REASON_EVENT"         value="0x03" info="Task waits for some event in the event group to be set"/>
-        <enum name="TN_WAIT_REASON_DQUE_WSEND"    value="0x04" info="Task wants to put some data to the data queue, and there's no space in the queue."/>
-        <enum name="TN_WAIT_REASON_DQUE_WRECEIVE" value="0x05" info="Task wants to receive some data to the data queue, and there's no data in the queue"/>
-        <enum name="TN_WAIT_REASON_MUTEX_C"       value="0x06" info="Task wants to lock a mutex with priority ceiling"/>
-        <enum name="TN_WAIT_REASON_MUTEX_I"       value="0x07" info="Task wants to lock a mutex with priority inheritance"/>
-        <enum name="TN_WAIT_REASON_WFIXMEM"       value="0x08" info="Task wants to get memory block from memory pool, and there's no free memory blocks"/>
-        <enum name="TN_WAIT_REASONS_CNT"          value="0x09" info="Wait reasons count"/>
-      </member>
-    </typedef>
-
-    
 
   </typedefs>
 
   <objects>
     <object name="TNeo">
-      <read name="_tn_tasks_created_cnt" type="int32_t"      symbol="_tn_tasks_created_cnt"   />
-      <read name="_tn_sys_state"         type="TN_StateFlag" symbol="_tn_sys_state"   />
+      <read name="_tn_tasks_created_cnt" type="int32_t"      symbol="_tn_tasks_created_cnt"/>
+      <read name="_tn_sys_state"         type="TN_StateFlag" symbol="_tn_sys_state"/>
+      <read name="_tn_sys_time_count"    type="uint32_t"     symbol="_tn_sys_time_count"/>
+      
+
+      <read name="task"      type="TN_Task"           symbol="_tn_idle_task"/>
+      <var  name="task_addr" type="uint32_t"          value="__FindSymbol (&quot;_tn_idle_task&quot;)"/>
+      <read name="id_task"   type="TN_ObjId"          offset="task_addr + __Offset_of(TN_Task:id_task)"/>
+      <read name="profiler"  type="_TN_TaskProfiler"  offset="task_addr + __Offset_of(TN_Task:profiler)"/>
+
       <out name="TNeo">
+
         <item property="Kernel" value="">
-          <item property="count of created tasks" value="%d[_tn_tasks_created_cnt]" />
-          <item property="system state flags"     value="%E[_tn_sys_state.id]" />
+          <item property="count of created tasks" value="%d[_tn_tasks_created_cnt]"/>
+          <item property="system state flags"     value="%E[_tn_sys_state.id]"/>
+          <item property="system time"            value="%d[_tn_sys_time_count]"/>
         </item>
+
+        <item property="Tasks" value="">
+          <item property="%x[task_addr] (%S[task_addr]) %N[task.name]" value="total=%d[profiler.total_run_time] max=%d[profiler.max_consecutive_run_time] count=%d[profiler.got_running_cnt]">
+
+            <item property="stack_cur_pt" value="%x[task.stack_cur_pt]" />
+            <item property="id_task"      value="%E[id_task.id]" />
+          </item>
+       </item>
       </out>
     </object>
   </objects>

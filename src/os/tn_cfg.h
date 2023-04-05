@@ -276,7 +276,7 @@
  * Relevant if only `#TN_PROFILER` is non-zero.
  */
 #ifndef TN_PROFILER_WAIT_TIME
-#  define TN_PROFILER_WAIT_TIME  1
+#  define TN_PROFILER_WAIT_TIME  0
 #endif
 
 /**
