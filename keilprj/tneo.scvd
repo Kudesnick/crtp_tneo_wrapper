@@ -118,21 +118,30 @@
       <member name="subsys_wait"      type="int32_t"        info=""/>
       <member name="name"             type="int32_t"        info="char *"/>
       <member name="profiler"         type="uint32_t"       info="_TN_TaskProfiler"/>
+      <var name="stack_size"    type="uint32_t" value="0"/>
+      <var name="stack_usd"     type="uint8_t"  value="0"/>
+      <var name="stack_usd_max" type="uint8_t"  value="0"/>
     </typedef>
 
   </typedefs>
 
   <objects>
     <object name="TNeo">
-      <read name="_tn_tasks_created_cnt" type="int32_t"      symbol="_tn_tasks_created_cnt"/>
-      <read name="_tn_sys_state"         type="TN_StateFlag" symbol="_tn_sys_state"/>
-      <read name="_tn_sys_time_count"    type="uint32_t"     symbol="_tn_sys_time_count"/>
-      
+      <read name="_tn_tasks_created_cnt"  type="int32_t"            symbol="_tn_tasks_created_cnt"/>
+      <read name="_tn_sys_state"          type="TN_StateFlag"       symbol="_tn_sys_state"/>
+      <read name="_tn_sys_time_count"     type="uint32_t"           symbol="_tn_sys_time_count"/>
 
-      <read name="task"      type="TN_Task"           symbol="_tn_idle_task"/>
-      <var  name="task_addr" type="uint32_t"          value="__FindSymbol (&quot;_tn_idle_task&quot;)"/>
-      <read name="id_task"   type="TN_ObjId"          offset="task_addr + __Offset_of(TN_Task:id_task)"/>
-      <read name="profiler"  type="_TN_TaskProfiler"  offset="task_addr + __Offset_of(TN_Task:profiler)"/>
+      <var  name="task_addr"              type="uint32_t"           value="__FindSymbol(&quot;_tn_idle_task&quot;)" const="1"/>
+      <read name="task"                   type="TN_Task"            offset="task_addr"/>
+      <read name="id_task"                type="TN_ObjId"           offset="task_addr + __Offset_of(TN_Task:id_task)"/>
+      <read name="task_name"              type="uint32_t"           offset="task_addr + __Offset_of(TN_Task:name)"/>
+      <read name="profiler"               type="_TN_TaskProfiler"   offset="task_addr + __Offset_of(TN_Task:profiler)"/>
+
+      <calc>
+        task.stack_size = task.stack_high_addr - task.stack_low_addr + 1;
+        task.stack_usd = (__CalcMemUsed(task.stack_low_addr, task.stack_size, 0xFEEDFACE, 0xFEEDFACE) >> 20) &amp; 0xFF;
+        task.stack_usd_max = (task.stack_usd_max > task.stack_usd) ? task.stack_usd_max : task.stack_usd;
+      </calc>
 
       <out name="TNeo">
 
@@ -143,10 +152,11 @@
         </item>
 
         <item property="Tasks" value="">
-          <item property="%x[task_addr] (%S[task_addr]) %N[task.name]" value="total=%d[profiler.total_run_time] max=%d[profiler.max_consecutive_run_time] count=%d[profiler.got_running_cnt]">
-
-            <item property="stack_cur_pt" value="%x[task.stack_cur_pt]" />
-            <item property="id_task"      value="%E[id_task.id]" />
+          <item property="%x[task_addr] (%S[task_addr]) %N[task_name]" value="load=%d[profiler.total_run_time * 100 / (_tn_sys_time_count + 1)]%% | stk=%d[task.stack_usd_max]%%">
+            <item property="total_run_time"           value="%d[profiler.total_run_time]"/>
+            <item property="got_running_cnt"          value="%d[profiler.got_running_cnt]"/>
+            <item property="max_consecutive_run_time" value="%d[profiler.max_consecutive_run_time]"/>
+            <item property="id_task"                  value="%E[id_task.id]" />
           </item>
        </item>
       </out>
