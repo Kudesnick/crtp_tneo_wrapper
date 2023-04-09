@@ -96,7 +96,7 @@
     </typedef>
 
     <!-- Task -->
-    <typedef name="TN_Task" size="512" info="" import="_tn_idle_task">
+    <typedef name="TN_Task" size="1024" info="" import="_tn_idle_task">
       <member name="stack_cur_pt"     type="uint32_t"       info="uint32_t*"/>
       <member name="id_task"          type="uint32_t"       info="TN_ObjId"/>
       <member name="task_queue"       type="uint32_t"       info="TN_ListItem"/>
@@ -111,9 +111,9 @@
       <member name="task_func_param"  type="uint32_t"       info=""/>
       <member name="base_priority"    type="int32_t"        info=""/>
       <member name="priority"         type="int32_t"        info=""/>
-      <member name="state"            type="uint8_t"        info="TN_TaskState"/>
-      <member name="wait_reason"      type="uint8_t"        info="TN_WaitReason"/>
-      <member name="wait_rc"          type="uint8_t"        info="TN_RCode"/>
+      <member name="task_state"       type="uint8_t"        info="TN_TaskState"/>
+      <member name="task_wait_reason" type="uint8_t"        info="TN_WaitReason"/>
+      <member name="task_wait_rc"     type="int8_t"         info="TN_RCode"/>
       <member name="tslice_count"     type="int32_t"        info=""/>
       <member name="subsys_wait"      type="int32_t"        info=""/>
       <member name="name"             type="uint32_t"       info="char *"/>
@@ -144,6 +144,9 @@
         <readlist name="task"         type="TN_Task"          offset="tmp"/>
         <readlist name="profiler"     type="_TN_TaskProfiler" offset="tmp + __Offset_of(TN_Task:profiler)"/>
         <readlist name="id_task"      type="TN_ObjId"         offset="tmp + __Offset_of(TN_Task:id_task)"/>
+        <readlist name="state"        type="TN_TaskState"     offset="tmp + __Offset_of(TN_Task:task_state)"/>
+        <readlist name="wait_reason"  type="TN_WaitReason"    offset="tmp + __Offset_of(TN_Task:task_wait_reason)"/>
+        <readlist name="task_wait_rc" type="TN_RCode"         offset="tmp + __Offset_of(TN_Task:task_wait_rc)"/>
       </list>
 
       <list name="i" start="0" limit="task._count">
@@ -169,9 +172,12 @@
         <!-- TN_Task out -->
         <item property="Tasks" value="%d[task._count] items">
           <list name="i" start="0" limit="task._count">
-            <item property="%x[task[i]._addr] (%S[task[i]._addr]) %N[task[i].name]" value="load=%d[task[i].time_load]%%; stk=%d[task[i].stack_usd_max]%%" alert="task[i].stack_usd_max &gt; 95">
-              <item property="id task"                  value="%E[id_task[i].id]" alert="id_task[i].id != TN_ObjId:id:TN_ID_TASK"/>
-
+            <item property="%x[task[i]._addr] (%S[task[i]._addr]) %N[task[i].name]" value="load=%d[task[i].time_load]%% | stk=%d[task[i].stack_usd_max]%%" alert="task[i].stack_usd_max &gt; 95">
+              <item property="id task"                  value="%x[id_task[i].id] %E[id_task[i].id]" alert="id_task[i].id != TN_ObjId:id:TN_ID_TASK"/>
+              <item property="task state"               value="%x[state[i].id] %E[state[i].id]"/>
+              <item property="priority"                 value="%d[task[i].base_priority] &gt; %d[task[i].priority]" bold="task[i].base_priority != task[i].priority"/>
+              <item property="task wait reason"         value="%x[wait_reason[i].id] %E[wait_reason[i].id]"/>
+              <item property="task wait rc"             value="%E[task_wait_rc[i].id]" alert="task_wait_rc[i].id != TN_RCode:id:TN_RC_OK &amp;&amp; task_wait_rc[i].id != TN_RCode:id:TN_RC_TIMEOUT"/>
               <item property="total run time"           value="%d[profiler[i].total_run_time]"/>
               <item property="got running cnt"          value="%d[profiler[i].got_running_cnt]"/>
               <item property="max consecutive run time" value="%d[profiler[i].max_consecutive_run_time]"/>
