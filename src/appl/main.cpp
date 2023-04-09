@@ -10,8 +10,8 @@
 class kernel: public os::kernel<kernel>
 {
 public:
-    os::stack<0x200> idle_stack;
-    os::stack<0x100> int_stack;
+    os::stack<0x50> idle_stack;
+    os::stack<0xE0> int_stack;
     static void init_hw(void);
     static void idle_task(void);
     static void init_sw(void);
@@ -20,7 +20,7 @@ public:
 class task: public os::task<task>
 {
 public:
-    os::stack<0x100> stack;
+    os::stack<0xC0> stack;
     __NO_RETURN void task_func(void)
     {
         __HAL_RCC_GPIOC_CLK_ENABLE();
@@ -46,7 +46,6 @@ void kernel::init_hw(void)
 void kernel::idle_task(void)
 {
     __NOP();
-    __WFE();
     __NOP();
 }
 

@@ -2,6 +2,9 @@
 #include <stdint.h>
 #include "tn.h"
 
+extern "C" const uint32_t Image$$RW_STACK$$Base;
+extern "C" const uint32_t Image$$RW_STACK$$Length;
+
 namespace os
 {
     
@@ -49,8 +52,10 @@ public:
             base->idle_stack.size,
             base->int_stack.word,
             base->int_stack.size,
-            base->idle_task,
-            base->init_sw
+//            const_cast<uint32_t *>(&Image$$RW_STACK$$Base),
+//            Image$$RW_STACK$$Length - reinterpret_cast<uint32_t>(&Image$$RW_STACK$$Base),
+            base->init_sw,
+            base->idle_task
             );
     }
 };
