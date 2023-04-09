@@ -364,6 +364,13 @@ SPI5_IRQHandler
                  
 __user_initial_stackheap
 
+                 LDR     R0, =Stack_Mem
+                 LDR     R1, =Stack_Size
+                 LDR     R2, =0xFEEDFACE
+Fill             STR     R2, [R0], #4
+                 SUBS    R1,#4
+                 BNE     Fill
+
                  LDR     R0, =  Heap_Mem
                  LDR     R1, =(Stack_Mem + Stack_Size)
                  LDR     R2, = (Heap_Mem +  Heap_Size)
