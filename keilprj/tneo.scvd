@@ -129,6 +129,13 @@
       <read name="_tn_tasks_created_cnt"  type="int32_t"      symbol="_tn_tasks_created_cnt"/>
       <read name="_tn_sys_state"          type="TN_StateFlag" symbol="_tn_sys_state"/>
       <read name="_tn_sys_time_count"     type="uint32_t"     symbol="_tn_sys_time_count"/>
+      <read name="_tn_int_stack"          type="uint32_t"     symbol="_tn_int_stack"/>
+      <read name="_tn_int_stack_size"     type="uint32_t"     symbol="_tn_int_stack_size"/>
+
+      <var name="int_stack_usd_max" type="uint8_t"  value="0"/>
+      <calc>
+        int_stack_usd_max = (__CalcMemUsed(_tn_int_stack, _tn_int_stack_size * 4, 0xFEEDFACE, 0xFEEDFACE) >> 20) &amp; 0xFF;
+      </calc>
 
       <!-- TN_Task read -->
       <readlist name="task_queue" type="TN_ListItem" symbol="_tn_tasks_created_list" next="next" init="1"/>
@@ -167,12 +174,13 @@
           <item property="count of created tasks" value="%d[_tn_tasks_created_cnt]"/>
           <item property="system state flags"     value="%E[_tn_sys_state.id]"/>
           <item property="system time"            value="%d[_tn_sys_time_count]"/>
+          <item property="system stack used"      value="%d[int_stack_usd_max]%% of %x[_tn_int_stack_size * 4] bytes" alert="int_stack_usd_max &gt; 95"/>
         </item>
 
         <!-- TN_Task out -->
         <item property="Tasks" value="%d[task._count] items">
           <list name="i" start="0" limit="task._count">
-            <item property="%x[task[i]._addr] (%S[task[i]._addr]) %N[task[i].name]" value="load=%d[task[i].time_load]%% | stk=%d[task[i].stack_usd_max]%%" alert="task[i].stack_usd_max &gt; 95">
+            <item property="%x[task[i]._addr] %N[task[i].name]" value="load=%d[task[i].time_load]%% | stk=%d[task[i].stack_usd_max]%% of %x[task[i].stack_high_addr - task[i].stack_low_addr] bytes" alert="task[i].stack_usd_max &gt; 95">
               <item property="id task"                  value="%x[id_task[i].id] %E[id_task[i].id]" alert="id_task[i].id != TN_ObjId:id:TN_ID_TASK"/>
               <item property="task state"               value="%x[state[i].id] %E[state[i].id]"/>
               <item property="priority"                 value="%d[task[i].base_priority] &gt; %d[task[i].priority]" bold="task[i].base_priority != task[i].priority"/>

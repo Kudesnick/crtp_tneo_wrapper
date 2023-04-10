@@ -50,10 +50,10 @@ public:
         tn_sys_start(
             base->idle_stack.word,
             base->idle_stack.size,
-            base->int_stack.word,
-            base->int_stack.size,
-//            const_cast<uint32_t *>(&Image$$RW_STACK$$Base),
-//            Image$$RW_STACK$$Length - reinterpret_cast<uint32_t>(&Image$$RW_STACK$$Base),
+//          base->int_stack.word,
+//          base->int_stack.size,
+            const_cast<uint32_t *>(&Image$$RW_STACK$$Base),
+            (Image$$RW_STACK$$Length - reinterpret_cast<uint32_t>(&Image$$RW_STACK$$Base)) / sizeof(uint32_t),
             base->init_sw,
             base->idle_task
             );

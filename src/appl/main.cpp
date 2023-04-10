@@ -7,11 +7,13 @@
 
 #include "os.h"
 
+extern "C" const uint32_t Image$$RW_STACK$$Base;
+extern "C" const uint32_t Image$$RW_STACK$$Length;
+
 class kernel: public os::kernel<kernel>
 {
 public:
     os::stack<0x50> idle_stack;
-    os::stack<0xE0> int_stack;
     static void init_hw(void);
     static void idle_task(void);
     static void init_sw(void);
