@@ -1,19 +1,14 @@
 
-#include "RTE_Components.h"
-#include CMSIS_device_header
-
 #include <stdlib.h>
 #include <stdio.h>
 
 #include "os.h"
-
-extern "C" const uint32_t Image$$RW_STACK$$Base;
-extern "C" const uint32_t Image$$RW_STACK$$Length;
+#include "bsp.h"
 
 class kernel: public os::kernel<kernel>
 {
 public:
-    os::stack<0x50> idle_stack;
+    os::stack<0x58> idle_stack;
     static void init_hw(void);
     static void idle_task(void);
     static void init_sw(void);
@@ -23,43 +18,26 @@ class task: public os::task<task>
 {
 public:
     os::stack<0xC0> stack;
-    __NO_RETURN void task_func(void)
+    void task_func(void) __attribute__((__noreturn__))
     {
-        __HAL_RCC_GPIOC_CLK_ENABLE();
-        GPIO_InitTypeDef GPIO_InitStruct =
-        {
-            .Pin   = GPIO_PIN_13,
-            .Mode  = GPIO_MODE_OUTPUT_OD,
-            .Pull  = GPIO_NOPULL,
-            .Speed = GPIO_SPEED_FREQ_LOW 
-        };
-        HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
-        
-        for(;;sleep(500))
-            HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
+        for(bsp::led C13;;sleep(500))
+            C13.toggle();
     }
 };
 
 void kernel::init_hw(void)
 {
-    if (SysTick_Config(HSE_VALUE / 1000)) os::hardfault();
+    csp::tick::init(1, kernel::tick);
 }
 
 void kernel::idle_task(void)
 {
-    __NOP();
-    __NOP();
+    csp::halt();
 }
 
 void kernel::init_sw(void)
 {
     static task tsk;
-}
-
-extern "C" void SysTick_Handler(void);
-void SysTick_Handler(void)
-{
-    kernel::tick();
 }
 
 int main(void)

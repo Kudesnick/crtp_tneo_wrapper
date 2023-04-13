@@ -1,13 +1,13 @@
 
+#pragma once
+
 #include <stdint.h>
 #include "tn.h"
-
-extern "C" const uint32_t Image$$RW_STACK$$Base;
-extern "C" const uint32_t Image$$RW_STACK$$Length;
+#include "bsp.h"
 
 namespace os
 {
-    
+
 enum class priority: uint8_t
 {
     idle     = 0,
@@ -17,19 +17,15 @@ enum class priority: uint8_t
     relatime = 4
 };
 
-inline void hardfault(void)
-{
-    volatile static uint32_t *i = nullptr;
-    *i++;
-}
-
 inline static constexpr uint32_t MIN_STACK_SIZE = TN_MIN_STACK_SIZE;
 
 template <uint32_t sz> union stack
 {
     static_assert(sz % sizeof(uint64_t) == 0, "");
     static_assert(sz  / sizeof(uint32_t) >= TN_MIN_STACK_SIZE, "");
+private:
     uint64_t dword[sz / sizeof(uint64_t)];
+public:
     uint32_t word[sz / sizeof(uint32_t)];
     static inline constexpr uint32_t size = sz / sizeof(uint32_t);
 };
@@ -52,8 +48,8 @@ public:
             base->idle_stack.size,
 //          base->int_stack.word,
 //          base->int_stack.size,
-            const_cast<uint32_t *>(&Image$$RW_STACK$$Base),
-            (Image$$RW_STACK$$Length - reinterpret_cast<uint32_t>(&Image$$RW_STACK$$Base)) / sizeof(uint32_t),
+            csp::sp,
+            csp::stack_size,
             base->init_sw,
             base->idle_task
             );
@@ -81,19 +77,16 @@ public:
         )
     {
         T *const &base = static_cast<T*>(this);
-        if (tn_task_create_wname(
-                &task_,
-                [](void *_base){static_cast<T*>(_base)->task_func();},
-                static_cast<int>(_priority),
-                base->stack.word,
-                base->stack.size,
-                base,
-                TN_TASK_CREATE_OPT_START,
-                _name
-                ) != TN_RC_OK)
-        {
-            hardfault();
-        }
+        tn_task_create_wname(
+            &task_,
+            [](void *_base){static_cast<T*>(_base)->task_func();},
+            static_cast<int>(_priority),
+            base->stack.word,
+            base->stack.size,
+            base,
+            TN_TASK_CREATE_OPT_START,
+            _name
+            );
     }
 };
 
