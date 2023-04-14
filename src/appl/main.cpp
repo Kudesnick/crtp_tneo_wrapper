@@ -5,13 +5,16 @@
 #include "os.h"
 #include "bsp.h"
 
-class kernel: public os::kernel<kernel>
+class kernel: public os::kernel
 {
 public:
     os::stack<0x58> idle_stack;
     static void init_hw(void);
     static void idle_task(void);
     static void init_sw(void);
+
+    kernel(): os::kernel(this)
+    {}
 };
 
 class task: public os::task<task>

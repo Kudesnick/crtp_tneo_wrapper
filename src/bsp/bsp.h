@@ -4,9 +4,9 @@
 
 namespace csp
 {
-extern uint32_t *const &sp;
+extern uint32_t *const &stack_ptr;
 extern const uint32_t stack_size;
-    
+
 class tick
 {
 private:

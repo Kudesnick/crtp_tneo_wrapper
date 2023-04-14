@@ -8,8 +8,8 @@ extern "C" const uint32_t Image$$RW_STACK$$Length;
 
 namespace csp
 {
-uint32_t *const &sp = const_cast<uint32_t *>(&Image$$RW_STACK$$Base);
-const uint32_t stack_size = (Image$$RW_STACK$$Length - reinterpret_cast<uint32_t>(&Image$$RW_STACK$$Base)) / sizeof(uint32_t);
+uint32_t *const &stack_ptr = const_cast<uint32_t *>(&Image$$RW_STACK$$Base);
+const uint32_t stack_size = Image$$RW_STACK$$Length - reinterpret_cast<uint32_t>(&Image$$RW_STACK$$Base);
 
 
 tick::tick(const uint32_t _ms, void(*const _handle)(void))
