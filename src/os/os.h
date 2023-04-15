@@ -2,7 +2,6 @@
 #pragma once
 
 #include <stdint.h>
-#include <memory>
 #include "tn.h"
 #include "bsp.h"
 
@@ -36,12 +35,12 @@ public:
         tn_tick_int_processing();
     }
 
-    template<typename T> kernel(T *const &_base)
+    template<class T> kernel(T *const &_base)
     {
         tn_arch_int_dis();
         _base->init_hw();
         tn_sys_start(
-            reinterpret_cast<TN_UWord *>(std::addressof(_base->idle_stack)),
+            reinterpret_cast<TN_UWord *>(&(_base->idle_stack)),
             sizeof(_base->idle_stack) / 4,
             csp::stack_ptr,
             csp::stack_size / 4,
@@ -51,7 +50,7 @@ public:
     }
 };
 
-template<typename T> class task
+class task
 {
 protected:
     TN_Task task_;
@@ -62,23 +61,16 @@ protected:
     }
 
 public:
-    task(const char *const _name):
-        task(priority::normal, _name)
-        {}
 
-    task(
-        const priority _priority = priority::normal,
-        const char *const _name = nullptr
-        )
+    template<class T> task(T *const &_base, const priority _priority = priority::normal, const char *const _name = nullptr)
     {
-        T *const &base = static_cast<T*>(this);
         tn_task_create_wname(
             &task_,
-            [](void *_base){static_cast<T*>(_base)->task_func();},
+            _base->task_func,
             static_cast<int>(_priority),
-            reinterpret_cast<TN_UWord *>(std::addressof(base->stack)),
-            sizeof(base->stack) / sizeof(uint32_t),
-            base,
+            reinterpret_cast<TN_UWord *>(&(_base->stack)),
+            sizeof(_base->stack) / sizeof(uint32_t),
+            _base,
             TN_TASK_CREATE_OPT_START,
             _name
             );
