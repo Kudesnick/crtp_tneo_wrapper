@@ -7,10 +7,16 @@
 
 struct kernel: public os::kernel
 {
-    os::stack<0x58> idle_stack;
+    os::stack<0x58> stack;
     static void init_hw(void);
-    static void idle_task(void);
     static void init_sw(void);
+    static void task_func(void *arg) __attribute__((__noreturn__))
+    {
+        (void)arg;
+        
+        for(;;)
+            csp::halt();
+    }
 
     kernel(): os::kernel(this){}
 };
@@ -25,17 +31,12 @@ static struct task: public os::task
         for(bsp::led C13;;sleep(500))
             C13.toggle();
     }
-    task(void): os::task(this, os::priority::normal, "user_task"){}
+    task(): os::task(this, os::priority::normal, "user_task"){}
 } task_obj;
 
 void kernel::init_hw(void)
 {
     csp::tick::init(1, kernel::tick);
-}
-
-void kernel::idle_task(void)
-{
-    csp::halt();
 }
 
 void kernel::init_sw(void)

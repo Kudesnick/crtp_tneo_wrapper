@@ -27,29 +27,6 @@ private:
     uint64_t dword[sz / sizeof(uint64_t)];
 };
 
-class kernel
-{
-public:
-    static inline void tick(void)
-    {
-        tn_tick_int_processing();
-    }
-
-    template<class T> kernel(T *const &_base)
-    {
-        tn_arch_int_dis();
-        _base->init_hw();
-        tn_sys_start(
-            reinterpret_cast<TN_UWord *>(&(_base->idle_stack)),
-            sizeof(_base->idle_stack) / 4,
-            csp::stack_ptr,
-            csp::stack_size / 4,
-            _base->init_sw,
-            _base->idle_task
-            );
-    }
-};
-
 class task
 {
 protected:
@@ -61,7 +38,6 @@ protected:
     }
 
 public:
-
     template<class T> task(T *const &_base, const priority _priority = priority::normal, const char *const _name = nullptr)
     {
         tn_task_create_wname(
@@ -71,8 +47,28 @@ public:
             reinterpret_cast<TN_UWord *>(&(_base->stack)),
             sizeof(_base->stack) / sizeof(uint32_t),
             _base,
-            TN_TASK_CREATE_OPT_START,
             _name
+            );
+    }
+};
+
+class kernel: public task
+{
+public:
+    static inline void tick(void)
+    {
+        tn_tick_int_processing();
+    }
+
+    template<class T> kernel(T *const &_base):
+        task(_base, priority::idle, "idle")
+    {
+        tn_arch_int_dis();
+        _base->init_hw();
+        tn_sys_start(
+            csp::stack_ptr,
+            csp::stack_size / 4,
+            _base->init_sw
             );
     }
 };
