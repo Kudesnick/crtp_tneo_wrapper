@@ -21,6 +21,8 @@ public:
 
 void halt(void);
 
+void interrupt_global(const bool _enable);
+
 }; // namespace csp
 
 namespace bsp

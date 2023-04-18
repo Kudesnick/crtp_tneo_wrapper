@@ -398,7 +398,30 @@
 #  define TN_MAX_INLINE          0
 #endif
 
+/*******************************************************************************
+ *    Keil UVision-specific configuration
+ ******************************************************************************/
 
+/**
+ * If you want to use Keil Event Recorder and Component Viewer, then you
+ * translate structure of objects in it. There is no way to pass the structure
+ * of an object to the *.scvd file other than through the name of the
+ * object. In order not to depend on user code, it is necessary to create fake
+ * objects of the structures used in the Event Recorder and Component Viewer.
+ * You can go the other way - describe the structure of the object in the
+ * *.scvd file, indicating all the fields and their offsets. However, this will
+ * not work if the structure in the object changes, such as when tracing is
+ * enabled or disabled.
+ *
+ * see https://www.keil.com/pack/doc/compiler/EventRecorder/html/elem_typedefs.html#elem_typedef
+ */
+#ifdef __UVISION_VERSION
+#  if TN_DEBUG
+#    define TN_USE_SCVD         1
+#  else
+#    define TN_USE_SCVD         0
+#  endif
+#endif
 
 /*******************************************************************************
  *    PIC24/dsPIC-specific configuration

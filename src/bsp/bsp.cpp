@@ -35,6 +35,18 @@ void halt(void)
 #endif
 }
 
+void interrupt_global(const bool _enable)
+{
+    if (_enable)
+    {
+        __enable_irq();
+    }
+    else
+    {
+        __disable_irq();
+    }
+}
+
 }; // namespace csp
 
 namespace bsp
@@ -50,7 +62,7 @@ led::led(void)
         .Pull  = GPIO_NOPULL,
         .Speed = GPIO_SPEED_FREQ_LOW 
     };
-    HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+    HAL_GPIO_Init(GPIOC, (GPIO_InitTypeDef *)&GPIO_InitStruct);
 }
 led::~led(void)
 {

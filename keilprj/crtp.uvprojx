@@ -337,7 +337,7 @@
             <v6WtE>0</v6WtE>
             <v6Rtti>0</v6Rtti>
             <VariousControls>
-              <MiscControls>-Wno-c++98-compat -Wno-c++98-compat-pedantic -Wno-padded -Wno-declaration-after-statement -Wno-global-constructors</MiscControls>
+              <MiscControls>-Wno-c++98-compat -Wno-c++98-compat-pedantic -Wno-c++20-designator -Wno-padded -Wno-declaration-after-statement -Wno-global-constructors</MiscControls>
               <Define>DEBUG HSE_VALUE=25000000</Define>
               <Undefine></Undefine>
               <IncludePath>..\rtt;..\tneo\src;..\tneo\src\arch;..\tneo\src\arch\cortex_m;..\tneo\src\core;..\tneo\src\core\internal;..\src\os;..\src\bsp</IncludePath>

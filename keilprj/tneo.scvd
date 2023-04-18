@@ -96,7 +96,7 @@
     </typedef>
 
     <!-- Task -->
-    <typedef name="TN_Task" size="1024" info="" import="_tn_idle_task">
+    <typedef name="TN_Task" size="1024" info="" import="_tn_scvd_task">
       <member name="stack_cur_pt"     type="uint32_t"       info="uint32_t*"/>
       <member name="id_task"          type="uint32_t"       info="TN_ObjId"/>
       <member name="task_queue"       type="uint32_t"       info="TN_ListItem"/>
@@ -118,8 +118,9 @@
       <member name="subsys_wait"      type="int32_t"        info=""/>
       <member name="name"             type="uint32_t"       info="char *"/>
       <member name="profiler"         type="uint32_t"       info="_TN_TaskProfiler"/>
-      <var name="stack_usd_max" type="uint8_t"  value="0"/>
-      <var name="time_load"     type="uint8_t"  value="0"/>
+      <var name="stack_usd_max"  type="uint8_t"  value="0"/>
+      <var name="stack_usd_byte" type="uint32_t" value="0"/>
+      <var name="time_load"      type="uint8_t"  value="0"/>
     </typedef>
 
   </typedefs>
@@ -132,9 +133,15 @@
       <read name="_tn_int_stack"          type="uint32_t"     symbol="_tn_int_stack"/>
       <read name="_tn_int_stack_size"     type="uint32_t"     symbol="_tn_int_stack_size"/>
 
+      <var name="tmp" type="uint32_t" value="0"/>
+
       <var name="int_stack_usd_max" type="uint8_t"  value="0"/>
+      <var name="int_stack_usd_bytes" type="uint8_t"  value="0"/>
+      
       <calc>
-        int_stack_usd_max = (__CalcMemUsed(_tn_int_stack, _tn_int_stack_size * 4, 0xFEEDFACE, 0xFEEDFACE) >> 20) &amp; 0xFF;
+        tmp = __CalcMemUsed(_tn_int_stack, _tn_int_stack_size * 4, 0xFEEDFACE, 0xFEEDFACE)
+        int_stack_usd_max = (tmp &gt;&gt; 20) &amp; 0xFF;
+        int_stack_usd_bytes = tmp &amp; ((1 &lt;&lt; 20) - 1);
       </calc>
 
       <!-- TN_Task read -->
@@ -142,7 +149,6 @@
 
       <list name="i" start="1" limit="task_queue._count">
 
-        <var name="tmp" type="uint32_t" value="0"/>
         <calc>
           tmp = task_queue[i]._addr;
           tmp -= __Offset_of(TN_Task:create_queue);
@@ -158,9 +164,10 @@
 
       <list name="i" start="0" limit="task._count">
         <calc>
-          tmp = task[i].stack_high_addr - task[i].stack_low_addr + 1;
-          tmp = (__CalcMemUsed(task[i].stack_low_addr, tmp, 0xFEEDFACE, 0xFEEDFACE) >> 20) &amp; 0xFF;
-          task[i].stack_usd_max = (task[i].stack_usd_max > tmp) ? task[i].stack_usd_max : tmp;
+          tmp = task[i].stack_high_addr - task[i].stack_low_addr + 4;
+          tmp = __CalcMemUsed(task[i].stack_low_addr, tmp, 0xFEEDFACE, 0xFEEDFACE);
+          task[i].stack_usd_max = (tmp &gt;&gt; 20) &amp; 0xFF;
+          task[i].stack_usd_byte = tmp &amp; ((1 &lt;&lt; 20) - 1);
           task[i].time_load = profiler[i].total_run_time * 100 / (_tn_sys_time_count + 1);
         </calc>
       </list>
@@ -174,18 +181,18 @@
           <item property="count of created tasks" value="%d[_tn_tasks_created_cnt]"/>
           <item property="system state flags"     value="%E[_tn_sys_state.id]"/>
           <item property="system time"            value="%d[_tn_sys_time_count]"/>
-          <item property="system stack used"      value="%d[int_stack_usd_max]%% of %x[_tn_int_stack_size * 4] bytes" alert="int_stack_usd_max &gt; 95"/>
+          <item property="system stack used"      value="%d[int_stack_usd_max]%% (%d[int_stack_usd_bytes] of %d[_tn_int_stack_size * 4] bytes)" alert="int_stack_usd_max &gt; 95"/>
         </item>
 
         <!-- TN_Task out -->
         <item property="Tasks" value="%d[task._count] items">
           <list name="i" start="0" limit="task._count">
-            <item property="%x[task[i]._addr] %N[task[i].name]" value="load=%d[task[i].time_load]%% | stk=%d[task[i].stack_usd_max]%% of %x[task[i].stack_high_addr - task[i].stack_low_addr] bytes" alert="task[i].stack_usd_max &gt; 95">
-              <item property="id task"                  value="%x[id_task[i].id] %E[id_task[i].id]" alert="id_task[i].id != TN_ObjId:id:TN_ID_TASK"/>
-              <item property="task state"               value="%x[state[i].id] %E[state[i].id]"/>
+            <item property="%x[task[i]._addr] %N[task[i].name]" value="load=%d[task[i].time_load]%% | stk=%d[task[i].stack_usd_max]%% (%d[task[i].stack_usd_byte] of %d[task[i].stack_high_addr - task[i].stack_low_addr + 4] bytes)" alert="task[i].stack_usd_max &gt; 95">
+              <item property="id task"                  value="%x[id_task[i].id] (%E[id_task[i].id])" alert="id_task[i].id != TN_ObjId:id:TN_ID_TASK"/>
+              <item property="task state"               value="%x[state[i].id] (%E[state[i].id])"/>
               <item property="priority"                 value="%d[task[i].base_priority] &gt; %d[task[i].priority]" bold="task[i].base_priority != task[i].priority"/>
-              <item property="task wait reason"         value="%x[wait_reason[i].id] %E[wait_reason[i].id]"/>
-              <item property="task wait rc"             value="%E[task_wait_rc[i].id]" alert="task_wait_rc[i].id != TN_RCode:id:TN_RC_OK &amp;&amp; task_wait_rc[i].id != TN_RCode:id:TN_RC_TIMEOUT"/>
+              <item property="task wait reason"         value="%x[wait_reason[i].id] (%E[wait_reason[i].id])"/>
+              <item property="task wait rc"             value="%x[task_wait_rc[i].id] (%E[task_wait_rc[i].id])" alert="task_wait_rc[i].id != TN_RCode:id:TN_RC_OK &amp;&amp; task_wait_rc[i].id != TN_RCode:id:TN_RC_TIMEOUT"/>
               <item property="total run time"           value="%d[profiler[i].total_run_time]"/>
               <item property="got running cnt"          value="%d[profiler[i].got_running_cnt]"/>
               <item property="max consecutive run time" value="%d[profiler[i].max_consecutive_run_time]"/>
