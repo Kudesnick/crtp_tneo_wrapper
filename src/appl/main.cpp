@@ -26,7 +26,7 @@ static struct task: public os::task<task, 0xC0>
 {
     void task_func(void) __attribute__((__noreturn__))
     {
-        for(bsp::led C13;;sleep(500))
+        for(bsp::led C13;;sleep(200))
             C13.toggle();
     }
     using os::task<task, 0xC0>::task;
