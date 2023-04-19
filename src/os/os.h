@@ -102,16 +102,9 @@ public:
 template <uint32_t _stack_size, os::priority _priority>
 task<_stack_size, _priority>::task(const char *const _name)
 {
-    volatile union
-    {
-        void(task<_stack_size, _priority>::*base)(void);
-        void(*func)(void *);
-    } ptr = {.base = &task<_stack_size, _priority>::task_func};
-
     tn_task_create_wname(
         &task_,
-        ptr.func,
-    //        [](void *T){static_cast<task_base*>(T)->task_func();},
+        [](void *T){static_cast<task_base*>(T)->task_func();},
         static_cast<int>(_priority),
         reinterpret_cast<TN_UWord *>(&this->arr),
         this->size / sizeof(uint32_t),
