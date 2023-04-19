@@ -76,18 +76,21 @@ public:
     rc activate(void);
     rc release_wait(void);
     bool is_task_context(void);
-    ~task_base();
+    
+    virtual void task_func(void) = 0;
+    virtual ~task_base();
 };
 
-template <class T, uint32_t _stack_size, os::priority _priority = os::priority::normal>
+template <uint32_t _stack_size, os::priority _priority = os::priority::normal>
 class task : public task_base, private stack<_stack_size>
 {
 public:
     task(const char *const _name = nullptr);
 };
 
-template <class T, uint32_t _stck_size>
-class kernel: public task<T, _stck_size, priority::idle>
+
+template <class T>
+class kernel
 {
 public:
     static void tick(void);
@@ -96,12 +99,19 @@ public:
 
 //-- templates realisations ---------------------------------------------------/
 
-template <class T, uint32_t _stack_size, os::priority _priority>
-task<T, _stack_size, _priority>::task(const char *const _name)
+template <uint32_t _stack_size, os::priority _priority>
+task<_stack_size, _priority>::task(const char *const _name)
 {
+    volatile union
+    {
+        void(task<_stack_size, _priority>::*base)(void);
+        void(*func)(void *);
+    } ptr = {.base = &task<_stack_size, _priority>::task_func};
+
     tn_task_create_wname(
         &task_,
-        [](void *_T){static_cast<T*>(_T)->task_func();},
+        ptr.func,
+    //        [](void *T){static_cast<task_base*>(T)->task_func();},
         static_cast<int>(_priority),
         reinterpret_cast<TN_UWord *>(&this->arr),
         this->size / sizeof(uint32_t),
@@ -110,15 +120,15 @@ task<T, _stack_size, _priority>::task(const char *const _name)
         );
 }
 
-template <class T, uint32_t _stck_size>
-void kernel<T, _stck_size>::tick(void)
+
+template <class T>
+void kernel<T>::tick(void)
 {
     tn_tick_int_processing();
 }
 
-template <class T, uint32_t _stck_size>
-kernel<T, _stck_size>::kernel(uint32_t *const _stack_ptr, const uint32_t _stack_size):
-    task<T, _stck_size, priority::idle>("idle")
+template <class T>
+kernel<T>::kernel(uint32_t *const _stack_ptr, const uint32_t _stack_size)
 {
     tn_arch_int_dis();
     T::hw_init();
