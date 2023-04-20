@@ -18,7 +18,7 @@ struct kernel: public os::kernel<kernel>
 
 struct idle: public os::task<0x100, os::priority::idle>
 {
-    virtual void task_func(void) override;
+    void task_func(void) override;
     using os::task<0x100, os::priority::idle>::task;
 };
 
@@ -30,7 +30,7 @@ void idle::task_func(void)
 
 struct task: public os::task<0x100>
 {
-    virtual void task_func(void) override;
+    void task_func(void) override;
     using os::task<0x100>::task;
 };
 

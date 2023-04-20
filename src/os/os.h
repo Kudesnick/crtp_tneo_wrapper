@@ -47,12 +47,19 @@ struct stack
 
 class task_base
 {
+private:
+    virtual void task_func(void) = 0;
+    
 protected:
     TN_Task task_;
 
     rc sleep(const uint32_t _tick);
     void exit(void);
     void self_destructor(void);
+    static void task_force(void *obj)
+    {
+        static_cast<task_base*>(obj)->task_func();
+    }
 
 public:
     enum class state: int8_t
@@ -76,8 +83,6 @@ public:
     rc activate(void);
     rc release_wait(void);
     bool is_task_context(void);
-    
-    virtual void task_func(void) = 0;
     virtual ~task_base();
 };
 
@@ -104,7 +109,7 @@ task<_stack_size, _priority>::task(const char *const _name)
 {
     tn_task_create_wname(
         &task_,
-        [](void *T){static_cast<task_base*>(T)->task_func();},
+        task_force,
         static_cast<int>(_priority),
         reinterpret_cast<TN_UWord *>(&this->arr),
         this->size / sizeof(uint32_t),
