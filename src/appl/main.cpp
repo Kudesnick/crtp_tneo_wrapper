@@ -16,10 +16,10 @@ struct kernel: public os::kernel<kernel>
 };
 
 
-struct idle: public os::task<0x100, os::priority::idle>
+struct idle: public os::task<0x68, os::priority::idle>
 {
     void task_func(void) override;
-    using os::task<0x100, os::priority::idle>::task;
+    using os::task<0x68, os::priority::idle>::task;
 };
 
 void idle::task_func(void)
@@ -28,10 +28,10 @@ void idle::task_func(void)
 }
 
 
-struct task: public os::task<0x100>
+struct task: public os::task<0xC0>
 {
     void task_func(void) override;
-    using os::task<0x100>::task;
+    using os::task<0xC0>::task;
 };
 
 void task::task_func(void)

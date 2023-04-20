@@ -18,9 +18,14 @@ void task_base::exit(void)
     tn_task_exit(TN_TASK_EXIT_OPT_NO_DELETE);
 }
 
-void task_base::self_destructor(void)
+void task_base::self_kill(void)
 {
     tn_task_exit(TN_TASK_EXIT_OPT_DELETE);
+}
+
+void task_base::task_force(void *obj)
+{
+    static_cast<task_base*>(obj)->task_func();
 }
 
 rc task_base::suspend(void)
@@ -36,6 +41,13 @@ rc task_base::resume(void)
 rc task_base::terminate(void)
 {
     return static_cast<rc>(tn_task_terminate(&task_));
+}
+
+rc task_base::kill(void)
+{
+    return static_cast<rc>(
+        tn_task_delete(&task_)
+        );
 }
 
 task_base::state task_base::state_get(void)
@@ -75,11 +87,6 @@ rc task_base::release_wait(void)
 bool task_base::is_task_context(void)
 {
     return tn_is_task_context();
-}
-
-task_base::~task_base()
-{
-    tn_task_delete(&task_);
 }
 
 } // namespace os

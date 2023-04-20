@@ -55,11 +55,8 @@ protected:
 
     rc sleep(const uint32_t _tick);
     void exit(void);
-    void self_destructor(void);
-    static void task_force(void *obj)
-    {
-        static_cast<task_base*>(obj)->task_func();
-    }
+    void self_kill(void);
+    static void task_force(void *obj);
 
 public:
     enum class state: int8_t
@@ -77,13 +74,13 @@ public:
     rc suspend(void);
     rc resume(void);
     rc terminate(void);
+    rc kill(void);
     state state_get(void);
     rc change_priority(const priority _priority);
     rc wakeup(void);
     rc activate(void);
     rc release_wait(void);
     bool is_task_context(void);
-    virtual ~task_base();
 };
 
 template <uint32_t _stack_size, os::priority _priority = os::priority::normal>
