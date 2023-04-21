@@ -96,12 +96,23 @@ public:
 
 //-- templates realisations ---------------------------------------------------/
 
+template <class T> constexpr void(*member_to_func(void(T::*_member)(void)))(void *)
+{
+    const union
+    {
+        void(T::*member)(void);
+        void(*func)(void *);
+    } &ptr = {.member = _member};
+    
+    return ptr.func;
+}
+
 template <class T, uint32_t _stack_size, os::priority _priority>
 task<T, _stack_size, _priority>::task(const char *const _name)
 {
     tn_task_create_wname(
         &task_,
-        [](void *_T){static_cast<T*>(_T)->task_func();},
+        member_to_func(&T::task_func),
         static_cast<int>(_priority),
         reinterpret_cast<TN_UWord *>(&this->arr),
         this->size / sizeof(uint32_t),
@@ -110,22 +121,22 @@ task<T, _stack_size, _priority>::task(const char *const _name)
         );
 }
 
-template <class T, uint32_t _stck_size>
-void kernel<T, _stck_size>::tick(void)
+template <class T, uint32_t _stack_size>
+void kernel<T, _stack_size>::tick(void)
 {
     tn_tick_int_processing();
 }
 
-template <class T, uint32_t _stck_size>
-kernel<T, _stck_size>::kernel(uint32_t *const _stack_ptr, const uint32_t _stack_size):
-    task<T, _stck_size, priority::idle>("idle")
+template <class T, uint32_t _stack_size>
+kernel<T, _stack_size>::kernel(uint32_t *const _sys_stack_ptr, const uint32_t _sys_stack_size):
+    task<T, _stack_size, priority::idle>("idle")
 {
     tn_arch_int_dis();
-    T::hw_init();
+    static_cast<T*>(this)->hw_init();
     tn_sys_start(
-        _stack_ptr,
-        _stack_size / 4,
-        T::sw_init
+        _sys_stack_ptr,
+        _sys_stack_size / 4,
+        nullptr
         );
 }
 

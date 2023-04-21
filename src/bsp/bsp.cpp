@@ -6,6 +6,8 @@
 extern "C" const uint32_t Image$$RW_STACK$$Base;
 extern "C" const uint32_t Image$$RW_STACK$$Length;
 
+static void dummy(void) {};
+
 namespace csp
 {
 uint32_t *const &stack_ptr = const_cast<uint32_t *>(&Image$$RW_STACK$$Base);
@@ -23,7 +25,7 @@ tick& tick::init(const uint32_t _ms, void(*const _handle)(void))
     static tick instance(_ms, _handle);
     return instance;
 }
-void(*tick::handle)(void) = nullptr;
+void(*tick::handle)(void) = dummy;
 
 
 void halt(void)
@@ -87,5 +89,5 @@ void led::toggle(void)
 extern "C" void SysTick_Handler(void);
 void SysTick_Handler(void)
 {
-    if (csp::tick::handle) csp::tick::handle();
+    csp::tick::handle();
 }

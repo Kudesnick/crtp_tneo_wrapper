@@ -5,32 +5,31 @@
 #include "os.h"
 #include "bsp.h"
 
-struct kernel: public os::kernel<kernel, 0x68>
+struct kernel: public os::kernel<kernel, 0x50>
 {
-    static void hw_init(void)
+    void hw_init(void)
     {
         csp::tick::init(1, kernel::tick);
     }
-    static void sw_init(void){}
+    void sw_init(void){}
     void task_func(void) __attribute__((__noreturn__))
     {
         for(;;)
-        {
             csp::halt();
-        }
     }
-    using os::kernel<kernel, 0x68>::kernel;
+    using os::kernel<kernel, 0x50>::kernel;
 };
 
-static struct task: public os::task<task, 0xC0>
+struct task: public os::task<task, 0xA8>
 {
     void task_func(void) __attribute__((__noreturn__))
     {
         for(bsp::led C13;;sleep(200))
             C13.toggle();
     }
-    using os::task<task, 0xC0>::task;
-} task_obj = "user_task";
+    using os::task<task, 0xA8>::task;
+};
+static task task_obj = "user_task";
 
 int main(void)
 {
