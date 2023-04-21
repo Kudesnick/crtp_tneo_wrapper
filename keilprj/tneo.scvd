@@ -136,7 +136,7 @@
       <var name="tmp" type="uint32_t" value="0"/>
 
       <var name="int_stack_usd_max" type="uint8_t"  value="0"/>
-      <var name="int_stack_usd_bytes" type="uint8_t"  value="0"/>
+      <var name="int_stack_usd_bytes" type="uint32_t"  value="0"/>
       
       <calc>
         tmp = __CalcMemUsed(_tn_int_stack, _tn_int_stack_size * 4, 0xFEEDFACE, 0xFEEDFACE)
