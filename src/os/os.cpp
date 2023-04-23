@@ -13,6 +13,11 @@ rc task_base::sleep(const uint32_t _tick)
     return static_cast<rc>(tn_task_sleep(_tick));
 }
 
+rc task_base::yield(void)
+{
+    return static_cast<rc>(tn_task_yield());
+}
+
 void task_base::exit(void)
 {
     tn_task_exit(TN_TASK_EXIT_OPT_NO_DELETE);

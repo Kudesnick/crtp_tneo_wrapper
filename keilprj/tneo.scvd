@@ -7,9 +7,9 @@
 
     <typedef name="TN_StateFlag" size="1" info="">
       <member name="id" type="uint8_t" offset="0" info="System state flags">
-        <enum name="system is stoped"    value="0x00" info=""/>
-        <enum name="system is running"   value="0x01" info=""/>
-        <enum name="deadlock is active"  value="0x03" info=""/>
+        <enum name="TN_STATE_FLAG__SYS_NOINIT"  value="0x00" info=""/>
+        <enum name="TN_STATE_FLAG__SYS_RUNNING" value="0x01" info=""/>
+        <enum name="TN_STATE_FLAG__DEADLOCK"    value="0x03" info=""/>
       </member>
     </typedef>
 
@@ -43,12 +43,15 @@
 
     <typedef name="TN_TaskState" size="1">
       <member name="id" type="uint8_t">
-        <enum name="TN_TASK_STATE_NONE"     value="0" info=""/>
-        <enum name="TN_TASK_STATE_RUNNABLE" value="1" info=""/>
-        <enum name="TN_TASK_STATE_WAIT"     value="2" info=""/>
-        <enum name="TN_TASK_STATE_SUSPEND"  value="4" info=""/>
-        <enum name="TN_TASK_STATE_WAITSUSP" value="6" info=""/>
-        <enum name="TN_TASK_STATE_DORMANT"  value="8" info=""/>
+        <enum name="TN_TASK_STATE_NONE"       value="0"    info=""/>
+        <enum name="TN_TASK_STATE_RUNNABLE"   value="1"    info=""/>
+        <enum name="TN_TASK_STATE_WAIT"       value="2"    info=""/>
+        <enum name="TN_TASK_STATE_SUSPEND"    value="4"    info=""/>
+        <enum name="TN_TASK_STATE_WAITSUSP"   value="4+2"  info=""/>
+        <enum name="TN_TASK_STATE_DORMANT"    value="8"    info=""/>
+        <enum name="TN_TASK_STATE_YIELD"      value="16"   info=""/>
+        <enum name="TN_TASK_STATE_RUNTOYIELD" value="16+1" info=""/>
+
       </member>
     </typedef>
 

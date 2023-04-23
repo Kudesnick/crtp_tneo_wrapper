@@ -23,16 +23,25 @@ struct kernel: public os::kernel<kernel, 0x50>
     using os::kernel<kernel, 0x50>::kernel;
 };
 
-struct dtask: public os::task<dtask, 0x50,os::priority::low>
+struct dtask1: public os::task<dtask1, 0xA8,os::priority::low>
 {
     void task_func(void) __attribute__((__noreturn__))
     {
-        for(;;);
+        for(int i = 0;;i++) if (i & 1) yield();
     }
-    using os::task<dtask, 0x50, os::priority::low>::task;
+    using os::task<dtask1, 0xA8, os::priority::low>::task;
 };
-static dtask dtask_obj[2] = {"dummy_task1", "dummy_task2"};
+static dtask1 dtask1_obj = "dummy_task1";
 
+struct dtask2: public os::task<dtask2, 0xA8,os::priority::low>
+{
+    void task_func(void) __attribute__((__noreturn__))
+    {
+        for(int i = 0;;i++) if (i & 1) yield();
+    }
+    using os::task<dtask2, 0xA8, os::priority::low>::task;
+};
+static dtask2 dtask2_obj = "dummy_task2";
 
 struct task: public os::task<task, 0xA8>
 {

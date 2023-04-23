@@ -62,6 +62,7 @@ protected:
     TN_Task task_;
 
     rc sleep(const uint32_t _tick);
+    rc yield(void);
     void exit(void);
     void self_destructor(void);
 
