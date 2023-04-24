@@ -2,18 +2,18 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "os.h"
 #include "bsp.h"
+#include "os.h"
 
-struct kernel: public os::kernel<kernel, 0x50>
+struct kernel: os::kernel<kernel, 0x50>
 {
     void hw_init(void)
     {
-        csp::tick::init(1, kernel::tick);
+        csp::tick::init(1, os::tick);
     }
     static void sw_init(void)
     {
-        kernel::tslice_set(os::priority::low, 10);
+        os::tslice_set(os::priority::low, 10);
     }
     void task_func(void) __attribute__((__noreturn__))
     {
@@ -23,27 +23,25 @@ struct kernel: public os::kernel<kernel, 0x50>
     using os::kernel<kernel, 0x50>::kernel;
 };
 
-struct dtask1: public os::task<dtask1, 0xA8,os::priority::low>
+static struct  dtask1: os::task<dtask1, 0xA8,os::priority::low>
 {
     void task_func(void) __attribute__((__noreturn__))
     {
         for(int i = 0;;i++) if (i & 1) yield();
     }
     using os::task<dtask1, 0xA8, os::priority::low>::task;
-};
-static dtask1 dtask1_obj = "dummy_task1";
+} dtask1_obj = "dummy_task1";
 
-struct dtask2: public os::task<dtask2, 0xA8,os::priority::low>
+static struct dtask2: os::task<dtask2, 0xA8,os::priority::low>
 {
     void task_func(void) __attribute__((__noreturn__))
     {
         for(int i = 0;;i++) if (i & 1) yield();
     }
     using os::task<dtask2, 0xA8, os::priority::low>::task;
-};
-static dtask2 dtask2_obj = "dummy_task2";
+} dtask2_obj = "dummy_task2";
 
-struct task: public os::task<task, 0xA8>
+static struct task: os::task<task, 0xA8>
 {
     void task_func(void) __attribute__((__noreturn__))
     {
@@ -51,8 +49,7 @@ struct task: public os::task<task, 0xA8>
             C13.toggle();
     }
     using os::task<task, 0xA8>::task;
-};
-static task task_obj = "user_task";
+} task_obj = "user_task";
 
 
 int main(void)

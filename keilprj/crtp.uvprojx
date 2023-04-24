@@ -614,11 +614,6 @@
               <FilePath>..\tneo\src\core\tn_mutex.h</FilePath>
             </File>
             <File>
-              <FileName>tn_oldsymbols.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\tneo\src\core\tn_oldsymbols.h</FilePath>
-            </File>
-            <File>
               <FileName>tn_sem.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\tneo\src\core\tn_sem.c</FilePath>

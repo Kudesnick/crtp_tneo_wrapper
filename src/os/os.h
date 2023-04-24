@@ -2,39 +2,21 @@
 #pragma once
 
 #include <stdint.h>
-#include "tn.h"
 
-extern"C" void tn_tick_int_processing(void);
 
-extern"C" void tn_arch_int_dis(void);
-extern"C" void tn_sys_start(uint32_t *, unsigned int, void(*)(void));
+// extern"C" void tn_tick_int_processing(void);
+// extern"C" void tn_arch_int_dis(void);
+// extern"C" void tn_sys_start(uint32_t *, unsigned int, void(*)(void));
 
 namespace os
 {
-
-enum class priority: uint8_t
+    
+namespace __tn
 {
-    idle     = 4,
-    low      = 3,
-    normal   = 2,
-    high     = 1,
-    relatime = 0
-};
+#include "tn.h"
+}
 
-enum class rc: int8_t
-{
-   ok          =   0,
-   timeout     =  -1,
-   overflow    =  -2,
-   wcontext    =  -3,
-   wstate      =  -4,
-   wparam      =  -5,
-   illegal_use =  -6,
-   invalid_obj =  -7,
-   deleted     =  -8,
-   forced      =  -9,
-   internal    = -10
-};
+//-- utils ----------------------------------------------------------------------------------------/
 
 template <uint32_t sz>
 struct stack
@@ -56,10 +38,69 @@ template <class T> constexpr void(*member_to_func(void(T::*_member)(void)))(void
     return ptr.func;
 }
 
+//-- common data from tn_common.h and tn_sys.h ----------------------------------------------------/
+
+enum class rc: int8_t
+{
+   ok          =  __tn::TN_RC_OK         ,
+   timeout     =  __tn::TN_RC_TIMEOUT    ,
+   overflow    =  __tn::TN_RC_OVERFLOW   ,
+   wcontext    =  __tn::TN_RC_WCONTEXT   ,
+   wstate      =  __tn::TN_RC_WSTATE     ,
+   wparam      =  __tn::TN_RC_WPARAM     ,
+   illegal_use =  __tn::TN_RC_ILLEGAL_USE,
+   invalid_obj =  __tn::TN_RC_INVALID_OBJ,
+   deleted     =  __tn::TN_RC_DELETED    ,
+   forced      =  __tn::TN_RC_FORCED     ,
+   internal    =  __tn::TN_RC_INTERNAL   
+};
+
+enum class priority: uint8_t
+{
+    idle     = 4,
+    low      = 3,
+    normal   = 2,
+    high     = 1,
+    relatime = 0,
+};
+
+enum class sys_state: uint8_t
+{
+    noinit  = __tn::TN_STATE_FLAG__SYS_NOINIT,
+    running = __tn::TN_STATE_FLAG__SYS_RUNNING,
+    dedlock = __tn::TN_STATE_FLAG__DEADLOCK
+};
+
+enum class context: uint8_t
+{
+    none = __tn::TN_CONTEXT_NONE,
+    task = __tn::TN_CONTEXT_TASK,
+    isr  = __tn::TN_CONTEXT_ISR
+};
+
+enum
+{
+    no_time_slice  = TN_NO_TIME_SLICE,
+    max_time_slice = TN_MAX_TIME_SLICE
+};
+
+void tick(void); // tn_tick_int_processing
+rc tslice_set(const priority _priority, const int32_t _ticks);
+uint32_t tick_get(void);
+sys_state state_get(void);
+context conext_get(void);
+namespace sheduler
+{
+    void restore(void);
+    void dis_save(void);
+}
+
+//-- task from tn_task.h --------------------------------------------------------------------------/
+
 class task_base
 {
 protected:
-    TN_Task task_;
+    __tn::TN_Task task_;
 
     rc sleep(const uint32_t _tick);
     rc yield(void);
@@ -69,13 +110,15 @@ protected:
 public:
     enum class state: int8_t
     {
-        none     = 0,
-        runnable = (1 << 0),
-        wait     = (1 << 1),
-        suspend  = (1 << 2),
-        waitsusp = (wait | suspend),
-        dormant  = (1 << 3),
-        err      = -1
+        none       = __tn::TN_TASK_STATE_NONE,
+        runnable   = __tn::TN_TASK_STATE_RUNNABLE,
+        wait       = __tn::TN_TASK_STATE_WAIT,
+        suspend    = __tn::TN_TASK_STATE_SUSPEND,
+        waitsusp   = __tn::TN_TASK_STATE_WAITSUSP,
+        dormant    = __tn::TN_TASK_STATE_DORMANT,
+        yield      = __tn::TN_TASK_STATE_YIELD,
+        runtoyield = __tn::TN_TASK_STATE_RUNTOYIELD,
+        err        = -1,
         
     };
 
@@ -92,54 +135,67 @@ public:
 };
 
 
-class kernel_base
-{
-public:
-    static void tick(void)
-    {
-        tn_tick_int_processing();
-    }
-    static rc tslice_set(const priority _priority, const int32_t _ticks)
-    {
-        return static_cast<rc>(tn_sys_tslice_set(static_cast<int>(_priority), _ticks));
-    }
-};
-
-
 template <class T, uint32_t _stack_size, os::priority _priority = os::priority::normal>
 class task : public task_base, private stack<_stack_size>
 {
 public:
     task(const char *const _name = nullptr)
     {
-        tn_task_create_wname(
-            &task_,
-            member_to_func(&T::task_func),
-            static_cast<int>(_priority),
-            reinterpret_cast<TN_UWord *>(this->stack_ptr),
-            this->stack_size / sizeof(uint32_t),
-            this,
-            _name
-            );
+        if (tn_task_create_wname(
+                &task_,
+                member_to_func(&T::task_func),
+                static_cast<int>(_priority),
+                reinterpret_cast<__tn::TN_UWord *>(this->stack_ptr),
+                this->stack_size / sizeof(uint32_t),
+                this,
+                _name
+                ) != __tn::TN_RC_OK)
+        {
+            _TN_FATAL_ERROR("task not created");
+        }
     }
 };
 
 
 template <class T, uint32_t _stack_size>
-class kernel: public task<T, _stack_size, priority::idle>, public kernel_base
+class kernel: public task<T, _stack_size, priority::idle>
 {
 public:
     kernel(uint32_t *const _sys_stack_ptr, const uint32_t _sys_stack_size):
         task<T, _stack_size, priority::idle>("idle")
     {
-        tn_arch_int_dis();
+        __tn::tn_arch_int_dis();
         static_cast<T*>(this)->hw_init();
-        tn_sys_start(
+        __tn::tn_sys_start(
             _sys_stack_ptr,
             _sys_stack_size / 4,
             T::sw_init
             );
     }
+};
+
+//-- mutex from tn_mutex.h --------------------------------------------------------------------------/
+
+class mutex
+{
+protected:
+    __tn::TN_Mutex mutex_;
+
+    enum class protocol
+    {
+        ceiling = __tn::TN_MUTEX_PROT_CEILING,
+        inherit = __tn::TN_MUTEX_PROT_INHERIT
+    };
+
+public:
+    rc lock(const uint32_t _timeout);
+    rc lock_now();
+    rc unlock();
+
+    mutex(void);
+    mutex(const priority _ceil_priority);
+
+    ~mutex();
 };
 
 } // namespace os
