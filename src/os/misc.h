@@ -1,12 +1,13 @@
 
-#include <stdio.h>
 #include <stdint.h>
+
+#include "printf.h"
 
 #define BRK for(;;)
 
 #define STRINGIFY(x) #x
 #define STR(x) STRINGIFY(x)
-#define printerr(_s, ...) fprintf(stderr, "\033[31mError:\033[0m '" __FILE__ "'[" STR(__LINE__) "] : " _s __VA_OPT__(,) __VA_ARGS__)
+#define printerr(_s, ...) printf("\033[31mError:\033[0m '" __FILE__ "'[" STR(__LINE__) "] : " _s __VA_OPT__(,) __VA_ARGS__)
 #define PRINTFAULT(...) printerr(__VA_ARGS__); BRK
 
 #define U32 "%#010x"
