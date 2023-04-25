@@ -3,14 +3,9 @@
 
 #include <stdint.h>
 
-
-// extern"C" void tn_tick_int_processing(void);
-// extern"C" void tn_arch_int_dis(void);
-// extern"C" void tn_sys_start(uint32_t *, unsigned int, void(*)(void));
-
 namespace os
 {
-    
+
 namespace __tn
 {
 #include "tn.h"
@@ -34,7 +29,7 @@ template <class T> constexpr void(*member_to_func(void(T::*_member)(void)))(void
         void(T::*member)(void);
         void(*func)(void *);
     } &ptr = {.member = _member};
-    
+
     return ptr.func;
 }
 
@@ -93,7 +88,19 @@ namespace sheduler
 {
     void restore(void);
     void dis_save(void);
+#if TN_DYNAMIC_TICK
+    void cb_sleep_until(uint32_t _timestamp); // weak
+#endif
 }
+
+class task_base;
+class mutex;
+
+void cb_stack_overflow(task_base *const _task); // weak
+void cb_deadlock(const bool _active, mutex *const _mutex, task_base *const _task); // weak
+#if TN_DYNAMIC_TICK
+uint32_t cb_tick_get(void) // weak
+#endif
 
 //-- task from tn_task.h --------------------------------------------------------------------------/
 
@@ -101,11 +108,6 @@ class task_base
 {
 protected:
     __tn::TN_Task task_;
-
-    rc sleep(const uint32_t _tick);
-    rc yield(void);
-    void exit(void);
-    void self_destructor(void);
 
 public:
     enum class state: int8_t
@@ -122,6 +124,11 @@ public:
         
     };
 
+    rc static sleep(const uint32_t _tick);
+    rc static yield(void);
+    void static exit(void);
+    void static self_destructor(void);
+
     rc suspend(void);
     rc resume(void);
     rc terminate(void);
@@ -130,7 +137,6 @@ public:
     rc wakeup(void);
     rc activate(void);
     rc release_wait(void);
-    bool is_task_context(void);
     ~task_base();
 };
 
@@ -160,12 +166,37 @@ public:
 template <class T, uint32_t _stack_size>
 class kernel: public task<T, _stack_size, priority::idle>
 {
+private:
+    static void cb_stack_overflow(__tn::TN_Task *_task)
+    {
+        /* Опасное преобразование! Будет работать только если поле __tn::TN_Task task_ будет первым
+         * в классе task_base и класс task_base не будет содержать виртуальных методов
+         */
+        os::cb_stack_overflow(reinterpret_cast<task_base *>(_task));
+    }
+
+    static void cb_deadlock(TN_BOOL _active, struct __tn::TN_Mutex *_mutex, struct __tn::TN_Task *_task)
+    {
+        /* Опасное преобразование! Будет работать только если поле __tn::TN_Task task_ будет первым
+         * в классе task_base и класс task_base не будет содержать виртуальных методов
+         */
+        /* Опасное преобразование! Будет работать только если поле __tn::TN_Mutex mutex_ будет первым
+         * в классе mutex и класс mutex не будет содержать виртуальных методов
+         */
+        os::cb_deadlock(_active, reinterpret_cast<mutex *>(_mutex), reinterpret_cast<task_base *>(_task));
+    }
+
 public:
     kernel(uint32_t *const _sys_stack_ptr, const uint32_t _sys_stack_size):
         task<T, _stack_size, priority::idle>("idle")
     {
         __tn::tn_arch_int_dis();
         static_cast<T*>(this)->hw_init();
+        __tn::tn_callback_stack_overflow_set(cb_stack_overflow);
+        __tn::tn_callback_deadlock_set(cb_deadlock);
+#if TN_DYNAMIC_TICK
+        __tn::tn_callback_dyn_tick_set(sheduler::cb_sleep_until, cb_tick_get);
+#endif
         __tn::tn_sys_start(
             _sys_stack_ptr,
             _sys_stack_size / 4,
@@ -174,7 +205,7 @@ public:
     }
 };
 
-//-- mutex from tn_mutex.h --------------------------------------------------------------------------/
+//-- mutex from tn_mutex.h ------------------------------------------------------------------------/
 
 class mutex
 {

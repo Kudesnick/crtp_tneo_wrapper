@@ -4,12 +4,22 @@
 
 #include "bsp.h"
 #include "os.h"
+#include "misc.h"
+
+//-- init callbacks -------------------------------------------------------------------------------/
+
+void csp::tick::cb_tick_handl(void)
+{
+    os::tick();
+}
+
+//-- kernel object --------------------------------------------------------------------------------/
 
 struct kernel: os::kernel<kernel, 0x50>
 {
     void hw_init(void)
     {
-        csp::tick::init(1, os::tick);
+        csp::tick::init(1);
     }
     static void sw_init(void)
     {
@@ -22,6 +32,8 @@ struct kernel: os::kernel<kernel, 0x50>
     }
     using os::kernel<kernel, 0x50>::kernel;
 };
+
+//-- tasks ----------------------------------------------------------------------------------------/
 
 static struct  dtask1: os::task<dtask1, 0xA8,os::priority::low>
 {
@@ -51,6 +63,7 @@ static struct task: os::task<task, 0xA8>
     using os::task<task, 0xA8>::task;
 } task_obj = "user_task";
 
+//-- main -----------------------------------------------------------------------------------------/
 
 int main(void)
 {

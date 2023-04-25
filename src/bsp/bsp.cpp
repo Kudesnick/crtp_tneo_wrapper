@@ -2,6 +2,7 @@
 #include CMSIS_device_header
 
 #include "bsp.h"
+#include "misc.h"
 
 extern "C" const uint32_t Image$$RW_STACK$$Base;
 extern "C" const uint32_t Image$$RW_STACK$$Length;
@@ -13,19 +14,19 @@ namespace csp
 uint32_t *const &stack_ptr = const_cast<uint32_t *>(&Image$$RW_STACK$$Base);
 const uint32_t stack_size = Image$$RW_STACK$$Length - reinterpret_cast<uint32_t>(&Image$$RW_STACK$$Base);
 
+res tick::init(const uint32_t _ms)
+{
+    auto res = res::ok;
+    
+    if (SysTick_Config(HSE_VALUE * _ms / 1000) != 0)
+    {
+        res = res::err;
+        PRINTFAULT("value %d not corrected for systick interval\n", _ms);
+    }
+    return res;
+}
 
-tick::tick(const uint32_t _ms, void(*const _handle)(void))
-{
-    handle = _handle;
-    SysTick_Config(HSE_VALUE / (1000 * _ms));
-}
-tick::tick() {};
-tick& tick::init(const uint32_t _ms, void(*const _handle)(void))
-{
-    static tick instance(_ms, _handle);
-    return instance;
-}
-void(*tick::handle)(void) = dummy;
+__WEAK void tick::cb_tick_handl(void) {};
 
 
 void halt(void)
@@ -89,5 +90,5 @@ void led::toggle(void)
 extern "C" void SysTick_Handler(void);
 void SysTick_Handler(void)
 {
-    csp::tick::handle();
+    csp::tick::cb_tick_handl();
 }

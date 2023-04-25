@@ -1,6 +1,9 @@
+#include "RTE_Components.h"
+#include CMSIS_device_header
 
 #include <stdint.h>
 #include "os.h"
+#include "misc.h"
 
 namespace os
 {
@@ -44,7 +47,32 @@ namespace sheduler
     {
         shed_state = __tn::tn_sched_dis_save();
     }
+#if TN_DYNAMIC_TICK
+    __WEAK void cb_sleep_until(uint32_t _timestamp)
+    {
+        PRINTFAULT("function 'sleep_until' must be overloaded\n");
+    }
+#endif
 }
+
+__WEAK void cb_stack_overflow(task_base *const _task)
+{
+    (void)_task;
+}
+
+__WEAK void cb_deadlock(const bool _active, mutex *const _mutex, task_base *const _task)
+{
+    (void)_active;
+    (void)_mutex;
+    (void)_task;
+}
+
+#if TN_DYNAMIC_TICK
+    __WEAK uint32_t cb_tick_get(void)
+    {
+        PRINTFAULT("function 'cb_tick_get' must be overloaded\n");
+    }
+#endif
 
 
 //-- task_base ------------------------------------------------------------------------------------/
@@ -86,10 +114,10 @@ rc task_base::terminate(void)
 
 task_base::state task_base::state_get(void)
 {
-    auto r_state = static_cast<enum __tn::TN_TaskState>(state::err);
+    auto r_state = state::err;
 
-    tn_task_state_get(&task_, &r_state);
-    return static_cast<state>(r_state);
+    tn_task_state_get(&task_, reinterpret_cast<enum __tn::TN_TaskState *>(&r_state));
+    return r_state;
 }
 
 rc task_base::change_priority(const priority _priority)
@@ -118,11 +146,6 @@ rc task_base::release_wait(void)
         );
 }
 
-bool task_base::is_task_context(void)
-{
-    return __tn::tn_is_task_context();
-}
-
 task_base::~task_base()
 {
     tn_task_delete(&task_);
@@ -149,7 +172,7 @@ mutex::mutex(void)
 {
     if (__tn::tn_mutex_create(&mutex_, __tn::TN_MUTEX_PROT_INHERIT, 0) != __tn::TN_RC_OK)
     {
-        _TN_FATAL_ERROR("mutex not created");
+        PRINTFAULT("mutex not created\n");
     }
 }
 
@@ -161,7 +184,7 @@ mutex::mutex(const priority _ceil_priority)
             static_cast<int>(_ceil_priority)
             ) != __tn::TN_RC_OK)
     {
-        _TN_FATAL_ERROR("mutex not created");
+        PRINTFAULT("mutex not created\n");
     }
 }
 
@@ -171,3 +194,5 @@ mutex::~mutex()
 }
 
 } // namespace os
+
+//-- override weak functions ----------------------------------------------------------------------/

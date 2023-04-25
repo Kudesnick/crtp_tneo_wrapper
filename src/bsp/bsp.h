@@ -4,19 +4,20 @@
 
 namespace csp
 {
+
+enum class res
+{
+    ok  =  0,
+    err = -1
+};
+
 extern uint32_t *const &stack_ptr;
 extern const uint32_t stack_size;
 
-class tick
+namespace tick
 {
-private:
-    tick(const uint32_t _ms, void(*const _handle)(void));
-    tick();
-    tick( const tick& );  
-    tick& operator=( tick& );
-public:
-    static tick& init(const uint32_t _ms, void(*const _handle)(void));
-    static void(*handle)(void);
+    res init(const uint32_t _ms);
+    void cb_tick_handl(void); // weak
 };
 
 void halt(void);

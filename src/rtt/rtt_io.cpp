@@ -3,10 +3,11 @@
 #include CMSIS_device_header
 #include <stdio.h>
 
-#ifdef RTE_CMSIS_RTOS2
-    #include "cmsis_os2.h" // ARM::CMSIS:RTOS:Keil RTX
-#endif
+#define USE_OS 1
 
+#if USE_OS
+#   include "os.h"
+#endif
 
 /// Консольный ввод/вывод
 #ifdef DEBUG
@@ -192,10 +193,10 @@ int stdin_getchar(void)
             }
         #endif
         
-        #ifdef RTE_CMSIS_RTOS2
+        #ifdef USE_OS
             if (result == -1)
             {
-                osThreadYield();
+                os::task_base::yield();
             }
         #endif
         }
