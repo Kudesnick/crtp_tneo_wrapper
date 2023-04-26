@@ -37,17 +37,17 @@ template <class T> constexpr void(*member_to_func(void(T::*_member)(void)))(void
 
 enum class rc: int8_t
 {
-   ok          =  __tn::TN_RC_OK         ,
-   timeout     =  __tn::TN_RC_TIMEOUT    ,
-   overflow    =  __tn::TN_RC_OVERFLOW   ,
-   wcontext    =  __tn::TN_RC_WCONTEXT   ,
-   wstate      =  __tn::TN_RC_WSTATE     ,
-   wparam      =  __tn::TN_RC_WPARAM     ,
+   ok          =  __tn::TN_RC_OK,
+   timeout     =  __tn::TN_RC_TIMEOUT,
+   overflow    =  __tn::TN_RC_OVERFLOW,
+   wcontext    =  __tn::TN_RC_WCONTEXT,
+   wstate      =  __tn::TN_RC_WSTATE,
+   wparam      =  __tn::TN_RC_WPARAM,
    illegal_use =  __tn::TN_RC_ILLEGAL_USE,
    invalid_obj =  __tn::TN_RC_INVALID_OBJ,
-   deleted     =  __tn::TN_RC_DELETED    ,
-   forced      =  __tn::TN_RC_FORCED     ,
-   internal    =  __tn::TN_RC_INTERNAL   
+   deleted     =  __tn::TN_RC_DELETED,
+   forced      =  __tn::TN_RC_FORCED,
+   internal    =  __tn::TN_RC_INTERNAL,
 };
 
 enum class priority: uint8_t
@@ -63,20 +63,26 @@ enum class sys_state: uint8_t
 {
     noinit  = __tn::TN_STATE_FLAG__SYS_NOINIT,
     running = __tn::TN_STATE_FLAG__SYS_RUNNING,
-    dedlock = __tn::TN_STATE_FLAG__DEADLOCK
+    dedlock = __tn::TN_STATE_FLAG__DEADLOCK,
 };
 
 enum class context: uint8_t
 {
     none = __tn::TN_CONTEXT_NONE,
     task = __tn::TN_CONTEXT_TASK,
-    isr  = __tn::TN_CONTEXT_ISR
+    isr  = __tn::TN_CONTEXT_ISR,
 };
 
-enum
+enum time_slise: uint16_t
 {
-    no_time_slice  = TN_NO_TIME_SLICE,
-    max_time_slice = TN_MAX_TIME_SLICE
+    no_slice  = TN_NO_TIME_SLICE,
+    max_slice = TN_MAX_TIME_SLICE,
+};
+
+enum wait: uint32_t
+{
+    nowait     = 0,
+    infinitely = TN_WAIT_INFINITE,
 };
 
 void tick(void); // tn_tick_int_processing
@@ -215,13 +221,12 @@ protected:
     enum class protocol
     {
         ceiling = __tn::TN_MUTEX_PROT_CEILING,
-        inherit = __tn::TN_MUTEX_PROT_INHERIT
+        inherit = __tn::TN_MUTEX_PROT_INHERIT,
     };
 
 public:
-    rc lock(const uint32_t _timeout);
-    rc lock_now();
-    rc unlock();
+    rc acquire(const uint32_t _timeout);
+    rc release(void);
 
     mutex(void);
     mutex(const priority _ceil_priority);

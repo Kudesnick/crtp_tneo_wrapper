@@ -153,17 +153,12 @@ task_base::~task_base()
 
 //-- mutex ----------------------------------------------------------------------------------------/
 
-rc mutex::lock(const uint32_t _timeout)
+rc mutex::acquire(const uint32_t _timeout)
 {
     return static_cast<rc>(tn_mutex_lock(&mutex_, _timeout));
 }
 
-rc mutex::lock_now()
-{
-    return static_cast<rc>(tn_mutex_lock_polling(&mutex_));
-}
-
-rc mutex::unlock()
+rc mutex::release(void)
 {
     return static_cast<rc>(tn_mutex_unlock(&mutex_));
 }

@@ -39,9 +39,21 @@
 
 #if USR_PUT_RTT || USR_PUT_ITM
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+#if USE_OS
+
+static os::mutex printf_mutex;
+
+void _printf_mutex_acquire(void)
+{
+    printf_mutex.acquire(os::wait::infinitely);
+}
+
+void _printf_mutex_release(void)
+{
+    printf_mutex.release();
+}
+
+#endif // USE_OS
 
 void _putchar(char _ch)
 {
@@ -59,10 +71,6 @@ void _putchar(char _ch)
     }
 #endif
 }
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif // USR_PUT_RTT || USR_PUT_ITM
 
