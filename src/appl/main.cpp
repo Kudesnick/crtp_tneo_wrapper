@@ -67,19 +67,19 @@ static struct task: os::task<task, 0xA0>
 //-- task for printf and mutex testing ------------------------------------------------------------/
 
 #if 1
-static struct printf_task: os::task<printf_task, 0x258>
+static struct printf_task: os::task<printf_task, 0x240>
 {
     void task_func(void) __attribute__((__noreturn__))
     {
         for(uint32_t i = 0;;i++)
         {
-            const char s[] = "-\\|/";
+            static constexpr char s[] = "-\\|/";
             printf("%d %c\r", os::tick_get(), s[i & 3]);
             
             sleep(500);
         }
     }
-    using os::task<printf_task, 0x258>::task;
+    using os::task<printf_task, 0x240>::task;
 } printf_task_obj = "printf_task";
 #endif
 
