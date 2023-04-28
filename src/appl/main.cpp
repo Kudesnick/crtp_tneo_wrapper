@@ -14,7 +14,7 @@ void csp::tick::cb_tick_handl(void)
 
 //-- kernel object --------------------------------------------------------------------------------/
 
-struct kernel: os::kernel<kernel, 0x50>
+struct kernel: os::kernel<kernel, 0x48>
 {
     void hw_init(void)
     {
@@ -29,38 +29,59 @@ struct kernel: os::kernel<kernel, 0x50>
         for(;;)
             csp::halt();
     }
-    using os::kernel<kernel, 0x50>::kernel;
+    using os::kernel<kernel, 0x48>::kernel;
 };
 
-//-- tasks ----------------------------------------------------------------------------------------/
+//-- tasks for yeld testing -----------------------------------------------------------------------/
 
-static struct  dtask1: os::task<dtask1, 0xA8,os::priority::low>
+static struct  dtask1: os::task<dtask1, 0x78,os::priority::low>
 {
     void task_func(void) __attribute__((__noreturn__))
     {
         for(int i = 0;;i++) if (i & 1) yield();
     }
-    using os::task<dtask1, 0xA8, os::priority::low>::task;
+    using os::task<dtask1, 0x78, os::priority::low>::task;
 } dtask1_obj = "dummy_task1";
 
-static struct dtask2: os::task<dtask2, 0xA8,os::priority::low>
+static struct dtask2: os::task<dtask2, 0x78,os::priority::low>
 {
     void task_func(void) __attribute__((__noreturn__))
     {
         for(int i = 0;;i++) if (i & 1) yield();
     }
-    using os::task<dtask2, 0xA8, os::priority::low>::task;
+    using os::task<dtask2, 0x78, os::priority::low>::task;
 } dtask2_obj = "dummy_task2";
 
-static struct task: os::task<task, 0xA8>
+//-- task for led blinking ------------------------------------------------------------------------/
+
+static struct task: os::task<task, 0xA0>
 {
     void task_func(void) __attribute__((__noreturn__))
     {
         for(bsp::led C13;;sleep(200))
             C13.toggle();
     }
-    using os::task<task, 0xA8>::task;
-} task_obj = "user_task";
+    using os::task<task, 0xA0>::task;
+} task_obj = "blink_task";
+
+//-- task for printf and mutex testing ------------------------------------------------------------/
+
+#if 1
+static struct printf_task: os::task<printf_task, 0x258>
+{
+    void task_func(void) __attribute__((__noreturn__))
+    {
+        for(uint32_t i = 0;;i++)
+        {
+            const char s[] = "-\\|/";
+            printf("%d %c\r", os::tick_get(), s[i & 3]);
+            
+            sleep(500);
+        }
+    }
+    using os::task<printf_task, 0x258>::task;
+} printf_task_obj = "printf_task";
+#endif
 
 //-- main -----------------------------------------------------------------------------------------/
 
