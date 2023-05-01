@@ -1,6 +1,12 @@
 #include "RTE_Components.h"
 #include CMSIS_device_header
 
+#if !defined(__CC_ARM) && defined(__ARMCC_VERSION) && !defined(__OPTIMIZE__)
+    #error This project uses syntax solutions that require an optimization level of at least 1.
+    #error Otherwise, you will see an increase in ROM and RAM consumption up to two sizes.
+    #error As well as unjustified performance degradation.
+#endif
+
 #include <stdint.h>
 #include "os.h"
 #include "misc.h"

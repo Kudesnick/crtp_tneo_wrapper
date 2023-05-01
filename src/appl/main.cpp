@@ -35,53 +35,53 @@ struct kernel: os::kernel<kernel, 0x48>
 //-- tasks for yeld testing -----------------------------------------------------------------------/
 
 #if 1
-static struct  dtask1: os::task<dtask1, 0x78,os::priority::low>
+static struct  dtask1: os::task<dtask1, 0x58,os::priority::low>
 {
     void task_func(void) __attribute__((__noreturn__))
     {
         for(int i = 0;;i++) if (i & 1) yield();
     }
-    using os::task<dtask1, 0x78, os::priority::low>::task;
+    using os::task<dtask1, 0x58, os::priority::low>::task;
 } dtask1_obj = "dummy_task1";
 
-static struct dtask2: os::task<dtask2, 0x78,os::priority::low>
+static struct dtask2: os::task<dtask2, 0x58,os::priority::low>
 {
     void task_func(void) __attribute__((__noreturn__))
     {
         for(int i = 0;;i++) if (i & 1) yield();
     }
-    using os::task<dtask2, 0x78, os::priority::low>::task;
+    using os::task<dtask2, 0x58, os::priority::low>::task;
 } dtask2_obj = "dummy_task2";
 #endif
 
 //-- task for led blinking ------------------------------------------------------------------------/
 
-static struct task: os::task<task, 0xA0>
+static struct task: os::task<task, 0x68>
 {
     void task_func(void) __attribute__((__noreturn__))
     {
         for(bsp::led C13;;sleep(200))
             C13.toggle();
     }
-    using os::task<task, 0xA0>::task;
+    using os::task<task, 0x68>::task;
 } task_obj = "blink_task";
 
 //-- task for printf and mutex testing ------------------------------------------------------------/
 
 #if 1
-static struct printf_task: os::task<printf_task, 0x240>
+static struct printf_task: os::task<printf_task, 0xF8>
 {
     void task_func(void) __attribute__((__noreturn__))
     {
         for(uint32_t i = 0;;i++)
         {
-            static const char s[] = "-\\|/";
+            const char s[] = "-\\|/";
             printf("%d %c\r", os::tick_get(), s[i & 3]);
             
             sleep(500);
         }
     }
-    using os::task<printf_task, 0x240>::task;
+    using os::task<printf_task, 0xF8>::task;
 } printf_task_obj = "printf_task";
 #endif
 
