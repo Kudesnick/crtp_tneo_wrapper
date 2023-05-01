@@ -66,7 +66,7 @@ void _putchar(char _ch)
         (ITM_TER & (1UL << 0)        ))   /* ITM Port #0 enabled */
     {
         while (ITM_PORT0_U32 == 0);
-        __NOP();
+        ITM_PORT0_U8 = 0;
         ITM_PORT0_U8 = _ch;
     }
 #endif

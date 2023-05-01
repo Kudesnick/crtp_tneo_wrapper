@@ -2,6 +2,7 @@
 #pragma once
 
 #include <stdint.h>
+#include <cstddef>
 
 namespace os
 {
@@ -168,6 +169,7 @@ public:
     }
 };
 
+//-- kernel ---------------------------------------------------------------------------------------/
 
 template <class T, uint32_t _stack_size>
 class kernel: public task<T, _stack_size, priority::idle>
@@ -232,6 +234,107 @@ public:
     mutex(const priority _ceil_priority);
 
     ~mutex();
+};
+
+//-- semaphores from tn_sem.h ------------------------------------------------------------------------/
+
+class semaphore
+{
+protected:
+    __tn::TN_Sem sem_;
+
+public:
+    rc acquire(const uint32_t _timeout);
+    rc release(void);
+
+    semaphore(const uint32_t start_, const uint32_t max_);
+    ~semaphore();
+};
+
+//-- memory pool from tn_fmem.h ------------------------------------------------------------------------/
+
+class fmem_base
+{
+protected:
+    __tn::TN_FMem fmem_;
+
+public:
+    rc acquire(void **p_data_, const uint32_t _timeout_);
+    rc release(void *p_data_);
+ 
+    int32_t free_cnt_get(void);
+    int32_t used_cnt_get(void);
+
+    fmem_base(void *start_addr_, unsigned int block_size_, int blocks_cnt_);
+    ~fmem_base();
+};
+
+template <class T> class fmem: public fmem_base
+{
+static_assert(sizeof(T) >= sizeof(void *), "");
+static_assert(sizeof(T) % sizeof(uint32_t) == 0, "");
+public:
+    class item
+    {
+    private:
+        fmem<T> *owner_;
+        T* ptr_;
+    public:
+        T*const &ptr    = ptr_;
+        fmem<T> *&owner = owner_;
+
+        rc acquire(fmem<T> &fmem_, const uint32_t timeout_)
+        {
+            if (owner_ != nullptr) return rc::illegal_use;
+            
+            rc res = fmem_.acquire(static_cast<void **>(&ptr_), timeout_);
+            if (res == rc::ok) owner_ = &fmem_;
+
+            return res;
+        }
+
+        rc release(void)
+        {
+            if (owner_ == nullptr) return rc::illegal_use;
+
+            rc res = owner_->release(static_cast<void *>(&ptr_));
+            if (res == rc::ok) owner_ = ptr_ = nullptr;
+            
+            return res;
+        }
+    };
+
+    rc acquire(T *const &p_data_, const uint32_t timeout_)
+    {
+        return fmem_base::acquire(static_cast<void **>(&p_data_), timeout_);
+    }
+
+    rc release(T &p_data_)
+    {
+        return fmem_base::release(static_cast<void *>(&p_data_));
+    }
+
+    rc acquire(item &item_, const uint32_t timeout_)
+    {
+        return item_.acquire(this, timeout_);
+    }
+
+    rc release(item &item_)
+    {
+        return (item_.owner == this) ? item_.release() : rc::illegal_use;
+    }
+    
+    fmem(T *const start_addr_, const uint32_t blocks_cnt_):
+        fmem_base(static_cast<void *>(start_addr_), sizeof(T), blocks_cnt_){}
+};
+
+template <class T, uint32_t cnt> class fmempool: public fmem<T>
+{
+static_assert(cnt > 0, "");
+private:
+    T pool_[cnt];
+public:
+    fmempool(void): fmem_base(pool_, cnt){}
 };
 
 } // namespace os

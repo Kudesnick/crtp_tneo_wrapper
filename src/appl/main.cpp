@@ -73,7 +73,7 @@ static struct printf_task: os::task<printf_task, 0x240>
     {
         for(uint32_t i = 0;;i++)
         {
-            static constexpr char s[] = "-\\|/";
+            static const char s[] = "-\\|/";
             printf("%d %c\r", os::tick_get(), s[i & 3]);
             
             sleep(500);

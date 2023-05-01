@@ -122,33 +122,36 @@ task_base::state task_base::state_get(void)
 
 rc task_base::change_priority(const priority _priority)
 {
-    return static_cast<rc>(tn_task_change_priority(&task_, static_cast<int>(_priority)));
+    return static_cast<rc>(__tn::tn_task_change_priority(&task_, static_cast<int>(_priority)));
 }
 
 rc task_base::wakeup(void)
 {
     return static_cast<rc>(
-        __tn::tn_is_task_context() ? tn_task_wakeup(&task_) : tn_task_iwakeup(&task_)
+        __tn::tn_is_task_context() ? __tn::tn_task_wakeup(&task_) : __tn::tn_task_iwakeup(&task_)
         );
 }
 
 rc task_base::activate(void)
 {
     return static_cast<rc>(
-        __tn::tn_is_task_context() ? tn_task_activate(&task_) : tn_task_iactivate(&task_)
+        __tn::tn_is_task_context() ? __tn::tn_task_activate(&task_) : __tn::tn_task_iactivate(&task_)
         );
 }
 
 rc task_base::release_wait(void)
 {
     return static_cast<rc>(
-        __tn::tn_is_task_context() ? tn_task_release_wait(&task_) : tn_task_irelease_wait(&task_)
+        __tn::tn_is_task_context() ? __tn::tn_task_release_wait(&task_) : __tn::tn_task_irelease_wait(&task_)
         );
 }
 
 task_base::~task_base()
 {
-    tn_task_delete(&task_);
+    if (__tn::tn_task_delete(&task_) != __tn::TN_RC_OK)
+    {
+        PRINTFAULT("rask destructor error\n");
+    }
 }
 
 //-- mutex ----------------------------------------------------------------------------------------/
@@ -185,7 +188,102 @@ mutex::mutex(const priority _ceil_priority)
 
 mutex::~mutex()
 {
-    __tn::tn_mutex_delete(&mutex_);
+    if (__tn::tn_mutex_delete(&mutex_) != __tn::TN_RC_OK)
+    {
+        PRINTFAULT("mutex destructor error\n");
+    }
+}
+
+//-- semaphore ------------------------------------------------------------------------------------/
+
+rc semaphore::acquire(const uint32_t _timeout)
+{
+    if (__tn::tn_is_task_context())
+    {
+        return static_cast<rc>(__tn::tn_sem_wait(&sem_, _timeout));
+    }
+    else if (_timeout == 0)
+    {
+        return static_cast<rc>(__tn::tn_sem_iwait_polling(&sem_));
+    }
+    else
+    {
+        return rc::wparam;
+    }
+}
+
+rc semaphore::release(void) // increment
+{
+    return static_cast<rc>(
+        __tn::tn_is_task_context() ? __tn::tn_sem_signal(&sem_) : __tn::tn_sem_isignal(&sem_)
+        );
+}
+
+semaphore::semaphore(const uint32_t start_, const uint32_t max_)
+{
+    if (__tn::tn_sem_create(&sem_, start_, max_) != __tn::TN_RC_OK)
+    {
+        PRINTFAULT("semaphore not created\n");
+    }
+}
+
+semaphore::~semaphore()
+{
+    if (__tn::tn_sem_delete(&sem_)  != __tn::TN_RC_OK)
+    {
+        PRINTFAULT("semaphore destructor error\n");
+    }
+}
+
+//-- fmem -----------------------------------------------------------------------------------------/
+
+rc fmem_base::acquire(void **p_data_, const uint32_t _timeout)
+{
+    if (__tn::tn_is_task_context())
+    {
+        return static_cast<rc>(__tn::tn_fmem_get(&fmem_, p_data_, _timeout));
+    }
+    else if (_timeout == 0)
+    {
+        return static_cast<rc>(__tn::tn_fmem_iget_polling(&fmem_, p_data_));
+    }
+    else
+    {
+        return rc::wparam;
+    }
+}
+
+rc fmem_base::release(void *p_data_)
+{
+    return static_cast<rc>(
+        __tn::tn_is_task_context() ? __tn::tn_fmem_release(&fmem_, p_data_) : __tn::tn_fmem_irelease(&fmem_, p_data_)
+        );
+}
+
+int32_t fmem_base::free_cnt_get(void)
+{
+    return __tn::tn_fmem_free_blocks_cnt_get(&fmem_);
+}
+
+int32_t fmem_base::used_cnt_get(void)
+{
+    return __tn::tn_fmem_used_blocks_cnt_get(&fmem_);
+}
+
+fmem_base::fmem_base(void *start_addr_, unsigned int block_size_, int blocks_cnt_)
+{
+    if (__tn::tn_fmem_create(&fmem_, start_addr_, block_size_, blocks_cnt_) != __tn::TN_RC_OK)
+    {
+         PRINTFAULT("fmem pool not created\n");
+    }
+}
+
+fmem_base::~fmem_base()
+{
+    if (__tn::tn_fmem_delete(&fmem_)  != __tn::TN_RC_OK)
+    {
+        PRINTFAULT("fmem pool destructor error\n");
+    }
 }
 
 } // namespace os
