@@ -243,15 +243,15 @@ semaphore::~semaphore()
 
 //-- fmem -----------------------------------------------------------------------------------------/
 
-rc fmem_base::acquire(void **p_data_, const uint32_t _timeout)
+rc fmem_base::acquire(void **_p_data, const uint32_t _timeout)
 {
     if (__tn::tn_is_task_context())
     {
-        return static_cast<rc>(__tn::tn_fmem_get(&fmem_, p_data_, _timeout));
+        return static_cast<rc>(__tn::tn_fmem_get(&fmem_, _p_data, _timeout));
     }
     else if (_timeout == 0)
     {
-        return static_cast<rc>(__tn::tn_fmem_iget_polling(&fmem_, p_data_));
+        return static_cast<rc>(__tn::tn_fmem_iget_polling(&fmem_, _p_data));
     }
     else
     {
@@ -259,10 +259,10 @@ rc fmem_base::acquire(void **p_data_, const uint32_t _timeout)
     }
 }
 
-rc fmem_base::release(void *p_data_)
+rc fmem_base::release(void *_p_data)
 {
     return static_cast<rc>(
-        __tn::tn_is_task_context() ? __tn::tn_fmem_release(&fmem_, p_data_) : __tn::tn_fmem_irelease(&fmem_, p_data_)
+        __tn::tn_is_task_context() ? __tn::tn_fmem_release(&fmem_, _p_data) : __tn::tn_fmem_irelease(&fmem_, _p_data)
         );
 }
 
@@ -276,9 +276,9 @@ int32_t fmem_base::used_cnt_get(void)
     return __tn::tn_fmem_used_blocks_cnt_get(&fmem_);
 }
 
-fmem_base::fmem_base(void *start_addr_, unsigned int block_size_, int blocks_cnt_)
+fmem_base::fmem_base(void *_start_addr, uint32_t _block_size, uint32_t _blocks_cnt)
 {
-    if (__tn::tn_fmem_create(&fmem_, start_addr_, block_size_, blocks_cnt_) != __tn::TN_RC_OK)
+    if (__tn::tn_fmem_create(&fmem_, _start_addr, _block_size, _blocks_cnt) != __tn::TN_RC_OK)
     {
          PRINTFAULT("fmem pool not created\n");
     }
