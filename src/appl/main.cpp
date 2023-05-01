@@ -34,6 +34,7 @@ struct kernel: os::kernel<kernel, 0x48>
 
 //-- tasks for yeld testing -----------------------------------------------------------------------/
 
+#if 1
 static struct  dtask1: os::task<dtask1, 0x78,os::priority::low>
 {
     void task_func(void) __attribute__((__noreturn__))
@@ -51,6 +52,7 @@ static struct dtask2: os::task<dtask2, 0x78,os::priority::low>
     }
     using os::task<dtask2, 0x78, os::priority::low>::task;
 } dtask2_obj = "dummy_task2";
+#endif
 
 //-- task for led blinking ------------------------------------------------------------------------/
 
