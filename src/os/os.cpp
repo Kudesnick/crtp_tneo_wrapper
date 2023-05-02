@@ -133,23 +133,17 @@ rc task_base::change_priority(const priority _priority)
 
 rc task_base::wakeup(void)
 {
-    return static_cast<rc>(
-        __tn::tn_is_task_context() ? __tn::tn_task_wakeup(&task_) : __tn::tn_task_iwakeup(&task_)
-        );
+    return static_cast<rc>(__tn::tn_is_task_context() ? __tn::tn_task_wakeup(&task_) : __tn::tn_task_iwakeup(&task_));
 }
 
 rc task_base::activate(void)
 {
-    return static_cast<rc>(
-        __tn::tn_is_task_context() ? __tn::tn_task_activate(&task_) : __tn::tn_task_iactivate(&task_)
-        );
+    return static_cast<rc>(__tn::tn_is_task_context() ? __tn::tn_task_activate(&task_) : __tn::tn_task_iactivate(&task_));
 }
 
 rc task_base::release_wait(void)
 {
-    return static_cast<rc>(
-        __tn::tn_is_task_context() ? __tn::tn_task_release_wait(&task_) : __tn::tn_task_irelease_wait(&task_)
-        );
+    return static_cast<rc>(__tn::tn_is_task_context() ? __tn::tn_task_release_wait(&task_) : __tn::tn_task_irelease_wait(&task_));
 }
 
 task_base::~task_base()
@@ -182,11 +176,7 @@ mutex::mutex(void)
 
 mutex::mutex(const priority _ceil_priority)
 {
-    if (__tn::tn_mutex_create(
-            &mutex_,
-            __tn::TN_MUTEX_PROT_CEILING,
-            static_cast<int>(_ceil_priority)
-            ) != __tn::TN_RC_OK)
+    if (__tn::tn_mutex_create(&mutex_, __tn::TN_MUTEX_PROT_CEILING, static_cast<int>(_ceil_priority)) != __tn::TN_RC_OK)
     {
         PRINTFAULT("mutex not created\n");
     }
@@ -220,9 +210,7 @@ rc semaphore::acquire(const uint32_t _timeout)
 
 rc semaphore::release(void) // increment
 {
-    return static_cast<rc>(
-        __tn::tn_is_task_context() ? __tn::tn_sem_signal(&sem_) : __tn::tn_sem_isignal(&sem_)
-        );
+    return static_cast<rc>(__tn::tn_is_task_context() ? __tn::tn_sem_signal(&sem_) : __tn::tn_sem_isignal(&sem_));
 }
 
 semaphore::semaphore(const uint32_t start_, const uint32_t max_)
@@ -245,13 +233,13 @@ semaphore::~semaphore()
 
 rc fmem_base::acquire(void **_p_data, const uint32_t _timeout)
 {
-    if (__tn::tn_is_task_context())
+    if (_timeout == 0)
+    {
+        return static_cast<rc>(__tn::tn_is_task_context() ? __tn::tn_fmem_get_polling(&fmem_, _p_data) : __tn::tn_fmem_iget_polling(&fmem_, _p_data));
+    }
+    else if (__tn::tn_is_task_context())
     {
         return static_cast<rc>(__tn::tn_fmem_get(&fmem_, _p_data, _timeout));
-    }
-    else if (_timeout == 0)
-    {
-        return static_cast<rc>(__tn::tn_fmem_iget_polling(&fmem_, _p_data));
     }
     else
     {
@@ -261,9 +249,7 @@ rc fmem_base::acquire(void **_p_data, const uint32_t _timeout)
 
 rc fmem_base::release(void *_p_data)
 {
-    return static_cast<rc>(
-        __tn::tn_is_task_context() ? __tn::tn_fmem_release(&fmem_, _p_data) : __tn::tn_fmem_irelease(&fmem_, _p_data)
-        );
+    return static_cast<rc>(__tn::tn_is_task_context() ? __tn::tn_fmem_release(&fmem_, _p_data) : __tn::tn_fmem_irelease(&fmem_, _p_data));
 }
 
 int32_t fmem_base::free_cnt_get(void)
