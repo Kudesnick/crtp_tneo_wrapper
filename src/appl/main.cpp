@@ -88,14 +88,16 @@ static struct fmem_task: os::task<fmem_task, 0x110>
         uint8_t noalign;
     };
 
-    os::fmempool<item_t, 3> pool;
+    os::fmempool<item_t, 3> pool_1;
+    os::fmempool<item_t, 3> pool_2;
     
-    os::fmem<item_t>::item items[5] = {pool, pool, pool, pool};
+    os::fmem<item_t>::item items[6] = {pool_1, pool_1, pool_1, pool_1, pool_1};
     
     void print_snapshot(void)
     {
         printf("snapshot:\n");
-        printf("mempool used: %d, free: %d\n", pool.used_cnt_get(), pool.free_cnt_get());
+        printf("mempool_1 used: %d, free: %d\n", pool_1.used_cnt_get(), pool_1.free_cnt_get());
+        printf("mempool_2 used: %d, free: %d\n", pool_2.used_cnt_get(), pool_2.free_cnt_get());
         int cnt = 0;
         for (auto &i : items)
         {
@@ -107,6 +109,19 @@ static struct fmem_task: os::task<fmem_task, 0x110>
     void task_func(void) __attribute__((__noreturn__))
     {
         printf("sizeof(item_t) = %d\n", sizeof(item_t));
+        print_snapshot();
+
+        items[3].acquire(pool_2, os::nowait);
+        items[4].acquire(pool_2, os::nowait);
+        items[5].acquire(pool_2, os::nowait);
+        print_snapshot();
+
+        items[5].move(pool_1);
+        items[4].move(pool_1);
+        items[3].move(pool_1);
+        print_snapshot();
+
+        for (auto &i : items) i.release();
         print_snapshot();
         
         for(uint32_t i = 0;;i++)

@@ -2,9 +2,9 @@
 #include CMSIS_device_header
 
 #if !defined(__CC_ARM) && defined(__ARMCC_VERSION) && !defined(__OPTIMIZE__)
-    #error This project uses syntax solutions that require an optimization level of at least 1.
-    #error Otherwise, you will see an increase in ROM and RAM consumption up to two sizes.
-    #error As well as unjustified performance degradation.
+    #warning This project uses syntax solutions that require an optimization level of at least 1.
+    #warning Otherwise, you will see an increase in ROM and RAM consumption up to two sizes.
+    #warning As well as unjustified performance degradation.
 #endif
 
 #include <stdint.h>
@@ -250,6 +250,11 @@ rc fmem_base::acquire(void **_p_data, const uint32_t _timeout)
 rc fmem_base::release(void *_p_data)
 {
     return static_cast<rc>(__tn::tn_is_task_context() ? __tn::tn_fmem_release(&fmem_, _p_data) : __tn::tn_fmem_irelease(&fmem_, _p_data));
+}
+
+rc fmem_base::append(void *_p_data)
+{
+    return static_cast<rc>(__tn::tn_is_task_context() ? __tn::tn_fmem_append(&fmem_, _p_data) : __tn::tn_fmem_iappend(&fmem_, _p_data));
 }
 
 int32_t fmem_base::free_cnt_get(void)

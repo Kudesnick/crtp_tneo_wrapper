@@ -177,19 +177,19 @@ class kernel: public task<T, _stack_size, priority::idle>
 private:
     static void cb_stack_overflow(__tn::TN_Task *_task)
     {
-        /* Опасное преобразование! Будет работать только если поле __tn::TN_Task task_ будет первым
-         * в классе task_base и класс task_base не будет содержать виртуальных методов
+        /** @todo Опасное преобразование! Будет работать только если поле __tn::TN_Task task_ будет
+         * первым в классе task_base и класс task_base не будет содержать виртуальных методов
          */
         os::cb_stack_overflow(reinterpret_cast<task_base *>(_task));
     }
 
     static void cb_deadlock(TN_BOOL _active, struct __tn::TN_Mutex *_mutex, struct __tn::TN_Task *_task)
     {
-        /* Опасное преобразование! Будет работать только если поле __tn::TN_Task task_ будет первым
-         * в классе task_base и класс task_base не будет содержать виртуальных методов
+        /** @todo Опасное преобразование! Будет работать только если поле __tn::TN_Task task_ будет
+         * первым в классе task_base и класс task_base не будет содержать виртуальных методов
          */
-        /* Опасное преобразование! Будет работать только если поле __tn::TN_Mutex mutex_ будет первым
-         * в классе mutex и класс mutex не будет содержать виртуальных методов
+        /** @todo Опасное преобразование! Будет работать только если поле __tn::TN_Mutex mutex_
+         * будет первым в классе mutex и класс mutex не будет содержать виртуальных методов
          */
         os::cb_deadlock(_active, reinterpret_cast<mutex *>(_mutex), reinterpret_cast<task_base *>(_task));
     }
@@ -236,7 +236,7 @@ public:
     ~mutex();
 };
 
-//-- semaphores from tn_sem.h ------------------------------------------------------------------------/
+//-- semaphores from tn_sem.h ---------------------------------------------------------------------/
 
 class semaphore
 {
@@ -251,7 +251,7 @@ public:
     ~semaphore();
 };
 
-//-- memory pool from tn_fmem.h ------------------------------------------------------------------------/
+//-- memory pool from tn_fmem.h -------------------------------------------------------------------/
 
 class fmem_base
 {
@@ -261,6 +261,7 @@ protected:
 public:
     rc acquire(void **_p_data, const uint32_t _timeout);
     rc release(void *_p_data);
+    rc append(void *_p_data);
 
     int32_t free_cnt_get(void);
     int32_t used_cnt_get(void);
@@ -268,6 +269,7 @@ public:
     fmem_base(void *_start_addr, uint32_t _block_size, uint32_t _blocks_cnt);
     ~fmem_base();
 };
+
 
 template <class T> class fmem: public fmem_base
 {
@@ -297,12 +299,31 @@ public:
         {
             if (owner_ == nullptr) return rc::illegal_use;
 
-            rc res = owner_->release(ptr_);
-            if (res == rc::ok) owner_ = ptr_ = nullptr;
-            
+            rc res = owner_->release(*ptr_);
+            if (res == rc::ok)
+            {
+                owner_ = nullptr;
+                ptr_ = nullptr;
+            }
+
             return res;
         }
-        
+
+        rc move(fmem<T> &_fmem)
+        {
+            if (owner_ == nullptr) return rc::illegal_use;
+            else if (owner_ == &_fmem) return release();
+            
+            rc res = owner_->append(*ptr_);
+            if (res == rc::ok)
+            {
+                owner_ = nullptr;
+                ptr_ = nullptr;
+            }
+
+            return res;
+        }
+
         item(fmem<T> &_fmem):
             owner_(nullptr), ptr_(nullptr)
         {
@@ -322,6 +343,11 @@ public:
         return fmem_base::release(static_cast<void *>(&_p_data));
     }
 
+    rc append(T &_p_data)
+    {
+        return fmem_base::append(static_cast<void *>(&_p_data));
+    }
+
     rc acquire(item &_item, const uint32_t _timeout)
     {
         return _item.acquire(this, _timeout);
@@ -335,6 +361,7 @@ public:
     fmem(T *const _start_addr, const uint32_t _blocks_cnt):
         fmem_base(static_cast<void *>(_start_addr), sizeof(T), _blocks_cnt){}
 };
+
 
 template <class T, uint32_t cnt> class fmempool: public fmem<T>
 {
