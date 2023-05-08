@@ -257,6 +257,8 @@ class fmem_base
 {
 protected:
     __tn::TN_FMem fmem_;
+    int32_t leave(void);
+    int32_t add(void);
 
 public:
     rc acquire(void **_p_data, const uint32_t _timeout);
@@ -311,17 +313,23 @@ public:
 
         rc move(fmem<T> &_fmem)
         {
-            if (owner_ == nullptr) return rc::illegal_use;
-            else if (owner_ == &_fmem) return release();
+            if (owner_ == nullptr || ptr_ == nullptr) return rc::illegal_use;
+            else if (owner_ == &_fmem) return rc::illegal_use;
             
-            rc res = owner_->append(*ptr_);
-            if (res == rc::ok)
+            auto source_cnt = owner_->used_cnt_get();
+            auto dest_cnt = _fmem.used_cnt_get();
+            
+            if (true
+                && source_cnt > 0   
+                && owner_->leave() == source_cnt - 1
+                && _fmem.add() == dest_cnt + 1
+            )
             {
-                owner_ = nullptr;
-                ptr_ = nullptr;
+                owner_ = &_fmem;
+                return rc::illegal_use;
             }
 
-            return res;
+            return rc::ok;
         }
 
         item(fmem<T> &_fmem):

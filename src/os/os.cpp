@@ -231,6 +231,16 @@ semaphore::~semaphore()
 
 //-- fmem -----------------------------------------------------------------------------------------/
 
+int32_t fmem_base::leave(void)
+{
+    return (fmem_.blocks_cnt) ? static_cast<int32_t>(--fmem_.blocks_cnt) : -1;
+}
+
+int32_t fmem_base::add(void)
+{
+    return static_cast<int32_t>(++fmem_.blocks_cnt);
+}
+
 rc fmem_base::acquire(void **_p_data, const uint32_t _timeout)
 {
     if (_timeout == 0)

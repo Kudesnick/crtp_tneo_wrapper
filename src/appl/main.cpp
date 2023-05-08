@@ -78,8 +78,8 @@ static struct printf_task: os::task<printf_task, 0xF8>
 
 //-- task for fmem pool testing -------------------------------------------------------------------/
 
-#if 1
-static struct fmem_task: os::task<fmem_task, 0x110>
+#if 0
+static struct fmem_task: os::task<fmem_task, 0x130>
 {
     struct item_t
     {
@@ -91,13 +91,15 @@ static struct fmem_task: os::task<fmem_task, 0x110>
     os::fmempool<item_t, 3> pool_1;
     os::fmempool<item_t, 3> pool_2;
     
+    item_t raw_pool[3];
+
     os::fmem<item_t>::item items[6] = {pool_1, pool_1, pool_1, pool_1, pool_1};
     
     void print_snapshot(void)
     {
         printf("snapshot:\n");
-        printf("mempool_1 used: %d, free: %d\n", pool_1.used_cnt_get(), pool_1.free_cnt_get());
-        printf("mempool_2 used: %d, free: %d\n", pool_2.used_cnt_get(), pool_2.free_cnt_get());
+        printf("mempool_1 " U32 " used: %d, free: %d\n", &pool_1, pool_1.used_cnt_get(), pool_1.free_cnt_get());
+        printf("mempool_2 " U32 " used: %d, free: %d\n", &pool_2, pool_2.used_cnt_get(), pool_2.free_cnt_get());
         int cnt = 0;
         for (auto &i : items)
         {
@@ -109,20 +111,35 @@ static struct fmem_task: os::task<fmem_task, 0x110>
     void task_func(void) __attribute__((__noreturn__))
     {
         printf("sizeof(item_t) = %d\n", sizeof(item_t));
+        printf("After constructor");
         print_snapshot();
 
-        items[3].acquire(pool_2, os::nowait);
-        items[4].acquire(pool_2, os::nowait);
-        items[5].acquire(pool_2, os::nowait);
+        items[3].acquire(pool_2, os::infinitely);
+        items[4].acquire(pool_2, os::infinitely);
+        items[5].acquire(pool_2, os::infinitely);
+        printf("After acure in pool_2 ");
         print_snapshot();
 
         items[5].move(pool_1);
         items[4].move(pool_1);
         items[3].move(pool_1);
+        printf("After move in pool_1 ");
         print_snapshot();
 
         for (auto &i : items) i.release();
+        printf("After release all ");
         print_snapshot();
+
+        for (auto &i : raw_pool) pool_2.append(i);
+        printf("After append raw_pool to pool_2 ");
+        print_snapshot();
+        
+        for (uint32_t i = 0; i < countof(raw_pool); i++)
+        {
+            items[i].acquire(pool_2, os::infinitely);
+        }
+        printf("After accure raw_pool ");
+        print_snapshot();        
         
         for(uint32_t i = 0;;i++)
         {
@@ -132,7 +149,7 @@ static struct fmem_task: os::task<fmem_task, 0x110>
             sleep(500);
         }
     }
-    using os::task<fmem_task, 0x110>::task;
+    using os::task<fmem_task, 0x130>::task;
 } fmem_task_obj = "fmem_task";
 #endif
 

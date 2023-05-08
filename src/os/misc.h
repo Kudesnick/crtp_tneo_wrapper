@@ -3,6 +3,8 @@
 
 #include "printf.h"
 
+#define countof(array) (sizeof(array) / sizeof(array[0]))
+
 #define BRK for(;;)
 
 #define STRINGIFY(x) #x
