@@ -273,7 +273,7 @@ public:
 };
 
 
-template <class T> class fmem: public fmem_base
+template <class T> class fmem_tmplt: public fmem_base
 {
     static_assert(sizeof(T) >= sizeof(void *), "mempool item must be 4 bytes or greater");
 static_assert(sizeof(T) % sizeof(uint32_t) == 0, "size of mempool item must be a multiple of 4 bytes");
@@ -281,13 +281,13 @@ public:
     class item
     {
     private:
-        fmem<T> *owner_;
+        fmem_tmplt<T> *owner_;
         T* ptr_;
     public:
         T*const &ptr    = ptr_;
-        fmem<T> *&owner = owner_;
+        fmem_tmplt<T> *&owner = owner_;
 
-        rc acquire(fmem<T> &_fmem, const uint32_t _timeout)
+        rc acquire(fmem_tmplt<T> &_fmem, const uint32_t _timeout)
         {
             if (owner_ != nullptr) return rc::illegal_use;
             
@@ -311,7 +311,7 @@ public:
             return res;
         }
 
-        rc move(fmem<T> &_fmem)
+        rc move(fmem_tmplt<T> &_fmem)
         {
             if (owner_ == nullptr || ptr_ == nullptr) return rc::illegal_use;
             else if (owner_ == &_fmem) return rc::illegal_use;
@@ -332,7 +332,7 @@ public:
             return rc::ok;
         }
 
-        item(fmem<T> &_fmem):
+        item(fmem_tmplt<T> &_fmem):
             owner_(nullptr), ptr_(nullptr)
         {
             acquire(_fmem, nowait);
@@ -366,18 +366,18 @@ public:
         return (_item.owner == this) ? _item.release() : rc::illegal_use;
     }
     
-    fmem(T *const _start_addr, const uint32_t _blocks_cnt):
+    fmem_tmplt(T *const _start_addr, const uint32_t _blocks_cnt):
         fmem_base(static_cast<void *>(_start_addr), sizeof(T), _blocks_cnt){}
 };
 
 
-template <class T, uint32_t cnt> class fmempool: public fmem<T>
+template <class T, uint32_t cnt> class fmem: public fmem_tmplt<T>
 {
 static_assert(cnt > 0, "count of mempool items must be greater that 1");
 private:
     T pool_[cnt];
 public:
-    fmempool(void): fmem<T>(pool_, cnt){}
+    fmem(void): fmem_tmplt<T>(pool_, cnt){}
 };
 
 //-- event group from tn_eventgrp.h ---------------------------------------------------------------/

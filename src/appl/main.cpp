@@ -88,12 +88,12 @@ static struct fmem_task: os::task<fmem_task, 0x130>
         uint8_t noalign;
     };
 
-    os::fmempool<item_t, 3> pool_1;
-    os::fmempool<item_t, 3> pool_2;
+    os::fmem<item_t, 3> pool_1;
+    os::fmem<item_t, 3> pool_2;
     
     item_t raw_pool[3];
 
-    os::fmem<item_t>::item items[6] = {pool_1, pool_1, pool_1, pool_1, pool_1};
+    os::fmem_tmplt<item_t>::item items[6] = {pool_1, pool_1, pool_1, pool_1, pool_1};
     
     void print_snapshot(void)
     {
