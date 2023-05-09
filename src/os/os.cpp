@@ -58,6 +58,10 @@ namespace sheduler
     {
         PRINTFAULT("function 'sleep_until' must be overloaded\n");
     }
+    __WEAK uint32_t cb_tick_get(void)
+    {
+        PRINTFAULT("function 'cb_tick_get' must be overloaded\n");
+    }
 #endif
 }
 
@@ -72,14 +76,6 @@ __WEAK void cb_deadlock(const bool _active, mutex *const _mutex, task_base *cons
     (void)_mutex;
     (void)_task;
 }
-
-#if TN_DYNAMIC_TICK
-    __WEAK uint32_t cb_tick_get(void)
-    {
-        PRINTFAULT("function 'cb_tick_get' must be overloaded\n");
-    }
-#endif
-
 
 //-- task_base ------------------------------------------------------------------------------------/
 
@@ -198,7 +194,7 @@ rc semaphore::acquire(const uint32_t _timeout)
     {
         return static_cast<rc>(__tn::tn_sem_wait(&sem_, _timeout));
     }
-    else if (_timeout == 0)
+    else if (_timeout == os::nowait)
     {
         return static_cast<rc>(__tn::tn_sem_iwait_polling(&sem_));
     }
@@ -243,7 +239,7 @@ int32_t fmem_base::add(void)
 
 rc fmem_base::acquire(void **_p_data, const uint32_t _timeout)
 {
-    if (_timeout == 0)
+    if (_timeout == os::nowait)
     {
         return static_cast<rc>(__tn::tn_is_task_context() ? __tn::tn_fmem_get_polling(&fmem_, _p_data) : __tn::tn_fmem_iget_polling(&fmem_, _p_data));
     }
@@ -290,6 +286,49 @@ fmem_base::~fmem_base()
     if (__tn::tn_fmem_delete(&fmem_)  != __tn::TN_RC_OK)
     {
         PRINTFAULT("fmem pool destructor error\n");
+    }
+}
+
+//-- event group from tn_eventgrp.h ---------------------------------------------------------------/
+
+eventgrp::eventgrp(const uint32_t _pattern)
+{
+    if (__tn::tn_eventgrp_create(&eventgrp_, _pattern) != __tn::TN_RC_OK)
+    {
+         PRINTFAULT("event group not created\n");
+    }
+}
+
+rc eventgrp::wait(const uint32_t _pattern, const wait_mode _wait_mode, uint32_t *const _f_pattern, const uint32_t _timeout)
+{
+    if (_timeout == os::nowait)
+    {
+        return static_cast<rc>(__tn::tn_is_task_context() ?
+            __tn::tn_eventgrp_wait_polling(&eventgrp_, _pattern, static_cast<__tn::TN_EGrpWaitMode>(_wait_mode), _f_pattern) :
+            __tn::tn_eventgrp_iwait_polling(&eventgrp_, _pattern, static_cast<__tn::TN_EGrpWaitMode>(_wait_mode), _f_pattern));
+    }
+    else if (__tn::tn_is_task_context())
+    {
+        return static_cast<rc>(__tn::tn_eventgrp_wait(&eventgrp_, _pattern, static_cast<__tn::TN_EGrpWaitMode>(_wait_mode), _f_pattern, _timeout));
+    }
+    else
+    {
+        return rc::wparam;
+    }
+}
+
+rc eventgrp::modify(const op_mode _op_mode, const uint32_t _pattern)
+{
+    return static_cast<rc>(__tn::tn_is_task_context() ?
+        __tn::tn_eventgrp_modify(&eventgrp_,  static_cast<__tn::TN_EGrpOp>(_op_mode), _pattern) :
+        __tn::tn_eventgrp_imodify(&eventgrp_, static_cast<__tn::TN_EGrpOp>(_op_mode), _pattern));
+}
+
+eventgrp::~eventgrp()
+{
+    if (__tn::tn_eventgrp_delete(&eventgrp_)  != __tn::TN_RC_OK)
+    {
+        PRINTFAULT("event group destructor error\n");
     }
 }
 

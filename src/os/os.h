@@ -380,4 +380,33 @@ public:
     fmempool(void): fmem<T>(pool_, cnt){}
 };
 
+//-- event group from tn_eventgrp.h ---------------------------------------------------------------/
+
+class eventgrp
+{
+private:
+    __tn::TN_EventGrp eventgrp_;
+
+public:
+    enum class wait_mode
+    {
+        w_or      = __tn::TN_EVENTGRP_WMODE_OR,
+        w_and     = __tn::TN_EVENTGRP_WMODE_AND,
+        w_or_clr  = __tn::TN_EVENTGRP_WMODE_OR  | __tn::TN_EVENTGRP_WMODE_AUTOCLR,
+        w_and_clr = __tn::TN_EVENTGRP_WMODE_AND | __tn::TN_EVENTGRP_WMODE_AUTOCLR,
+    };
+
+    enum class op_mode
+    {
+        set    = __tn::TN_EVENTGRP_OP_SET,
+        clr    = __tn::TN_EVENTGRP_OP_CLEAR,
+        toggle = __tn::TN_EVENTGRP_OP_TOGGLE,
+    };
+
+    eventgrp(const uint32_t _pattern);
+    rc wait(const uint32_t _pattern, const wait_mode _wait_mode, uint32_t *const _f_pattern, const uint32_t _timeout);
+    rc modify(const op_mode _op_mode, const uint32_t _pattern);
+    ~eventgrp();
+};
+
 } // namespace os
