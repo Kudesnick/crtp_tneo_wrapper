@@ -8,6 +8,7 @@
 #endif
 
 #include <stdint.h>
+#include <cstring>
 #include "os.h"
 #include "misc.h"
 
@@ -253,6 +254,18 @@ rc fmem_base::acquire(void **_p_data, const uint32_t _timeout)
     }
 }
 
+rc fmem_base::acquire_memcpy(void **_p_data, void *_p_source, const uint32_t _timeout)
+{
+    rc ret = acquire(_p_data, _timeout);
+    
+    if (ret == rc::ok)
+    {
+        std::memcpy(*_p_data, _p_source, fmem_.block_size);
+    }
+    
+    return ret;
+}
+
 rc fmem_base::release(void *_p_data)
 {
     return static_cast<rc>(__tn::tn_is_task_context() ? __tn::tn_fmem_release(&fmem_, _p_data) : __tn::tn_fmem_irelease(&fmem_, _p_data));
@@ -329,6 +342,111 @@ eventgrp::~eventgrp()
     if (__tn::tn_eventgrp_delete(&eventgrp_)  != __tn::TN_RC_OK)
     {
         PRINTFAULT("event group destructor error\n");
+    }
+}
+
+//-- queue from tn_dqueue.h -----------------------------------------------------------------------/
+
+queue_base::queue_base(void **_p_fifo, const uint32_t _items)
+{
+    if (__tn::tn_queue_create(&queue_, _p_fifo, static_cast<int32_t>(_items)) != __tn::TN_RC_OK)
+    {
+         PRINTFAULT("queue not created\n");
+    }
+}
+
+rc queue_base::send(void *const _p_data, const uint32_t _timeout)
+{
+    if (__tn::tn_is_task_context())
+    {
+        return static_cast<rc>(__tn::tn_queue_send(&queue_, _p_data, _timeout));
+    }
+    else if (_timeout == os::nowait)
+    {
+        return static_cast<rc>(__tn::tn_queue_isend_polling(&queue_, _p_data));
+    }
+    else
+    {
+        return rc::wparam;
+    }
+}
+
+rc queue_base::receive(void **_pp_data, const uint32_t _timeout)
+{
+    if (__tn::tn_is_task_context())
+    {
+        return static_cast<rc>(__tn::tn_queue_receive(&queue_, _pp_data, _timeout));
+    }
+    else if (_timeout == os::nowait)
+    {
+        return static_cast<rc>(__tn::tn_queue_ireceive_polling(&queue_, _pp_data));
+    }
+    else
+    {
+        return rc::wparam;
+    }
+}
+
+rc queue_base::send_acquire(fmem_base &_fmem, void *_p_data, const uint32_t _timeout)
+{
+    uint32_t timestamp = tick_get();
+    void *ptr;
+    rc ret = _fmem.acquire_memcpy(&ptr, _p_data, _timeout);
+
+    if (ret == rc::ok)
+    {
+        uint32_t timeout = (_timeout == nowait || _timeout == infinitely) ? _timeout :
+            _timeout - (tick_get() - timestamp);
+        if (timeout > _timeout) timeout = 0;
+        
+        ret = queue_base::send(ptr, timeout);
+        
+        if (ret != rc::ok) _fmem.release(ptr);
+    }
+
+    return ret;
+}
+
+rc queue_base::receive_release(fmem_base &_fmem, void *_p_data, const uint32_t _timeout)
+{
+    void *ptr;
+    rc ret = queue_base::receive(&ptr, _timeout);
+    
+    if (ret == rc::ok)
+    {
+        memcpy(_p_data, ptr, _fmem.fmem_.block_size);
+        ret = _fmem.release(ptr);
+    }
+    
+    return ret;
+}
+
+int32_t queue_base::free_cnt_get(void)
+{
+    return __tn::tn_queue_free_items_cnt_get(&queue_);
+}
+
+int32_t queue_base::used_cnt_get(void)
+{
+    return __tn::tn_queue_used_items_cnt_get(&queue_);
+}
+
+rc queue_base::evengrp_connect(eventgrp &_eventgrp, const uint32_t _pattern)
+{
+    return static_cast<rc>(
+        __tn::tn_queue_eventgrp_connect(&queue_, &_eventgrp.eventgrp_, _pattern));
+}
+
+rc queue_base::evengrp_disconnect(void)
+{
+    return static_cast<rc>(__tn::tn_queue_eventgrp_disconnect(&queue_));
+}
+
+queue_base::~queue_base()
+{
+    if (__tn::tn_queue_delete(&queue_) != __tn::TN_RC_OK)
+    {
+         PRINTFAULT("queue destructor error\n");
     }
 }
 

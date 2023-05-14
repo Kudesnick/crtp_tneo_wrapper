@@ -5,6 +5,10 @@
 #include "os.h"
 #include "misc.h"
 
+#define TEST_YELD   (0)
+#define TEST_PRINTF (0)
+#define TEST_FMEM   (0)
+
 //-- init callbacks -------------------------------------------------------------------------------/
 
 void csp::tick::cb_tick_handl(void)
@@ -46,7 +50,7 @@ static struct task: os::task<task, 0x68>
 
 //-- tasks for yeld testing -----------------------------------------------------------------------/
 
-#if 1
+#if TEST_YELD
 static struct  dtask: os::task<dtask, 0x58,os::priority::low>
 {
     void task_func(void) __attribute__((__noreturn__))
@@ -59,7 +63,7 @@ static struct  dtask: os::task<dtask, 0x58,os::priority::low>
 
 //-- task for printf and mutex testing ------------------------------------------------------------/
 
-#if 0
+#if TEST_PRINTF
 static struct printf_task: os::task<printf_task, 0xF8>
 {
     void task_func(void) __attribute__((__noreturn__))
@@ -78,7 +82,7 @@ static struct printf_task: os::task<printf_task, 0xF8>
 
 //-- task for fmem pool testing -------------------------------------------------------------------/
 
-#if 0
+#if TEST_FMEM
 static struct fmem_task: os::task<fmem_task, 0x130>
 {
     struct item_t
@@ -93,7 +97,7 @@ static struct fmem_task: os::task<fmem_task, 0x130>
     
     item_t raw_pool[3];
 
-    os::fmem_tmplt<item_t>::item items[6] = {pool_1, pool_1, pool_1, pool_1, pool_1};
+    os::fmem_typed<item_t>::item items[6] = {pool_1, pool_1, pool_1, pool_1, pool_1};
     
     void print_snapshot(void)
     {

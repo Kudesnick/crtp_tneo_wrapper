@@ -227,7 +227,7 @@ protected:
     };
 
 public:
-    rc acquire(const uint32_t _timeout);
+    rc acquire(const uint32_t _timeout = nowait);
     rc release(void);
 
     mutex(void);
@@ -244,7 +244,7 @@ protected:
     __tn::TN_Sem sem_;
 
 public:
-    rc acquire(const uint32_t _timeout);
+    rc acquire(const uint32_t _timeout = nowait);
     rc release(void);
 
     semaphore(const uint32_t start_, const uint32_t max_);
@@ -260,8 +260,13 @@ protected:
     int32_t leave(void);
     int32_t add(void);
 
+    friend class queue_base;
+    /// @todo заменить на
+    /// friend rc queue_base::receive_release(fmem_base &_fmem, void *_p_data, const uint32_t _timeout)
 public:
-    rc acquire(void **_p_data, const uint32_t _timeout);
+
+    rc acquire(void **_p_data, const uint32_t _timeout = nowait);
+    rc acquire_memcpy(void **_p_data, void *_p_source, const uint32_t _timeout = nowait);
     rc release(void *_p_data);
     rc append(void *_p_data);
 
@@ -273,21 +278,22 @@ public:
 };
 
 
-template <class T> class fmem_tmplt: public fmem_base
+template <class T> class fmem_typed: public fmem_base
 {
-    static_assert(sizeof(T) >= sizeof(void *), "mempool item must be 4 bytes or greater");
+static_assert(sizeof(T) >= sizeof(void *), "mempool item must be 4 bytes or greater");
 static_assert(sizeof(T) % sizeof(uint32_t) == 0, "size of mempool item must be a multiple of 4 bytes");
+
 public:
     class item
     {
     private:
-        fmem_tmplt<T> *owner_;
+        fmem_typed<T> *owner_;
         T* ptr_;
     public:
         T*const &ptr    = ptr_;
-        fmem_tmplt<T> *&owner = owner_;
+        fmem_typed<T> *&owner = owner_;
 
-        rc acquire(fmem_tmplt<T> &_fmem, const uint32_t _timeout)
+        rc acquire(fmem_typed<T> &_fmem, const uint32_t _timeout = nowait)
         {
             if (owner_ != nullptr) return rc::illegal_use;
             
@@ -311,7 +317,7 @@ public:
             return res;
         }
 
-        rc move(fmem_tmplt<T> &_fmem)
+        rc move(fmem_typed<T> &_fmem)
         {
             if (owner_ == nullptr || ptr_ == nullptr) return rc::illegal_use;
             else if (owner_ == &_fmem) return rc::illegal_use;
@@ -332,7 +338,7 @@ public:
             return rc::ok;
         }
 
-        item(fmem_tmplt<T> &_fmem):
+        item(fmem_typed<T> &_fmem):
             owner_(nullptr), ptr_(nullptr)
         {
             acquire(_fmem, nowait);
@@ -341,22 +347,22 @@ public:
         item(void): owner_(nullptr), ptr_(nullptr) {}
     };
 
-    rc acquire(T *&_p_data, const uint32_t _timeout)
+    rc acquire(T *&_p_data, const uint32_t _timeout = nowait)
     {
         return fmem_base::acquire(reinterpret_cast<void **>(&_p_data), _timeout);
     }
 
-    rc release(T &_p_data)
+    rc release(T &_data)
     {
-        return fmem_base::release(static_cast<void *>(&_p_data));
+        return fmem_base::release(static_cast<void *>(&_data));
     }
 
-    rc append(T &_p_data)
+    rc append(T &_data)
     {
-        return fmem_base::append(static_cast<void *>(&_p_data));
+        return fmem_base::append(static_cast<void *>(&_data));
     }
 
-    rc acquire(item &_item, const uint32_t _timeout)
+    rc acquire(item &_item, const uint32_t _timeout = nowait)
     {
         return _item.acquire(this, _timeout);
     }
@@ -366,18 +372,19 @@ public:
         return (_item.owner == this) ? _item.release() : rc::illegal_use;
     }
     
-    fmem_tmplt(T *const _start_addr, const uint32_t _blocks_cnt):
+    fmem_typed(T *const _start_addr, const uint32_t _blocks_cnt):
         fmem_base(static_cast<void *>(_start_addr), sizeof(T), _blocks_cnt){}
 };
 
 
-template <class T, uint32_t cnt> class fmem: public fmem_tmplt<T>
+template <class T, uint32_t cnt> class fmem: public fmem_typed<T>
 {
-static_assert(cnt > 0, "count of mempool items must be greater that 1");
+static_assert(cnt > 0, "count of mempool items must be greater than 0");
+
 private:
     T pool_[cnt];
 public:
-    fmem(void): fmem_tmplt<T>(pool_, cnt){}
+    fmem(void): fmem_typed<T>(pool_, cnt){}
 };
 
 //-- event group from tn_eventgrp.h ---------------------------------------------------------------/
@@ -386,6 +393,10 @@ class eventgrp
 {
 private:
     __tn::TN_EventGrp eventgrp_;
+
+    friend class queue_base;
+    /// @todo заменить на:
+    /// friend rc queue_base::evengrp_connect(eventgrp &_eventgrp, const uint32_t _pattern);
 
 public:
     enum class wait_mode
@@ -404,9 +415,91 @@ public:
     };
 
     eventgrp(const uint32_t _pattern);
-    rc wait(const uint32_t _pattern, const wait_mode _wait_mode, uint32_t *const _f_pattern, const uint32_t _timeout);
+    rc wait(const uint32_t _pattern, const wait_mode _wait_mode, uint32_t *const _f_pattern, const uint32_t _timeout = nowait);
     rc modify(const op_mode _op_mode, const uint32_t _pattern);
     ~eventgrp();
 };
+
+//-- queue from tn_dqueue.h -----------------------------------------------------------------------/
+
+class queue_base
+{
+private:
+    __tn::TN_DQueue queue_;
+protected:
+    queue_base(void **_p_fifo, const uint32_t);
+    rc send(void *const _p_data, const uint32_t _timeout = nowait);
+    rc receive(void **_pp_data, const uint32_t _timeout = nowait);
+    rc send_acquire(fmem_base &_fmem, void *_p_data, const uint32_t _timeout = nowait);
+    rc receive_release(fmem_base &_fmem, void *_p_data, const uint32_t _timeout = nowait);
+public:
+    int32_t free_cnt_get(void);
+    int32_t used_cnt_get(void);
+    rc evengrp_connect(eventgrp &_eventgrp, const uint32_t _pattern);
+    rc evengrp_disconnect(void);
+    ~queue_base();
+};
+
+
+template <class T> class queue_typed: public queue_base
+{
+static_assert(sizeof(T) <= sizeof(void *), "size of queue's item type must be less or equal than 4 bytes");
+
+public:
+    queue_typed(void *_p_fifo = nullptr, const uint32_t _items = 0): queue_base(&_p_fifo, _items)
+    {}
+
+    rc send(T &_data, const uint32_t _timeout = nowait)
+    {
+        return queue_base::send(reinterpret_cast<void *>(_data), _timeout);
+    }
+    
+    rc receive(T &_data, const uint32_t _timeout = nowait)
+    {
+        return queue_base::receive(reinterpret_cast<void **>(&_data), _timeout);
+    }
+};
+
+
+template <class T, uint32_t cnt> class queue: public queue_typed<T>
+{
+private:
+    void *fifo_[cnt];
+public:
+    queue(): queue_typed<T>(fifo_, cnt){}
+};
+
+
+template <class T> class fmem_queue_typed: public queue_base
+{
+public:
+    fmem_typed<T> &fmem;
+
+    fmem_queue_typed(fmem_typed<T> &_fmem, T *_p_fifo = nullptr, const uint32_t _items = 0):
+        fmem(_fmem),
+        queue_base(&_p_fifo, _items)
+    {}
+
+    rc send_acquire(T &_data, const uint32_t _timeout = nowait)
+    {
+        return queue_base::receive_release(fmem, &_data, _timeout);
+    }
+    
+    rc receive_release(T &_data, const uint32_t _timeout = nowait)
+    {
+        return queue_base::receive_release(fmem, &_data, _timeout);
+    }
+};
+
+
+template <class T, uint32_t queue_cnt, uint32_t fmem_cnt> class fmem_queue: public fmem_queue_typed<T>
+{
+private:
+    void *fifo_[queue_cnt];
+    fmem<T, fmem_cnt> fmem_;
+public:
+    fmem_queue(): fmem_queue_typed<T>(fmem_, fifo_, queue_cnt){}
+};
+
 
 } // namespace os
