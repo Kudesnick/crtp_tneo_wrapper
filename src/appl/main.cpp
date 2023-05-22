@@ -5,7 +5,8 @@
 #include "os.h"
 #include "misc.h"
 
-#define TEST_YELD   (0)
+#define TEST_TIMER  (1)
+#define TEST_YIELD  (1)
 #define TEST_PRINTF (0)
 #define TEST_FMEM   (0)
 
@@ -36,21 +37,34 @@ struct kernel: os::kernel<kernel, 0x48>
     using os::kernel<kernel, 0x48>::kernel;
 };
 
-//-- task for led blinking ------------------------------------------------------------------------/
+//-- timer test -----------------------------------------------------------------------------------/
 
-static struct task: os::task<task, 0x68>
+#if TEST_TIMER
+static struct task: os::task<task, 0x70>
 {
+    static inline os::semaphore blink_sem = {1,1};
+    
+    struct timer: os::timer<timer>
+    {
+        void timer_func(void)
+        {
+            blink_sem.release();
+        }
+        using os::timer<timer>::timer;
+    } blink_timer = {200, os::repeat};
+
     void task_func(void) __attribute__((__noreturn__))
     {
-        for(bsp::led C13;;sleep(200))
+        for(bsp::led C13;;blink_sem.acquire(os::infinitely))
             C13.toggle();
     }
-    using os::task<task, 0x68>::task;
+    using os::task<task, 0x70>::task;
 } task_obj = "blink_task";
+#endif
 
 //-- tasks for yeld testing -----------------------------------------------------------------------/
 
-#if TEST_YELD
+#if TEST_YIELD
 static struct  dtask: os::task<dtask, 0x58,os::priority::low>
 {
     void task_func(void) __attribute__((__noreturn__))

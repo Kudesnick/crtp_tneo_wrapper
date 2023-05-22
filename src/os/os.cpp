@@ -450,6 +450,85 @@ queue_base::~queue_base()
     }
 }
 
+//-- timers from tn_tmer.h ------------------------------------------------------------------------/
+
+void timer_base::handler_(__tn::TN_Timer *_timer, void *_arg)
+{
+    (void)(_arg);
+    timer_base *const &timer_obj = reinterpret_cast<timer_base *>(_timer);
+    
+    if (timer_obj->func_)
+    {
+        timer_obj->func_(timer_obj);
+    }
+    
+    if (timer_obj->repeat_)
+    {
+        timer_obj->start(timer_obj->timeout_);
+    }
+}
+
+timer_base::timer_base(void(*_func)(void*), const uint32_t _timeout, const repeat_timer _repeat):
+    func_(_func), timeout_(_timeout), repeat_(_repeat)
+{
+    if (__tn::tn_timer_create(
+            &timer_,
+            handler_,
+            nullptr
+            ) != __tn::TN_RC_OK)
+    {
+        _TN_FATAL_ERROR("timer not created\n");
+    }
+    else
+    {
+        if (_timeout != os::nowait)
+        {
+            if (__tn::tn_timer_start(&timer_, _timeout) != __tn::TN_RC_OK)
+            {
+                _TN_FATAL_ERROR("timer not started after created\n");
+            }
+        }
+    }
+}
+
+rc timer_base::start(const uint32_t _timeout)
+{
+    return static_cast<rc>(__tn::tn_timer_start(&timer_, _timeout));
+}
+
+rc timer_base::start(const uint32_t _timeout, const repeat_timer _repeat)
+{
+    repeat_ = _repeat;
+    return static_cast<rc>(__tn::tn_timer_start(&timer_, _timeout));
+}
+
+rc timer_base::cancel()
+{
+    return static_cast<rc>(__tn::tn_timer_cancel(&timer_));
+}
+
+bool timer_base::is_active(void)
+{
+    bool result = false;
+    __tn::tn_timer_is_active(&timer_, &result);
+    return result;
+}
+
+uint32_t timer_base::time_left(void)
+{
+    __tn::TN_TickCnt result = os::infinitely;
+    __tn::tn_timer_time_left(&timer_, &result);
+    return result;
+}
+
+timer_base::~timer_base()
+{
+    if (__tn::tn_timer_delete(&timer_) != __tn::TN_RC_OK)
+    {
+         PRINTFAULT("timer destructor error\n");
+    }
+}
+
 } // namespace os
 
 //-- override weak functions ----------------------------------------------------------------------/

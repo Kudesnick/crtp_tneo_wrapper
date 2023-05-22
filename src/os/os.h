@@ -86,6 +86,12 @@ enum wait: uint32_t
     infinitely = TN_WAIT_INFINITE,
 };
 
+enum repeat_timer: bool
+{
+    repeat = true,
+    norepeat = false,
+};
+
 void tick(void); // tn_tick_int_processing
 rc tslice_set(const priority _priority, const int32_t _ticks);
 uint32_t tick_get(void);
@@ -154,7 +160,7 @@ class task : public task_base, private stack<_stack_size>
 public:
     task(const char *const _name = nullptr)
     {
-        if (tn_task_create_wname(
+        if (__tn::tn_task_create_wname(
                 &task_,
                 member_to_func(&T::task_func),
                 static_cast<int>(_priority),
@@ -164,7 +170,7 @@ public:
                 _name
                 ) != __tn::TN_RC_OK)
         {
-            _TN_FATAL_ERROR("task not created");
+            _TN_FATAL_ERROR("task not created\n");
         }
     }
 };
@@ -499,6 +505,36 @@ private:
     fmem<T, fmem_cnt> fmem_;
 public:
     fmem_queue(): fmem_queue_typed<T>(fmem_, fifo_, queue_cnt){}
+};
+
+//-- timers from tn_tmer.h ------------------------------------------------------------------------/
+
+class timer_base
+{
+private:
+    __tn::TN_Timer timer_;
+    void(*func_)(void*);
+    uint32_t timeout_;
+    repeat_timer repeat_;
+
+    static void handler_(__tn::TN_Timer *_timer, void *_arg);
+
+public:
+    timer_base(void(*_func)(void*), const uint32_t _timeout = os::nowait, const repeat_timer _repeat = os::norepeat);
+    rc start(const uint32_t _timeout);
+    rc start(const uint32_t _timeout, const repeat_timer _repeat);
+ 	rc cancel(void);
+ 	bool is_active(void);
+ 	uint32_t time_left(void);
+    ~timer_base();
+};
+
+
+template <class T> class timer : public timer_base
+{
+public:
+    timer(const uint32_t _timeout = os::nowait, const repeat_timer _repeat = os::norepeat):
+        timer_base(member_to_func(&T::timer_func), _timeout, _repeat){}
 };
 
 
