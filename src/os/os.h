@@ -4,13 +4,13 @@
 #include <stdint.h>
 #include <cstddef>
 
-namespace os
-{
-
 namespace __tn
 {
 #include "tn.h"
 }
+
+namespace os
+{
 
 //-- utils ----------------------------------------------------------------------------------------/
 
@@ -513,7 +513,6 @@ class timer_base
 {
 private:
     __tn::TN_Timer timer_;
-    void(*func_)(void*);
     uint32_t timeout_;
     repeat_timer repeat_;
 
@@ -521,6 +520,7 @@ private:
 
 public:
     timer_base(void(*_func)(void*), const uint32_t _timeout = os::nowait, const repeat_timer _repeat = os::norepeat);
+    rc start(void);
     rc start(const uint32_t _timeout);
     rc start(const uint32_t _timeout, const repeat_timer _repeat);
  	rc cancel(void);

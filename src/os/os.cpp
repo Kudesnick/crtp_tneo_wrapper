@@ -452,14 +452,13 @@ queue_base::~queue_base()
 
 //-- timers from tn_tmer.h ------------------------------------------------------------------------/
 
-void timer_base::handler_(__tn::TN_Timer *_timer, void *_arg)
+void timer_base::handler_(__tn::TN_Timer *_timer, void *_func)
 {
-    (void)(_arg);
     timer_base *const &timer_obj = reinterpret_cast<timer_base *>(_timer);
     
-    if (timer_obj->func_)
+    if (_func)
     {
-        timer_obj->func_(timer_obj);
+        reinterpret_cast<void(*)(void*)>(_func)(timer_obj);
     }
     
     if (timer_obj->repeat_)
@@ -469,15 +468,15 @@ void timer_base::handler_(__tn::TN_Timer *_timer, void *_arg)
 }
 
 timer_base::timer_base(void(*_func)(void*), const uint32_t _timeout, const repeat_timer _repeat):
-    func_(_func), timeout_(_timeout), repeat_(_repeat)
+    timeout_(_timeout), repeat_(_repeat)
 {
     if (__tn::tn_timer_create(
             &timer_,
             handler_,
-            nullptr
+            reinterpret_cast<void *>(_func)
             ) != __tn::TN_RC_OK)
     {
-        _TN_FATAL_ERROR("timer not created\n");
+        PRINTFAULT("timer not created\n");
     }
     else
     {
@@ -485,19 +484,26 @@ timer_base::timer_base(void(*_func)(void*), const uint32_t _timeout, const repea
         {
             if (__tn::tn_timer_start(&timer_, _timeout) != __tn::TN_RC_OK)
             {
-                _TN_FATAL_ERROR("timer not started after created\n");
+                PRINTFAULT("timer not started after created\n");
             }
         }
     }
 }
 
+rc timer_base::start(void)
+{
+    return static_cast<rc>(__tn::tn_timer_start(&timer_, timeout_));
+}
+
 rc timer_base::start(const uint32_t _timeout)
 {
+    timeout_ = _timeout;
     return static_cast<rc>(__tn::tn_timer_start(&timer_, _timeout));
 }
 
 rc timer_base::start(const uint32_t _timeout, const repeat_timer _repeat)
 {
+    timeout_ = _timeout;
     repeat_ = _repeat;
     return static_cast<rc>(__tn::tn_timer_start(&timer_, _timeout));
 }

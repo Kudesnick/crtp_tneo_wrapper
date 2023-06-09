@@ -6,9 +6,9 @@
 #include "misc.h"
 
 #define TEST_TIMER  (1)
-#define TEST_YIELD  (1)
+#define TEST_YIELD  (0)
 #define TEST_PRINTF (0)
-#define TEST_FMEM   (0)
+#define TEST_FMEM   (1)
 
 //-- init callbacks -------------------------------------------------------------------------------/
 
@@ -55,6 +55,7 @@ static struct task: os::task<task, 0x70>
 
     void task_func(void) __attribute__((__noreturn__))
     {
+        blink_timer.start(200);
         for(bsp::led C13;;blink_sem.acquire(os::infinitely))
             C13.toggle();
     }

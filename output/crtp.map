@@ -6,7 +6,7 @@ Section Cross References
 
     main.o(.text._ZN3csp4tick13cb_tick_handlEv) refers to os.o(.text._ZN2os4tickEv) for os::tick()
     main.o(.ARM.exidx.text._ZN3csp4tick13cb_tick_handlEv) refers to main.o(.text._ZN3csp4tick13cb_tick_handlEv) for [Anonymous Symbol]
-    main.o(.text.main) refers to main.o(.rodata.str1.1) for .L.str.1
+    main.o(.text.main) refers to main.o(.rodata.str1.1) for .L.str.4
     main.o(.text.main) refers to printf.o(.text.printf_) for printf_
     main.o(.text.main) refers to main.o(.bss._ZGVZ4mainE4krnl) for guard variable for main::krnl
     main.o(.text.main) refers to cxa_guard.cpp.o(.text.unlikely.__cxa_guard_acquire) for __cxa_guard_acquire
@@ -21,8 +21,13 @@ Section Cross References
     main.o(.text._GLOBAL__sub_I_main.cpp) refers to main.o(.bss._ZL8task_obj) for task_obj
     main.o(.text._GLOBAL__sub_I_main.cpp) refers to main.o(.text._ZN4task9task_funcEv) for task::task_func()
     main.o(.text._GLOBAL__sub_I_main.cpp) refers to tn_tasks.o(.text.tn_task_create_wname) for tn_task_create_wname
-    main.o(.text._GLOBAL__sub_I_main.cpp) refers to os.o(.text._ZN2os9task_baseD2Ev) for os::task_base::~task_base__sub_object()
+    main.o(.text._GLOBAL__sub_I_main.cpp) refers to main.o(.text._ZN4task5timer10timer_funcEv) for task::timer::timer_func()
+    main.o(.text._GLOBAL__sub_I_main.cpp) refers to os.o(.text._ZN2os10timer_baseC2EPFvPvEjNS_12repeat_timerE) for os::timer_base::timer_base__sub_object(void (*)(void*), unsigned int, os::repeat_timer)
+    main.o(.text._GLOBAL__sub_I_main.cpp) refers to main.o(.text._ZN4taskD2Ev) for task::~task__sub_object()
     main.o(.text._GLOBAL__sub_I_main.cpp) refers to cxa_atexit.o(.text) for __cxa_atexit
+    main.o(.text._GLOBAL__sub_I_main.cpp) refers to main.o(.bss._ZL13fmem_task_obj) for fmem_task_obj
+    main.o(.text._GLOBAL__sub_I_main.cpp) refers to main.o(.text._ZN9fmem_taskCI2N2os4taskIS_Lj304ELNS0_8priorityE2EEEEPKc) for fmem_task::fmem_task__sub_object(char const*)
+    main.o(.text._GLOBAL__sub_I_main.cpp) refers to main.o(.text._ZN9fmem_taskD2Ev) for fmem_task::~fmem_task__sub_object()
     main.o(.ARM.exidx.text._GLOBAL__sub_I_main.cpp) refers to main.o(.text._GLOBAL__sub_I_main.cpp) for [Anonymous Symbol]
     main.o(.init_array) refers to main.o(.text._GLOBAL__sub_I_main.cpp) for _GLOBAL__sub_I_main.cpp
     bsp.o(.text._ZN3csp4tick4initEj) refers to bsp.o(.rodata.str1.1) for .L.str
@@ -220,6 +225,30 @@ Section Cross References
     os.o(.text._ZN2os10queue_baseD2Ev) refers to os.o(.rodata.str1.1) for .L.str.11
     os.o(.text._ZN2os10queue_baseD2Ev) refers to printf.o(.text.printf_) for printf_
     os.o(.ARM.exidx.text._ZN2os10queue_baseD2Ev) refers to os.o(.text._ZN2os10queue_baseD2Ev) for [Anonymous Symbol]
+    os.o(.text._ZN2os10timer_base8handler_EPN4__tn8TN_TimerEPv) refers to tn_timer.o(.text.tn_timer_start) for tn_timer_start
+    os.o(.ARM.exidx.text._ZN2os10timer_base8handler_EPN4__tn8TN_TimerEPv) refers to os.o(.text._ZN2os10timer_base8handler_EPN4__tn8TN_TimerEPv) for [Anonymous Symbol]
+    os.o(.text._ZN2os10timer_base5startEj) refers to tn_timer.o(.text.tn_timer_start) for tn_timer_start
+    os.o(.ARM.exidx.text._ZN2os10timer_base5startEj) refers to os.o(.text._ZN2os10timer_base5startEj) for [Anonymous Symbol]
+    os.o(.text._ZN2os10timer_baseC2EPFvPvEjNS_12repeat_timerE) refers to os.o(.text._ZN2os10timer_base8handler_EPN4__tn8TN_TimerEPv) for os::timer_base::handler_(__tn::TN_Timer*, void*)
+    os.o(.text._ZN2os10timer_baseC2EPFvPvEjNS_12repeat_timerE) refers to tn_timer.o(.text.tn_timer_create) for tn_timer_create
+    os.o(.text._ZN2os10timer_baseC2EPFvPvEjNS_12repeat_timerE) refers to tn_timer.o(.text.tn_timer_start) for tn_timer_start
+    os.o(.text._ZN2os10timer_baseC2EPFvPvEjNS_12repeat_timerE) refers to printf.o(.text.printf_) for printf_
+    os.o(.text._ZN2os10timer_baseC2EPFvPvEjNS_12repeat_timerE) refers to os.o(.rodata.str1.1) for .L.str.13
+    os.o(.ARM.exidx.text._ZN2os10timer_baseC2EPFvPvEjNS_12repeat_timerE) refers to os.o(.text._ZN2os10timer_baseC2EPFvPvEjNS_12repeat_timerE) for [Anonymous Symbol]
+    os.o(.text._ZN2os10timer_base5startEv) refers to tn_timer.o(.text.tn_timer_start) for tn_timer_start
+    os.o(.ARM.exidx.text._ZN2os10timer_base5startEv) refers to os.o(.text._ZN2os10timer_base5startEv) for [Anonymous Symbol]
+    os.o(.text._ZN2os10timer_base5startEjNS_12repeat_timerE) refers to tn_timer.o(.text.tn_timer_start) for tn_timer_start
+    os.o(.ARM.exidx.text._ZN2os10timer_base5startEjNS_12repeat_timerE) refers to os.o(.text._ZN2os10timer_base5startEjNS_12repeat_timerE) for [Anonymous Symbol]
+    os.o(.text._ZN2os10timer_base6cancelEv) refers to tn_timer.o(.text.tn_timer_cancel) for tn_timer_cancel
+    os.o(.ARM.exidx.text._ZN2os10timer_base6cancelEv) refers to os.o(.text._ZN2os10timer_base6cancelEv) for [Anonymous Symbol]
+    os.o(.text._ZN2os10timer_base9is_activeEv) refers to tn_timer.o(.text.tn_timer_is_active) for tn_timer_is_active
+    os.o(.ARM.exidx.text._ZN2os10timer_base9is_activeEv) refers to os.o(.text._ZN2os10timer_base9is_activeEv) for [Anonymous Symbol]
+    os.o(.text._ZN2os10timer_base9time_leftEv) refers to tn_timer.o(.text.tn_timer_time_left) for tn_timer_time_left
+    os.o(.ARM.exidx.text._ZN2os10timer_base9time_leftEv) refers to os.o(.text._ZN2os10timer_base9time_leftEv) for [Anonymous Symbol]
+    os.o(.text._ZN2os10timer_baseD2Ev) refers to tn_timer.o(.text.tn_timer_delete) for tn_timer_delete
+    os.o(.text._ZN2os10timer_baseD2Ev) refers to os.o(.rodata.str1.1) for .L.str.14
+    os.o(.text._ZN2os10timer_baseD2Ev) refers to printf.o(.text.printf_) for printf_
+    os.o(.ARM.exidx.text._ZN2os10timer_baseD2Ev) refers to os.o(.text._ZN2os10timer_baseD2Ev) for [Anonymous Symbol]
     retarget_io.o(.text._printf_mutex_acquire) refers to retarget_io.o(.bss._ZL12printf_mutex) for printf_mutex
     retarget_io.o(.text._printf_mutex_acquire) refers to os.o(.text._ZN2os5mutex7acquireEj) for os::mutex::acquire(unsigned int)
     retarget_io.o(.ARM.exidx.text._printf_mutex_acquire) refers to retarget_io.o(.text._printf_mutex_acquire) for [Anonymous Symbol]
@@ -976,6 +1005,7 @@ Section Cross References
     tn_timer.o(.ARM.exidx.text.tn_timer_time_left) refers to tn_timer.o(.text.tn_timer_time_left) for [Anonymous Symbol]
     tn_timer_static.o(.text._tn_timers_init) refers to tn_timer_static.o(.bss._tn_sys_time_count) for _tn_sys_time_count
     tn_timer_static.o(.text._tn_timers_init) refers to tn_timer_static.o(.bss._tn_timer_list__gen) for _tn_timer_list__gen
+    tn_timer_static.o(.text._tn_timers_init) refers to tn_list.o(.text._tn_list_is_initialized) for _tn_list_is_initialized
     tn_timer_static.o(.text._tn_timers_init) refers to tn_list.o(.text._tn_list_reset) for _tn_list_reset
     tn_timer_static.o(.text._tn_timers_init) refers to tn_timer_static.o(.bss._tn_timer_list__tick) for _tn_timer_list__tick
     tn_timer_static.o(.ARM.exidx.text._tn_timers_init) refers to tn_timer_static.o(.text._tn_timers_init) for [Anonymous Symbol]
@@ -1001,6 +1031,7 @@ Section Cross References
     tn_timer_static.o(.text._tn_timer_start) refers to tn_timer_static.o(.bss._tn_sys_time_count) for _tn_sys_time_count
     tn_timer_static.o(.text._tn_timer_start) refers to tn_timer_static.o(.bss._tn_timer_list__tick) for _tn_timer_list__tick
     tn_timer_static.o(.text._tn_timer_start) refers to tn_timer_static.o(.bss._tn_timer_list__gen) for _tn_timer_list__gen
+    tn_timer_static.o(.text._tn_timer_start) refers to tn_list.o(.text._tn_list_is_initialized) for _tn_list_is_initialized
     tn_timer_static.o(.text._tn_timer_start) refers to tn_list.o(.text._tn_list_add_tail) for _tn_list_add_tail
     tn_timer_static.o(.ARM.exidx.text._tn_timer_start) refers to tn_timer_static.o(.text._tn_timer_start) for [Anonymous Symbol]
     tn_timer_static.o(.text._tn_timer_time_left) refers to tn_arch_cortex_m.o(.text) for _tn_arch_is_int_disabled
@@ -1415,25 +1446,66 @@ Section Cross References
     defsig_cppl_inner.o(.text) refers to defsig_general.o(.text) for __default_signal_display
     defsig_segv_inner.o(.text) refers to defsig_general.o(.text) for __default_signal_display
     defsig_other.o(.text) refers to defsig_general.o(.text) for __default_signal_display
+    main.o(.text.__cxx_global_var_init) refers to main.o(.bss._ZGVN4task9blink_semE) for guard variable for task::blink_sem
+    main.o(.text.__cxx_global_var_init) refers to cxa_guard.cpp.o(.text.unlikely.__cxa_guard_acquire) for __cxa_guard_acquire
+    main.o(.text.__cxx_global_var_init) refers to main.o(.bss._ZN4task9blink_semE) for task::blink_sem
+    main.o(.text.__cxx_global_var_init) refers to os.o(.text._ZN2os9semaphoreC2Ejj) for os::semaphore::semaphore(unsigned int, unsigned int)
+    main.o(.text.__cxx_global_var_init) refers to os.o(.text._ZN2os9semaphoreD2Ev) for os::semaphore::~semaphore()
+    main.o(.text.__cxx_global_var_init) refers to cxa_atexit.o(.text) for __cxa_atexit
+    main.o(.text.__cxx_global_var_init) refers to cxa_guard.cpp.o(.text.unlikely.__cxa_guard_release) for __cxa_guard_release
+    main.o(.ARM.exidx.text.__cxx_global_var_init) refers to main.o(.text.__cxx_global_var_init) for [Anonymous Symbol]
+    main.o(.init_array) refers to main.o(.text.__cxx_global_var_init) for __cxx_global_var_init
+    main.o(.text._ZN4taskD2Ev) refers to os.o(.text._ZN2os10timer_baseD2Ev) for os::timer_base::~timer_base__sub_object()
+    main.o(.text._ZN4taskD2Ev) refers to os.o(.text._ZN2os9task_baseD2Ev) for os::task_base::~task_base__sub_object()
+    main.o(.ARM.exidx.text._ZN4taskD2Ev) refers to main.o(.text._ZN4taskD2Ev) for [Anonymous Symbol]
+    main.o(.text._ZN9fmem_taskCI2N2os4taskIS_Lj304ELNS0_8priorityE2EEEEPKc) refers to main.o(.text._ZN9fmem_task9task_funcEv) for fmem_task::task_func()
+    main.o(.text._ZN9fmem_taskCI2N2os4taskIS_Lj304ELNS0_8priorityE2EEEEPKc) refers to tn_tasks.o(.text.tn_task_create_wname) for tn_task_create_wname
+    main.o(.text._ZN9fmem_taskCI2N2os4taskIS_Lj304ELNS0_8priorityE2EEEEPKc) refers to os.o(.text._ZN2os9fmem_baseC2EPvjj) for os::fmem_base::fmem_base__sub_object(void*, unsigned int, unsigned int)
+    main.o(.text._ZN9fmem_taskCI2N2os4taskIS_Lj304ELNS0_8priorityE2EEEEPKc) refers to os.o(.text._ZN2os9fmem_base7acquireEPPvj) for os::fmem_base::acquire(void**, unsigned int)
+    main.o(.ARM.exidx.text._ZN9fmem_taskCI2N2os4taskIS_Lj304ELNS0_8priorityE2EEEEPKc) refers to main.o(.text._ZN9fmem_taskCI2N2os4taskIS_Lj304ELNS0_8priorityE2EEEEPKc) for [Anonymous Symbol]
+    main.o(.text._ZN9fmem_taskD2Ev) refers to os.o(.text._ZN2os9fmem_baseD2Ev) for os::fmem_base::~fmem_base__sub_object()
+    main.o(.text._ZN9fmem_taskD2Ev) refers to os.o(.text._ZN2os9task_baseD2Ev) for os::task_base::~task_base__sub_object()
+    main.o(.ARM.exidx.text._ZN9fmem_taskD2Ev) refers to main.o(.text._ZN9fmem_taskD2Ev) for [Anonymous Symbol]
     main.o(.text._ZN6kernelCI2N2os6kernelIS_Lj72EEEEPjj) refers to main.o(.text._ZN6kernel9task_funcEv) for kernel::task_func()
     main.o(.text._ZN6kernelCI2N2os6kernelIS_Lj72EEEEPjj) refers to tn_tasks.o(.text.tn_task_create_wname) for tn_task_create_wname
     main.o(.text._ZN6kernelCI2N2os6kernelIS_Lj72EEEEPjj) refers to tn_arch_cortex_m.o(.text) for tn_arch_int_dis
     main.o(.text._ZN6kernelCI2N2os6kernelIS_Lj72EEEEPjj) refers to bsp.o(.text._ZN3csp4tick4initEj) for csp::tick::init(unsigned int)
-    main.o(.text._ZN6kernelCI2N2os6kernelIS_Lj72EEEEPjj) refers to main.o(.text._ZN2os6kernelI6kernelLj72EE17cb_stack_overflowEPNS_4__tn7TN_TaskE) for os::kernel<kernel, 72u>::cb_stack_overflow(os::__tn::TN_Task*)
+    main.o(.text._ZN6kernelCI2N2os6kernelIS_Lj72EEEEPjj) refers to main.o(.text._ZN2os6kernelI6kernelLj72EE17cb_stack_overflowEPN4__tn7TN_TaskE) for os::kernel<kernel, 72u>::cb_stack_overflow(__tn::TN_Task*)
     main.o(.text._ZN6kernelCI2N2os6kernelIS_Lj72EEEEPjj) refers to tn_sys.o(.text.tn_callback_stack_overflow_set) for tn_callback_stack_overflow_set
-    main.o(.text._ZN6kernelCI2N2os6kernelIS_Lj72EEEEPjj) refers to main.o(.text._ZN2os6kernelI6kernelLj72EE11cb_deadlockEbPNS_4__tn8TN_MutexEPNS3_7TN_TaskE) for os::kernel<kernel, 72u>::cb_deadlock(bool, os::__tn::TN_Mutex*, os::__tn::TN_Task*)
+    main.o(.text._ZN6kernelCI2N2os6kernelIS_Lj72EEEEPjj) refers to main.o(.text._ZN2os6kernelI6kernelLj72EE11cb_deadlockEbPN4__tn8TN_MutexEPNS3_7TN_TaskE) for os::kernel<kernel, 72u>::cb_deadlock(bool, __tn::TN_Mutex*, __tn::TN_Task*)
     main.o(.text._ZN6kernelCI2N2os6kernelIS_Lj72EEEEPjj) refers to tn_sys.o(.text.tn_callback_deadlock_set) for tn_callback_deadlock_set
     main.o(.text._ZN6kernelCI2N2os6kernelIS_Lj72EEEEPjj) refers to main.o(.text._ZN6kernel7sw_initEv) for kernel::sw_init()
     main.o(.text._ZN6kernelCI2N2os6kernelIS_Lj72EEEEPjj) refers to tn_sys.o(.text.tn_sys_start) for tn_sys_start
     main.o(.ARM.exidx.text._ZN6kernelCI2N2os6kernelIS_Lj72EEEEPjj) refers to main.o(.text._ZN6kernelCI2N2os6kernelIS_Lj72EEEEPjj) for [Anonymous Symbol]
+    main.o(.text._ZN4task9task_funcEv) refers to os.o(.text._ZN2os10timer_base5startEj) for os::timer_base::start(unsigned int)
     main.o(.text._ZN4task9task_funcEv) refers to bsp.o(.text._ZN3bsp3ledC2Ev) for bsp::led::led()
+    main.o(.text._ZN4task9task_funcEv) refers to main.o(.bss._ZN4task9blink_semE) for task::blink_sem
     main.o(.text._ZN4task9task_funcEv) refers to bsp.o(.text._ZN3bsp3led6toggleEv) for bsp::led::toggle()
-    main.o(.text._ZN4task9task_funcEv) refers to os.o(.text._ZN2os9task_base5sleepEj) for os::task_base::sleep(unsigned int)
+    main.o(.text._ZN4task9task_funcEv) refers to os.o(.text._ZN2os9semaphore7acquireEj) for os::semaphore::acquire(unsigned int)
     main.o(.ARM.exidx.text._ZN4task9task_funcEv) refers to main.o(.text._ZN4task9task_funcEv) for [Anonymous Symbol]
-    main.o(.text._ZN2os6kernelI6kernelLj72EE17cb_stack_overflowEPNS_4__tn7TN_TaskE) refers to os.o(.text._ZN2os17cb_stack_overflowEPNS_9task_baseE) for os::cb_stack_overflow(os::task_base*)
-    main.o(.ARM.exidx.text._ZN2os6kernelI6kernelLj72EE17cb_stack_overflowEPNS_4__tn7TN_TaskE) refers to main.o(.text._ZN2os6kernelI6kernelLj72EE17cb_stack_overflowEPNS_4__tn7TN_TaskE) for [Anonymous Symbol]
-    main.o(.text._ZN2os6kernelI6kernelLj72EE11cb_deadlockEbPNS_4__tn8TN_MutexEPNS3_7TN_TaskE) refers to os.o(.text._ZN2os11cb_deadlockEbPNS_5mutexEPNS_9task_baseE) for os::cb_deadlock(bool, os::mutex*, os::task_base*)
-    main.o(.ARM.exidx.text._ZN2os6kernelI6kernelLj72EE11cb_deadlockEbPNS_4__tn8TN_MutexEPNS3_7TN_TaskE) refers to main.o(.text._ZN2os6kernelI6kernelLj72EE11cb_deadlockEbPNS_4__tn8TN_MutexEPNS3_7TN_TaskE) for [Anonymous Symbol]
+    main.o(.text._ZN4task5timer10timer_funcEv) refers to main.o(.bss._ZN4task9blink_semE) for task::blink_sem
+    main.o(.text._ZN4task5timer10timer_funcEv) refers to os.o(.text._ZN2os9semaphore7releaseEv) for os::semaphore::release()
+    main.o(.ARM.exidx.text._ZN4task5timer10timer_funcEv) refers to main.o(.text._ZN4task5timer10timer_funcEv) for [Anonymous Symbol]
+    main.o(.text._ZN9fmem_task9task_funcEv) refers to printf.o(.text.printf_) for printf_
+    main.o(.text._ZN9fmem_task9task_funcEv) refers to main.o(.text._ZN9fmem_task14print_snapshotEv) for fmem_task::print_snapshot()
+    main.o(.text._ZN9fmem_task9task_funcEv) refers to os.o(.text._ZN2os9fmem_base7acquireEPPvj) for os::fmem_base::acquire(void**, unsigned int)
+    main.o(.text._ZN9fmem_task9task_funcEv) refers to os.o(.text._ZN2os9fmem_base7releaseEPv) for os::fmem_base::release(void*)
+    main.o(.text._ZN9fmem_task9task_funcEv) refers to os.o(.text._ZN2os9fmem_base6appendEPv) for os::fmem_base::append(void*)
+    main.o(.text._ZN9fmem_task9task_funcEv) refers to main.o(.rodata.str1.1) for .L.str.11
+    main.o(.text._ZN9fmem_task9task_funcEv) refers to os.o(.text._ZN2os8tick_getEv) for os::tick_get()
+    main.o(.text._ZN9fmem_task9task_funcEv) refers to os.o(.text._ZN2os9task_base5sleepEj) for os::task_base::sleep(unsigned int)
+    main.o(.text._ZN9fmem_task9task_funcEv) refers to os.o(.text._ZN2os9fmem_base12used_cnt_getEv) for os::fmem_base::used_cnt_get()
+    main.o(.text._ZN9fmem_task9task_funcEv) refers to os.o(.text._ZN2os9fmem_base5leaveEv) for os::fmem_base::leave()
+    main.o(.text._ZN9fmem_task9task_funcEv) refers to os.o(.text._ZN2os9fmem_base3addEv) for os::fmem_base::add()
+    main.o(.ARM.exidx.text._ZN9fmem_task9task_funcEv) refers to main.o(.text._ZN9fmem_task9task_funcEv) for [Anonymous Symbol]
+    main.o(.text._ZN9fmem_task14print_snapshotEv) refers to printf.o(.text.printf_) for printf_
+    main.o(.text._ZN9fmem_task14print_snapshotEv) refers to os.o(.text._ZN2os9fmem_base12used_cnt_getEv) for os::fmem_base::used_cnt_get()
+    main.o(.text._ZN9fmem_task14print_snapshotEv) refers to os.o(.text._ZN2os9fmem_base12free_cnt_getEv) for os::fmem_base::free_cnt_get()
+    main.o(.ARM.exidx.text._ZN9fmem_task14print_snapshotEv) refers to main.o(.text._ZN9fmem_task14print_snapshotEv) for [Anonymous Symbol]
+    main.o(.text._ZN2os6kernelI6kernelLj72EE17cb_stack_overflowEPN4__tn7TN_TaskE) refers to os.o(.text._ZN2os17cb_stack_overflowEPNS_9task_baseE) for os::cb_stack_overflow(os::task_base*)
+    main.o(.ARM.exidx.text._ZN2os6kernelI6kernelLj72EE17cb_stack_overflowEPN4__tn7TN_TaskE) refers to main.o(.text._ZN2os6kernelI6kernelLj72EE17cb_stack_overflowEPN4__tn7TN_TaskE) for [Anonymous Symbol]
+    main.o(.text._ZN2os6kernelI6kernelLj72EE11cb_deadlockEbPN4__tn8TN_MutexEPNS3_7TN_TaskE) refers to os.o(.text._ZN2os11cb_deadlockEbPNS_5mutexEPNS_9task_baseE) for os::cb_deadlock(bool, os::mutex*, os::task_base*)
+    main.o(.ARM.exidx.text._ZN2os6kernelI6kernelLj72EE11cb_deadlockEbPN4__tn8TN_MutexEPNS3_7TN_TaskE) refers to main.o(.text._ZN2os6kernelI6kernelLj72EE11cb_deadlockEbPN4__tn8TN_MutexEPNS3_7TN_TaskE) for [Anonymous Symbol]
     main.o(.text._ZN6kernel7sw_initEv) refers to os.o(.text._ZN2os10tslice_setENS_8priorityEi) for os::tslice_set(os::priority, int)
     main.o(.ARM.exidx.text._ZN6kernel7sw_initEv) refers to main.o(.text._ZN6kernel7sw_initEv) for [Anonymous Symbol]
     main.o(.text._ZN6kernel9task_funcEv) refers to bsp.o(.text._ZN3csp4haltEv) for csp::halt()
@@ -1469,7 +1541,6 @@ Removing Unused input sections from the image.
     Removing os.o(.text), (0 bytes).
     Removing os.o(.ARM.exidx.text._ZN2os4tickEv), (8 bytes).
     Removing os.o(.ARM.exidx.text._ZN2os10tslice_setENS_8priorityEi), (8 bytes).
-    Removing os.o(.text._ZN2os8tick_getEv), (4 bytes).
     Removing os.o(.ARM.exidx.text._ZN2os8tick_getEv), (8 bytes).
     Removing os.o(.text._ZN2os9state_getEv), (4 bytes).
     Removing os.o(.ARM.exidx.text._ZN2os9state_getEv), (8 bytes).
@@ -1511,33 +1582,20 @@ Removing Unused input sections from the image.
     Removing os.o(.text._ZN2os5mutexC2ENS_8priorityE), (92 bytes).
     Removing os.o(.ARM.exidx.text._ZN2os5mutexC2ENS_8priorityE), (8 bytes).
     Removing os.o(.ARM.exidx.text._ZN2os5mutexD2Ev), (8 bytes).
-    Removing os.o(.text._ZN2os9semaphore7acquireEj), (46 bytes).
     Removing os.o(.ARM.exidx.text._ZN2os9semaphore7acquireEj), (8 bytes).
-    Removing os.o(.text._ZN2os9semaphore7releaseEv), (32 bytes).
     Removing os.o(.ARM.exidx.text._ZN2os9semaphore7releaseEv), (8 bytes).
-    Removing os.o(.text._ZN2os9semaphoreC2Ejj), (28 bytes).
     Removing os.o(.ARM.exidx.text._ZN2os9semaphoreC2Ejj), (8 bytes).
-    Removing os.o(.text._ZN2os9semaphoreD2Ev), (28 bytes).
     Removing os.o(.ARM.exidx.text._ZN2os9semaphoreD2Ev), (8 bytes).
-    Removing os.o(.text._ZN2os9fmem_base5leaveEv), (18 bytes).
     Removing os.o(.ARM.exidx.text._ZN2os9fmem_base5leaveEv), (8 bytes).
-    Removing os.o(.text._ZN2os9fmem_base3addEv), (10 bytes).
     Removing os.o(.ARM.exidx.text._ZN2os9fmem_base3addEv), (8 bytes).
-    Removing os.o(.text._ZN2os9fmem_base7acquireEPPvj), (66 bytes).
     Removing os.o(.ARM.exidx.text._ZN2os9fmem_base7acquireEPPvj), (8 bytes).
     Removing os.o(.text._ZN2os9fmem_base14acquire_memcpyEPPvS1_j), (86 bytes).
     Removing os.o(.ARM.exidx.text._ZN2os9fmem_base14acquire_memcpyEPPvS1_j), (8 bytes).
-    Removing os.o(.text._ZN2os9fmem_base7releaseEPv), (38 bytes).
     Removing os.o(.ARM.exidx.text._ZN2os9fmem_base7releaseEPv), (8 bytes).
-    Removing os.o(.text._ZN2os9fmem_base6appendEPv), (38 bytes).
     Removing os.o(.ARM.exidx.text._ZN2os9fmem_base6appendEPv), (8 bytes).
-    Removing os.o(.text._ZN2os9fmem_base12free_cnt_getEv), (4 bytes).
     Removing os.o(.ARM.exidx.text._ZN2os9fmem_base12free_cnt_getEv), (8 bytes).
-    Removing os.o(.text._ZN2os9fmem_base12used_cnt_getEv), (4 bytes).
     Removing os.o(.ARM.exidx.text._ZN2os9fmem_base12used_cnt_getEv), (8 bytes).
-    Removing os.o(.text._ZN2os9fmem_baseC2EPvjj), (28 bytes).
     Removing os.o(.ARM.exidx.text._ZN2os9fmem_baseC2EPvjj), (8 bytes).
-    Removing os.o(.text._ZN2os9fmem_baseD2Ev), (28 bytes).
     Removing os.o(.ARM.exidx.text._ZN2os9fmem_baseD2Ev), (8 bytes).
     Removing os.o(.text._ZN2os8eventgrpC2Ej), (32 bytes).
     Removing os.o(.ARM.exidx.text._ZN2os8eventgrpC2Ej), (8 bytes).
@@ -1567,6 +1625,20 @@ Removing Unused input sections from the image.
     Removing os.o(.ARM.exidx.text._ZN2os10queue_base18evengrp_disconnectEv), (8 bytes).
     Removing os.o(.text._ZN2os10queue_baseD2Ev), (28 bytes).
     Removing os.o(.ARM.exidx.text._ZN2os10queue_baseD2Ev), (8 bytes).
+    Removing os.o(.ARM.exidx.text._ZN2os10timer_base8handler_EPN4__tn8TN_TimerEPv), (8 bytes).
+    Removing os.o(.ARM.exidx.text._ZN2os10timer_base5startEj), (8 bytes).
+    Removing os.o(.ARM.exidx.text._ZN2os10timer_baseC2EPFvPvEjNS_12repeat_timerE), (8 bytes).
+    Removing os.o(.text._ZN2os10timer_base5startEv), (6 bytes).
+    Removing os.o(.ARM.exidx.text._ZN2os10timer_base5startEv), (8 bytes).
+    Removing os.o(.text._ZN2os10timer_base5startEjNS_12repeat_timerE), (8 bytes).
+    Removing os.o(.ARM.exidx.text._ZN2os10timer_base5startEjNS_12repeat_timerE), (8 bytes).
+    Removing os.o(.text._ZN2os10timer_base6cancelEv), (4 bytes).
+    Removing os.o(.ARM.exidx.text._ZN2os10timer_base6cancelEv), (8 bytes).
+    Removing os.o(.text._ZN2os10timer_base9is_activeEv), (26 bytes).
+    Removing os.o(.ARM.exidx.text._ZN2os10timer_base9is_activeEv), (8 bytes).
+    Removing os.o(.text._ZN2os10timer_base9time_leftEv), (22 bytes).
+    Removing os.o(.ARM.exidx.text._ZN2os10timer_base9time_leftEv), (8 bytes).
+    Removing os.o(.ARM.exidx.text._ZN2os10timer_baseD2Ev), (8 bytes).
     Removing os.o(.bss._ZN2os8shedulerL10shed_stateE), (4 bytes).
     Removing retarget_io.o(.text), (0 bytes).
     Removing retarget_io.o(.ARM.exidx.text._printf_mutex_acquire), (8 bytes).
@@ -1724,29 +1796,17 @@ Removing Unused input sections from the image.
     Removing tn_eventgrp.o(.text._scan_event_waitqueue), (168 bytes).
     Removing tn_eventgrp.o(.ARM.exidx.text._scan_event_waitqueue), (8 bytes).
     Removing tn_fmem.o(.text), (0 bytes).
-    Removing tn_fmem.o(.text.tn_fmem_create), (170 bytes).
     Removing tn_fmem.o(.ARM.exidx.text.tn_fmem_create), (8 bytes).
-    Removing tn_fmem.o(.text.tn_fmem_delete), (112 bytes).
     Removing tn_fmem.o(.ARM.exidx.text.tn_fmem_delete), (8 bytes).
-    Removing tn_fmem.o(.text.tn_fmem_get), (218 bytes).
     Removing tn_fmem.o(.ARM.exidx.text.tn_fmem_get), (8 bytes).
-    Removing tn_fmem.o(.text.tn_fmem_get_polling), (106 bytes).
     Removing tn_fmem.o(.ARM.exidx.text.tn_fmem_get_polling), (8 bytes).
-    Removing tn_fmem.o(.text.tn_fmem_iget_polling), (168 bytes).
     Removing tn_fmem.o(.ARM.exidx.text.tn_fmem_iget_polling), (8 bytes).
-    Removing tn_fmem.o(.text.tn_fmem_release), (168 bytes).
     Removing tn_fmem.o(.ARM.exidx.text.tn_fmem_release), (8 bytes).
-    Removing tn_fmem.o(.text.tn_fmem_irelease), (168 bytes).
     Removing tn_fmem.o(.ARM.exidx.text.tn_fmem_irelease), (8 bytes).
-    Removing tn_fmem.o(.text.tn_fmem_append), (174 bytes).
     Removing tn_fmem.o(.ARM.exidx.text.tn_fmem_append), (8 bytes).
-    Removing tn_fmem.o(.text.tn_fmem_iappend), (174 bytes).
     Removing tn_fmem.o(.ARM.exidx.text.tn_fmem_iappend), (8 bytes).
-    Removing tn_fmem.o(.text.tn_fmem_free_blocks_cnt_get), (26 bytes).
     Removing tn_fmem.o(.ARM.exidx.text.tn_fmem_free_blocks_cnt_get), (8 bytes).
-    Removing tn_fmem.o(.text.tn_fmem_used_blocks_cnt_get), (30 bytes).
     Removing tn_fmem.o(.ARM.exidx.text.tn_fmem_used_blocks_cnt_get), (8 bytes).
-    Removing tn_fmem.o(.text._cb_before_task_wait_complete), (4 bytes).
     Removing tn_fmem.o(.ARM.exidx.text._cb_before_task_wait_complete), (8 bytes).
     Removing tn_list.o(.text), (0 bytes).
     Removing tn_list.o(.ARM.exidx.text._tn_list_is_initialized), (8 bytes).
@@ -1772,25 +1832,18 @@ Removing Unused input sections from the image.
     Removing tn_mutex.o(.ARM.exidx.text._tn_mutex_i_on_task_wait_complete), (8 bytes).
     Removing tn_mutex.o(.ARM.exidx.text._tn_mutex_on_task_wait_complete), (8 bytes).
     Removing tn_sem.o(.text), (0 bytes).
-    Removing tn_sem.o(.text.tn_sem_create), (84 bytes).
     Removing tn_sem.o(.ARM.exidx.text.tn_sem_create), (8 bytes).
-    Removing tn_sem.o(.text.tn_sem_delete), (112 bytes).
     Removing tn_sem.o(.ARM.exidx.text.tn_sem_delete), (8 bytes).
-    Removing tn_sem.o(.text.tn_sem_signal), (142 bytes).
     Removing tn_sem.o(.ARM.exidx.text.tn_sem_signal), (8 bytes).
-    Removing tn_sem.o(.text.tn_sem_isignal), (142 bytes).
     Removing tn_sem.o(.ARM.exidx.text.tn_sem_isignal), (8 bytes).
-    Removing tn_sem.o(.text.tn_sem_wait), (204 bytes).
     Removing tn_sem.o(.ARM.exidx.text.tn_sem_wait), (8 bytes).
     Removing tn_sem.o(.text.tn_sem_wait_polling), (112 bytes).
     Removing tn_sem.o(.ARM.exidx.text.tn_sem_wait_polling), (8 bytes).
-    Removing tn_sem.o(.text.tn_sem_iwait_polling), (112 bytes).
     Removing tn_sem.o(.ARM.exidx.text.tn_sem_iwait_polling), (8 bytes).
     Removing tn_sys.o(.text), (0 bytes).
     Removing tn_sys.o(.ARM.exidx.text.tn_sys_start), (8 bytes).
     Removing tn_sys.o(.ARM.exidx.text.tn_tick_int_processing), (8 bytes).
     Removing tn_sys.o(.ARM.exidx.text.tn_sys_tslice_set), (8 bytes).
-    Removing tn_sys.o(.text.tn_sys_time_get), (30 bytes).
     Removing tn_sys.o(.ARM.exidx.text.tn_sys_time_get), (8 bytes).
     Removing tn_sys.o(.text.tn_sys_state_flags_get), (12 bytes).
     Removing tn_sys.o(.ARM.exidx.text.tn_sys_state_flags_get), (8 bytes).
@@ -1855,19 +1908,15 @@ Removing Unused input sections from the image.
     Removing tn_tasks.o(.ARM.exidx.text._tn_task_set_waiting), (8 bytes).
     Removing tn_tasks.o(.text._tn_task_clear_dormant), (54 bytes).
     Removing tn_tasks.o(.ARM.exidx.text._tn_task_clear_dormant), (8 bytes).
-    Removing tn_tasks.o(.text._tn_task_first_wait_complete), (160 bytes).
     Removing tn_tasks.o(.ARM.exidx.text._tn_task_first_wait_complete), (8 bytes).
     Removing tn_tasks.o(.ARM.exidx.text._tn_change_running_task_priority), (8 bytes).
     Removing tn_tasks.o(.ARM.exidx.text._tn_is_mutex_locked_by_task), (8 bytes).
     Removing tn_tasks.o(.ARM.exidx.text._tn_task_exit_nodelete), (8 bytes).
     Removing tn_tasks.o(.ARM.exidx.text._tn_task_stack_end_get), (8 bytes).
     Removing tn_timer.o(.text), (0 bytes).
-    Removing tn_timer.o(.text.tn_timer_create), (80 bytes).
     Removing tn_timer.o(.ARM.exidx.text.tn_timer_create), (8 bytes).
     Removing tn_timer.o(.ARM.exidx.text._tn_timer_create), (8 bytes).
-    Removing tn_timer.o(.text.tn_timer_delete), (64 bytes).
     Removing tn_timer.o(.ARM.exidx.text.tn_timer_delete), (8 bytes).
-    Removing tn_timer.o(.text.tn_timer_start), (64 bytes).
     Removing tn_timer.o(.ARM.exidx.text.tn_timer_start), (8 bytes).
     Removing tn_timer.o(.text.tn_timer_cancel), (60 bytes).
     Removing tn_timer.o(.ARM.exidx.text.tn_timer_cancel), (8 bytes).
@@ -2114,14 +2163,21 @@ Removing Unused input sections from the image.
     Removing cxa_guard.cpp.o(.ARM.exidx.text.unlikely.__cxa_guard_abort), (8 bytes).
     Removing abort_message.cpp.o(.text), (0 bytes).
     Removing abort_message.cpp.o(.ARM.exidx.text.abort_message), (8 bytes).
+    Removing main.o(.ARM.exidx.text.__cxx_global_var_init), (8 bytes).
+    Removing main.o(.ARM.exidx.text._ZN4taskD2Ev), (8 bytes).
+    Removing main.o(.ARM.exidx.text._ZN9fmem_taskCI2N2os4taskIS_Lj304ELNS0_8priorityE2EEEEPKc), (8 bytes).
+    Removing main.o(.ARM.exidx.text._ZN9fmem_taskD2Ev), (8 bytes).
     Removing main.o(.ARM.exidx.text._ZN6kernelCI2N2os6kernelIS_Lj72EEEEPjj), (8 bytes).
     Removing main.o(.ARM.exidx.text._ZN4task9task_funcEv), (8 bytes).
-    Removing main.o(.ARM.exidx.text._ZN2os6kernelI6kernelLj72EE17cb_stack_overflowEPNS_4__tn7TN_TaskE), (8 bytes).
-    Removing main.o(.ARM.exidx.text._ZN2os6kernelI6kernelLj72EE11cb_deadlockEbPNS_4__tn8TN_MutexEPNS3_7TN_TaskE), (8 bytes).
+    Removing main.o(.ARM.exidx.text._ZN4task5timer10timer_funcEv), (8 bytes).
+    Removing main.o(.ARM.exidx.text._ZN9fmem_task9task_funcEv), (8 bytes).
+    Removing main.o(.ARM.exidx.text._ZN9fmem_task14print_snapshotEv), (8 bytes).
+    Removing main.o(.ARM.exidx.text._ZN2os6kernelI6kernelLj72EE17cb_stack_overflowEPN4__tn7TN_TaskE), (8 bytes).
+    Removing main.o(.ARM.exidx.text._ZN2os6kernelI6kernelLj72EE11cb_deadlockEbPN4__tn8TN_MutexEPNS3_7TN_TaskE), (8 bytes).
     Removing main.o(.ARM.exidx.text._ZN6kernel7sw_initEv), (8 bytes).
     Removing main.o(.ARM.exidx.text._ZN6kernel9task_funcEv), (8 bytes).
 
-676 unused section(s) (total 25706 bytes) removed from the image.
+660 unused section(s) (total 22816 bytes) removed from the image.
 
 ==============================================================================
 
@@ -2356,115 +2412,170 @@ Image Symbol Table
     [Anonymous Symbol]                       0x08000a58   Section        0  system_stm32f4xx.o(.text.SystemInit)
     _GLOBAL__sub_I_bsp.cpp                   0x08000a5d   Thumb Code    32  bsp.o(.text._GLOBAL__sub_I_bsp.cpp)
     [Anonymous Symbol]                       0x08000a5c   Section        0  bsp.o(.text._GLOBAL__sub_I_bsp.cpp)
-    _GLOBAL__sub_I_main.cpp                  0x08000a7d   Thumb Code    84  main.o(.text._GLOBAL__sub_I_main.cpp)
+    _GLOBAL__sub_I_main.cpp                  0x08000a7d   Thumb Code   128  main.o(.text._GLOBAL__sub_I_main.cpp)
     [Anonymous Symbol]                       0x08000a7c   Section        0  main.o(.text._GLOBAL__sub_I_main.cpp)
-    _GLOBAL__sub_I_retarget_io.cpp           0x08000add   Thumb Code    42  retarget_io.o(.text._GLOBAL__sub_I_retarget_io.cpp)
-    [Anonymous Symbol]                       0x08000adc   Section        0  retarget_io.o(.text._GLOBAL__sub_I_retarget_io.cpp)
-    [Anonymous Symbol]                       0x08000b08   Section        0  os.o(.text._ZN2os10tslice_setENS_8priorityEi)
-    [Anonymous Symbol]                       0x08000b0c   Section        0  os.o(.text._ZN2os11cb_deadlockEbPNS_5mutexEPNS_9task_baseE)
-    [Anonymous Symbol]                       0x08000b10   Section        0  os.o(.text._ZN2os17cb_stack_overflowEPNS_9task_baseE)
-    [Anonymous Symbol]                       0x08000b14   Section        0  os.o(.text._ZN2os4tickEv)
-    [Anonymous Symbol]                       0x08000b18   Section        0  os.o(.text._ZN2os5mutex7acquireEj)
-    [Anonymous Symbol]                       0x08000b1c   Section        0  os.o(.text._ZN2os5mutex7releaseEv)
-    [Anonymous Symbol]                       0x08000b20   Section        0  os.o(.text._ZN2os5mutexC2Ev)
-    [Anonymous Symbol]                       0x08000b7c   Section        0  os.o(.text._ZN2os5mutexD2Ev)
-    [Anonymous Symbol]                       0x08000b98   Section        0  main.o(.text._ZN2os6kernelI6kernelLj72EE11cb_deadlockEbPNS_4__tn8TN_MutexEPNS3_7TN_TaskE)
-    [Anonymous Symbol]                       0x08000b9c   Section        0  main.o(.text._ZN2os6kernelI6kernelLj72EE17cb_stack_overflowEPNS_4__tn7TN_TaskE)
-    [Anonymous Symbol]                       0x08000ba0   Section        0  os.o(.text._ZN2os9task_base5sleepEj)
-    [Anonymous Symbol]                       0x08000ba4   Section        0  os.o(.text._ZN2os9task_baseD2Ev)
-    [Anonymous Symbol]                       0x08000bc0   Section        0  bsp.o(.text._ZN3bsp3led6toggleEv)
-    [Anonymous Symbol]                       0x08000bd0   Section        0  bsp.o(.text._ZN3bsp3ledC2Ev)
-    [Anonymous Symbol]                       0x08000c34   Section        0  bsp.o(.text._ZN3csp4haltEv)
-    [Anonymous Symbol]                       0x08000c38   Section        0  main.o(.text._ZN3csp4tick13cb_tick_handlEv)
-    [Anonymous Symbol]                       0x08000c3c   Section        0  bsp.o(.text._ZN3csp4tick4initEj)
-    [Anonymous Symbol]                       0x08000c94   Section        0  main.o(.text._ZN4task9task_funcEv)
-    [Anonymous Symbol]                       0x08000cb0   Section        0  main.o(.text._ZN6kernel7sw_initEv)
-    [Anonymous Symbol]                       0x08000cb8   Section        0  main.o(.text._ZN6kernel9task_funcEv)
-    [Anonymous Symbol]                       0x08000cc0   Section        0  main.o(.text._ZN6kernelCI2N2os6kernelIS_Lj72EEEEPjj)
-    _mutex_do_unlock                         0x08000d2d   Thumb Code   280  tn_mutex.o(.text._mutex_do_unlock)
-    [Anonymous Symbol]                       0x08000d2c   Section        0  tn_mutex.o(.text._mutex_do_unlock)
-    _ntoa_long                               0x08000e45   Thumb Code   568  printf.o(.text._ntoa_long)
-    [Anonymous Symbol]                       0x08000e44   Section        0  printf.o(.text._ntoa_long)
-    _out_char                                0x0800107d   Thumb Code    10  printf.o(.text._out_char)
-    [Anonymous Symbol]                       0x0800107c   Section        0  printf.o(.text._out_char)
-    _out_null                                0x08001089   Thumb Code     2  printf.o(.text._out_null)
-    [Anonymous Symbol]                       0x08001088   Section        0  printf.o(.text._out_null)
-    [Anonymous Symbol]                       0x0800108c   Section        0  retarget_io.o(.text._printf_mutex_acquire)
-    [Anonymous Symbol]                       0x0800109c   Section        0  retarget_io.o(.text._printf_mutex_release)
-    [Anonymous Symbol]                       0x080010a8   Section        0  retarget_io.o(.text._putchar)
-    _task_wait_timeout                       0x080010e1   Thumb Code   146  tn_tasks.o(.text._task_wait_timeout)
-    [Anonymous Symbol]                       0x080010e0   Section        0  tn_tasks.o(.text._task_wait_timeout)
-    [Anonymous Symbol]                       0x08001174   Section        0  tn_arch_cortex_m_c.o(.text._tn_arch_stack_init)
-    [Anonymous Symbol]                       0x080011e4   Section        0  tn_tasks.o(.text._tn_change_running_task_priority)
-    [Anonymous Symbol]                       0x08001270   Section        0  tn_tasks.o(.text._tn_change_task_priority)
-    [Anonymous Symbol]                       0x08001280   Section        0  tn_sys.o(.text._tn_cry_deadlock)
-    [Anonymous Symbol]                       0x080012e4   Section        0  tn_tasks.o(.text._tn_is_mutex_locked_by_task)
-    [Anonymous Symbol]                       0x0800130c   Section        0  tn_list.o(.text._tn_list_add_head)
-    [Anonymous Symbol]                       0x08001318   Section        0  tn_list.o(.text._tn_list_add_tail)
-    [Anonymous Symbol]                       0x08001324   Section        0  tn_list.o(.text._tn_list_is_empty)
-    [Anonymous Symbol]                       0x0800133c   Section        0  tn_list.o(.text._tn_list_is_initialized)
-    [Anonymous Symbol]                       0x08001350   Section        0  tn_list.o(.text._tn_list_remove_entry)
-    [Anonymous Symbol]                       0x0800135c   Section        0  tn_list.o(.text._tn_list_remove_head)
-    [Anonymous Symbol]                       0x08001374   Section        0  tn_list.o(.text._tn_list_reset)
-    [Anonymous Symbol]                       0x0800137c   Section        0  tn_mutex.o(.text._tn_mutex_i_on_task_wait_complete)
-    [Anonymous Symbol]                       0x08001410   Section        0  tn_mutex.o(.text._tn_mutex_on_task_wait_complete)
-    [Anonymous Symbol]                       0x08001480   Section        0  tn_mutex.o(.text._tn_mutex_unlock_all_by_task)
-    [Anonymous Symbol]                       0x080014a4   Section        0  tn_sys.o(.text._tn_sys_on_context_switch)
-    [Anonymous Symbol]                       0x08001538   Section        0  tn_tasks.o(.text._tn_task_activate)
-    [Anonymous Symbol]                       0x080015d8   Section        0  tn_tasks.o(.text._tn_task_clear_runnable)
-    [Anonymous Symbol]                       0x08001664   Section        0  tn_tasks.o(.text._tn_task_clear_waiting)
-    [Anonymous Symbol]                       0x080016e0   Section        0  tn_tasks.o(.text._tn_task_exit_nodelete)
-    [Anonymous Symbol]                       0x080016e8   Section        0  tn_tasks.o(.text._tn_task_set_runnable)
-    [Anonymous Symbol]                       0x0800174c   Section        0  tn_tasks.o(.text._tn_task_set_waiting)
-    [Anonymous Symbol]                       0x080017b4   Section        0  tn_tasks.o(.text._tn_task_stack_end_get)
-    [Anonymous Symbol]                       0x080017b8   Section        0  tn_timer_static.o(.text._tn_timer_cancel)
-    [Anonymous Symbol]                       0x080017e4   Section        0  tn_timer.o(.text._tn_timer_create)
-    [Anonymous Symbol]                       0x08001810   Section        0  tn_timer.o(.text._tn_timer_is_active)
-    [Anonymous Symbol]                       0x0800182c   Section        0  tn_timer_static.o(.text._tn_timer_start)
-    [Anonymous Symbol]                       0x080018a8   Section        0  tn_timer_static.o(.text._tn_timers_init)
-    [Anonymous Symbol]                       0x080018dc   Section        0  tn_timer_static.o(.text._tn_timers_tick_proceed)
-    [Anonymous Symbol]                       0x080019e0   Section        0  tn_sys.o(.text._tn_wait_queue_notify_deleted)
-    _vsnprintf                               0x08001a25   Thumb Code  1336  printf.o(.text._vsnprintf)
-    [Anonymous Symbol]                       0x08001a24   Section        0  printf.o(.text._vsnprintf)
-    [Anonymous Symbol]                       0x08001f5c   Section        0  abort_message.cpp.o(.text.abort_message)
-    [Anonymous Symbol]                       0x08001f60   Section        0  main.o(.text.main)
-    [Anonymous Symbol]                       0x08001fe0   Section        0  printf.o(.text.printf_)
-    [Anonymous Symbol]                       0x08002020   Section        0  tn_sys.o(.text.tn_callback_deadlock_set)
-    [Anonymous Symbol]                       0x0800202c   Section        0  tn_sys.o(.text.tn_callback_stack_overflow_set)
-    [Anonymous Symbol]                       0x08002038   Section        0  tn_mutex.o(.text.tn_mutex_create)
-    [Anonymous Symbol]                       0x080020ac   Section        0  tn_mutex.o(.text.tn_mutex_delete)
-    [Anonymous Symbol]                       0x08002140   Section        0  tn_mutex.o(.text.tn_mutex_lock)
-    [Anonymous Symbol]                       0x08002370   Section        0  tn_mutex.o(.text.tn_mutex_unlock)
-    [Anonymous Symbol]                       0x080023f8   Section        0  tn_sys.o(.text.tn_sys_context_get)
-    [Anonymous Symbol]                       0x0800241c   Section        0  tn_sys.o(.text.tn_sys_start)
-    [Anonymous Symbol]                       0x080024dc   Section        0  tn_sys.o(.text.tn_sys_tslice_set)
-    [Anonymous Symbol]                       0x08002514   Section        0  tn_tasks.o(.text.tn_task_create)
-    [Anonymous Symbol]                       0x080026a8   Section        0  tn_tasks.o(.text.tn_task_create_wname)
-    [Anonymous Symbol]                       0x080026c8   Section        0  tn_tasks.o(.text.tn_task_delete)
-    [Anonymous Symbol]                       0x0800273c   Section        0  tn_tasks.o(.text.tn_task_exit)
-    [Anonymous Symbol]                       0x080027cc   Section        0  tn_tasks.o(.text.tn_task_sleep)
-    [Anonymous Symbol]                       0x0800286c   Section        0  tn_sys.o(.text.tn_tick_int_processing)
-    [Anonymous Symbol]                       0x08002958   Section        0  cxa_guard.cpp.o(.text.unlikely.__cxa_guard_acquire)
-    [Anonymous Symbol]                       0x080029b8   Section        0  cxa_guard.cpp.o(.text.unlikely.__cxa_guard_release)
-    _DoInit._aInitStr                        0x080029c0   Data          17  segger_rtt.o(.rodata._DoInit._aInitStr)
-    [Anonymous Symbol]                       0x080029c0   Section        0  segger_rtt.o(.rodata._DoInit._aInitStr)
-    .L.str.1                                 0x08002a78   Data          71  main.o(.rodata.str1.1)
-    [Anonymous Symbol]                       0x08002a78   Section        0  main.o(.rodata.str1.1)
-    .L.str                                   0x08002abf   Data          88  bsp.o(.rodata.str1.1)
-    [Anonymous Symbol]                       0x08002abf   Section        0  bsp.o(.rodata.str1.1)
-    .L.str                                   0x08002b17   Data          65  os.o(.rodata.str1.1)
-    [Anonymous Symbol]                       0x08002b17   Section        0  os.o(.rodata.str1.1)
-    .L.str.3                                 0x08002b58   Data          66  os.o(.rodata.str1.1)
-    .L.str                                   0x08002b9a   Data           9  segger_rtt.o(.rodata.str1.1)
-    .L.str.4                                 0x08002b9a   Data          65  os.o(.rodata.str1.1)
-    [Anonymous Symbol]                       0x08002b9a   Section        0  segger_rtt.o(.rodata.str1.1)
-    .init_array                              0x08002bd0   Section        0  init_aeabi.o(.init_array)
-    .L.str.5                                 0x08002bdb   Data          70  os.o(.rodata.str1.1)
-    .L.str.6                                 0x08002c21   Data          65  os.o(.rodata.str1.1)
-    .L.str.7                                 0x08002c62   Data          70  os.o(.rodata.str1.1)
-    .L.str.8                                 0x08002ca8   Data          67  os.o(.rodata.str1.1)
-    .L.str.9                                 0x08002ceb   Data          72  os.o(.rodata.str1.1)
-    .L.str.11                                0x08002d33   Data          66  os.o(.rodata.str1.1)
+    _GLOBAL__sub_I_retarget_io.cpp           0x08000b15   Thumb Code    42  retarget_io.o(.text._GLOBAL__sub_I_retarget_io.cpp)
+    [Anonymous Symbol]                       0x08000b14   Section        0  retarget_io.o(.text._GLOBAL__sub_I_retarget_io.cpp)
+    [Anonymous Symbol]                       0x08000b40   Section        0  os.o(.text._ZN2os10timer_base5startEj)
+    [Anonymous Symbol]                       0x08000b48   Section        0  os.o(.text._ZN2os10timer_base8handler_EPN4__tn8TN_TimerEPv)
+    [Anonymous Symbol]                       0x08000b68   Section        0  os.o(.text._ZN2os10timer_baseC2EPFvPvEjNS_12repeat_timerE)
+    [Anonymous Symbol]                       0x08000be4   Section        0  os.o(.text._ZN2os10timer_baseD2Ev)
+    [Anonymous Symbol]                       0x08000c00   Section        0  os.o(.text._ZN2os10tslice_setENS_8priorityEi)
+    [Anonymous Symbol]                       0x08000c04   Section        0  os.o(.text._ZN2os11cb_deadlockEbPNS_5mutexEPNS_9task_baseE)
+    [Anonymous Symbol]                       0x08000c08   Section        0  os.o(.text._ZN2os17cb_stack_overflowEPNS_9task_baseE)
+    [Anonymous Symbol]                       0x08000c0c   Section        0  os.o(.text._ZN2os4tickEv)
+    [Anonymous Symbol]                       0x08000c10   Section        0  os.o(.text._ZN2os5mutex7acquireEj)
+    [Anonymous Symbol]                       0x08000c14   Section        0  os.o(.text._ZN2os5mutex7releaseEv)
+    [Anonymous Symbol]                       0x08000c18   Section        0  os.o(.text._ZN2os5mutexC2Ev)
+    [Anonymous Symbol]                       0x08000c74   Section        0  os.o(.text._ZN2os5mutexD2Ev)
+    [Anonymous Symbol]                       0x08000c90   Section        0  main.o(.text._ZN2os6kernelI6kernelLj72EE11cb_deadlockEbPN4__tn8TN_MutexEPNS3_7TN_TaskE)
+    [Anonymous Symbol]                       0x08000c94   Section        0  main.o(.text._ZN2os6kernelI6kernelLj72EE17cb_stack_overflowEPN4__tn7TN_TaskE)
+    [Anonymous Symbol]                       0x08000c98   Section        0  os.o(.text._ZN2os8tick_getEv)
+    [Anonymous Symbol]                       0x08000c9c   Section        0  os.o(.text._ZN2os9fmem_base12free_cnt_getEv)
+    [Anonymous Symbol]                       0x08000ca0   Section        0  os.o(.text._ZN2os9fmem_base12used_cnt_getEv)
+    [Anonymous Symbol]                       0x08000ca4   Section        0  os.o(.text._ZN2os9fmem_base3addEv)
+    [Anonymous Symbol]                       0x08000cb0   Section        0  os.o(.text._ZN2os9fmem_base5leaveEv)
+    [Anonymous Symbol]                       0x08000cc4   Section        0  os.o(.text._ZN2os9fmem_base6appendEPv)
+    [Anonymous Symbol]                       0x08000cec   Section        0  os.o(.text._ZN2os9fmem_base7acquireEPPvj)
+    [Anonymous Symbol]                       0x08000d30   Section        0  os.o(.text._ZN2os9fmem_base7releaseEPv)
+    [Anonymous Symbol]                       0x08000d58   Section        0  os.o(.text._ZN2os9fmem_baseC2EPvjj)
+    [Anonymous Symbol]                       0x08000d74   Section        0  os.o(.text._ZN2os9fmem_baseD2Ev)
+    [Anonymous Symbol]                       0x08000d90   Section        0  os.o(.text._ZN2os9semaphore7acquireEj)
+    [Anonymous Symbol]                       0x08000dc0   Section        0  os.o(.text._ZN2os9semaphore7releaseEv)
+    [Anonymous Symbol]                       0x08000de0   Section        0  os.o(.text._ZN2os9semaphoreC2Ejj)
+    [Anonymous Symbol]                       0x08000dfc   Section        0  os.o(.text._ZN2os9semaphoreD2Ev)
+    [Anonymous Symbol]                       0x08000e18   Section        0  os.o(.text._ZN2os9task_base5sleepEj)
+    [Anonymous Symbol]                       0x08000e1c   Section        0  os.o(.text._ZN2os9task_baseD2Ev)
+    [Anonymous Symbol]                       0x08000e38   Section        0  bsp.o(.text._ZN3bsp3led6toggleEv)
+    [Anonymous Symbol]                       0x08000e48   Section        0  bsp.o(.text._ZN3bsp3ledC2Ev)
+    [Anonymous Symbol]                       0x08000eac   Section        0  bsp.o(.text._ZN3csp4haltEv)
+    [Anonymous Symbol]                       0x08000eb0   Section        0  main.o(.text._ZN3csp4tick13cb_tick_handlEv)
+    [Anonymous Symbol]                       0x08000eb4   Section        0  bsp.o(.text._ZN3csp4tick4initEj)
+    [Anonymous Symbol]                       0x08000f0c   Section        0  main.o(.text._ZN4task5timer10timer_funcEv)
+    [Anonymous Symbol]                       0x08000f18   Section        0  main.o(.text._ZN4task9task_funcEv)
+    [Anonymous Symbol]                       0x08000f48   Section        0  main.o(.text._ZN4taskD2Ev)
+    [Anonymous Symbol]                       0x08000f60   Section        0  main.o(.text._ZN6kernel7sw_initEv)
+    [Anonymous Symbol]                       0x08000f68   Section        0  main.o(.text._ZN6kernel9task_funcEv)
+    [Anonymous Symbol]                       0x08000f70   Section        0  main.o(.text._ZN6kernelCI2N2os6kernelIS_Lj72EEEEPjj)
+    [Anonymous Symbol]                       0x08000fdc   Section        0  main.o(.text._ZN9fmem_task14print_snapshotEv)
+    [Anonymous Symbol]                       0x080010e0   Section        0  main.o(.text._ZN9fmem_task9task_funcEv)
+    [Anonymous Symbol]                       0x080013b4   Section        0  main.o(.text._ZN9fmem_taskCI2N2os4taskIS_Lj304ELNS0_8priorityE2EEEEPKc)
+    [Anonymous Symbol]                       0x080014b4   Section        0  main.o(.text._ZN9fmem_taskD2Ev)
+    __cxx_global_var_init                    0x080014d5   Thumb Code    94  main.o(.text.__cxx_global_var_init)
+    [Anonymous Symbol]                       0x080014d4   Section        0  main.o(.text.__cxx_global_var_init)
+    _cb_before_task_wait_complete            0x08001535   Thumb Code     4  tn_fmem.o(.text._cb_before_task_wait_complete)
+    [Anonymous Symbol]                       0x08001534   Section        0  tn_fmem.o(.text._cb_before_task_wait_complete)
+    _mutex_do_unlock                         0x08001539   Thumb Code   280  tn_mutex.o(.text._mutex_do_unlock)
+    [Anonymous Symbol]                       0x08001538   Section        0  tn_mutex.o(.text._mutex_do_unlock)
+    _ntoa_long                               0x08001651   Thumb Code   568  printf.o(.text._ntoa_long)
+    [Anonymous Symbol]                       0x08001650   Section        0  printf.o(.text._ntoa_long)
+    _out_char                                0x08001889   Thumb Code    10  printf.o(.text._out_char)
+    [Anonymous Symbol]                       0x08001888   Section        0  printf.o(.text._out_char)
+    _out_null                                0x08001895   Thumb Code     2  printf.o(.text._out_null)
+    [Anonymous Symbol]                       0x08001894   Section        0  printf.o(.text._out_null)
+    [Anonymous Symbol]                       0x08001898   Section        0  retarget_io.o(.text._printf_mutex_acquire)
+    [Anonymous Symbol]                       0x080018a8   Section        0  retarget_io.o(.text._printf_mutex_release)
+    [Anonymous Symbol]                       0x080018b4   Section        0  retarget_io.o(.text._putchar)
+    _task_wait_timeout                       0x080018ed   Thumb Code   146  tn_tasks.o(.text._task_wait_timeout)
+    [Anonymous Symbol]                       0x080018ec   Section        0  tn_tasks.o(.text._task_wait_timeout)
+    [Anonymous Symbol]                       0x08001980   Section        0  tn_arch_cortex_m_c.o(.text._tn_arch_stack_init)
+    [Anonymous Symbol]                       0x080019f0   Section        0  tn_tasks.o(.text._tn_change_running_task_priority)
+    [Anonymous Symbol]                       0x08001a7c   Section        0  tn_tasks.o(.text._tn_change_task_priority)
+    [Anonymous Symbol]                       0x08001a8c   Section        0  tn_sys.o(.text._tn_cry_deadlock)
+    [Anonymous Symbol]                       0x08001af0   Section        0  tn_tasks.o(.text._tn_is_mutex_locked_by_task)
+    [Anonymous Symbol]                       0x08001b18   Section        0  tn_list.o(.text._tn_list_add_head)
+    [Anonymous Symbol]                       0x08001b24   Section        0  tn_list.o(.text._tn_list_add_tail)
+    [Anonymous Symbol]                       0x08001b30   Section        0  tn_list.o(.text._tn_list_is_empty)
+    [Anonymous Symbol]                       0x08001b48   Section        0  tn_list.o(.text._tn_list_is_initialized)
+    [Anonymous Symbol]                       0x08001b5c   Section        0  tn_list.o(.text._tn_list_remove_entry)
+    [Anonymous Symbol]                       0x08001b68   Section        0  tn_list.o(.text._tn_list_remove_head)
+    [Anonymous Symbol]                       0x08001b80   Section        0  tn_list.o(.text._tn_list_reset)
+    [Anonymous Symbol]                       0x08001b88   Section        0  tn_mutex.o(.text._tn_mutex_i_on_task_wait_complete)
+    [Anonymous Symbol]                       0x08001c1c   Section        0  tn_mutex.o(.text._tn_mutex_on_task_wait_complete)
+    [Anonymous Symbol]                       0x08001c8c   Section        0  tn_mutex.o(.text._tn_mutex_unlock_all_by_task)
+    [Anonymous Symbol]                       0x08001cb0   Section        0  tn_sys.o(.text._tn_sys_on_context_switch)
+    [Anonymous Symbol]                       0x08001d44   Section        0  tn_tasks.o(.text._tn_task_activate)
+    [Anonymous Symbol]                       0x08001de4   Section        0  tn_tasks.o(.text._tn_task_clear_runnable)
+    [Anonymous Symbol]                       0x08001e70   Section        0  tn_tasks.o(.text._tn_task_clear_waiting)
+    [Anonymous Symbol]                       0x08001eec   Section        0  tn_tasks.o(.text._tn_task_exit_nodelete)
+    [Anonymous Symbol]                       0x08001ef4   Section        0  tn_tasks.o(.text._tn_task_first_wait_complete)
+    [Anonymous Symbol]                       0x08001f94   Section        0  tn_tasks.o(.text._tn_task_set_runnable)
+    [Anonymous Symbol]                       0x08001ff8   Section        0  tn_tasks.o(.text._tn_task_set_waiting)
+    [Anonymous Symbol]                       0x08002060   Section        0  tn_tasks.o(.text._tn_task_stack_end_get)
+    [Anonymous Symbol]                       0x08002064   Section        0  tn_timer_static.o(.text._tn_timer_cancel)
+    [Anonymous Symbol]                       0x08002090   Section        0  tn_timer.o(.text._tn_timer_create)
+    [Anonymous Symbol]                       0x080020bc   Section        0  tn_timer.o(.text._tn_timer_is_active)
+    [Anonymous Symbol]                       0x080020d8   Section        0  tn_timer_static.o(.text._tn_timer_start)
+    [Anonymous Symbol]                       0x08002164   Section        0  tn_timer_static.o(.text._tn_timers_init)
+    [Anonymous Symbol]                       0x080021b4   Section        0  tn_timer_static.o(.text._tn_timers_tick_proceed)
+    [Anonymous Symbol]                       0x080022b8   Section        0  tn_sys.o(.text._tn_wait_queue_notify_deleted)
+    _vsnprintf                               0x080022fd   Thumb Code  1336  printf.o(.text._vsnprintf)
+    [Anonymous Symbol]                       0x080022fc   Section        0  printf.o(.text._vsnprintf)
+    [Anonymous Symbol]                       0x08002834   Section        0  abort_message.cpp.o(.text.abort_message)
+    [Anonymous Symbol]                       0x08002838   Section        0  main.o(.text.main)
+    [Anonymous Symbol]                       0x080028b8   Section        0  printf.o(.text.printf_)
+    [Anonymous Symbol]                       0x080028f8   Section        0  tn_sys.o(.text.tn_callback_deadlock_set)
+    [Anonymous Symbol]                       0x08002904   Section        0  tn_sys.o(.text.tn_callback_stack_overflow_set)
+    [Anonymous Symbol]                       0x08002910   Section        0  tn_fmem.o(.text.tn_fmem_append)
+    [Anonymous Symbol]                       0x080029c0   Section        0  tn_fmem.o(.text.tn_fmem_create)
+    [Anonymous Symbol]                       0x08002a6c   Section        0  tn_fmem.o(.text.tn_fmem_delete)
+    [Anonymous Symbol]                       0x08002adc   Section        0  tn_fmem.o(.text.tn_fmem_free_blocks_cnt_get)
+    [Anonymous Symbol]                       0x08002af8   Section        0  tn_fmem.o(.text.tn_fmem_get)
+    [Anonymous Symbol]                       0x08002bd4   Section        0  tn_fmem.o(.text.tn_fmem_get_polling)
+    [Anonymous Symbol]                       0x08002c40   Section        0  tn_fmem.o(.text.tn_fmem_iappend)
+    [Anonymous Symbol]                       0x08002cf0   Section        0  tn_fmem.o(.text.tn_fmem_iget_polling)
+    [Anonymous Symbol]                       0x08002d98   Section        0  tn_fmem.o(.text.tn_fmem_irelease)
+    [Anonymous Symbol]                       0x08002e40   Section        0  tn_fmem.o(.text.tn_fmem_release)
+    [Anonymous Symbol]                       0x08002ee8   Section        0  tn_fmem.o(.text.tn_fmem_used_blocks_cnt_get)
+    [Anonymous Symbol]                       0x08002f08   Section        0  tn_mutex.o(.text.tn_mutex_create)
+    [Anonymous Symbol]                       0x08002f7c   Section        0  tn_mutex.o(.text.tn_mutex_delete)
+    [Anonymous Symbol]                       0x08003010   Section        0  tn_mutex.o(.text.tn_mutex_lock)
+    [Anonymous Symbol]                       0x08003240   Section        0  tn_mutex.o(.text.tn_mutex_unlock)
+    [Anonymous Symbol]                       0x080032c8   Section        0  tn_sem.o(.text.tn_sem_create)
+    [Anonymous Symbol]                       0x0800331c   Section        0  tn_sem.o(.text.tn_sem_delete)
+    [Anonymous Symbol]                       0x0800338c   Section        0  tn_sem.o(.text.tn_sem_isignal)
+    [Anonymous Symbol]                       0x0800341c   Section        0  tn_sem.o(.text.tn_sem_iwait_polling)
+    [Anonymous Symbol]                       0x0800348c   Section        0  tn_sem.o(.text.tn_sem_signal)
+    [Anonymous Symbol]                       0x0800351c   Section        0  tn_sem.o(.text.tn_sem_wait)
+    [Anonymous Symbol]                       0x080035e8   Section        0  tn_sys.o(.text.tn_sys_context_get)
+    [Anonymous Symbol]                       0x0800360c   Section        0  tn_sys.o(.text.tn_sys_start)
+    [Anonymous Symbol]                       0x080036cc   Section        0  tn_sys.o(.text.tn_sys_time_get)
+    [Anonymous Symbol]                       0x080036ec   Section        0  tn_sys.o(.text.tn_sys_tslice_set)
+    [Anonymous Symbol]                       0x08003724   Section        0  tn_tasks.o(.text.tn_task_create)
+    [Anonymous Symbol]                       0x080038b8   Section        0  tn_tasks.o(.text.tn_task_create_wname)
+    [Anonymous Symbol]                       0x080038d8   Section        0  tn_tasks.o(.text.tn_task_delete)
+    [Anonymous Symbol]                       0x0800394c   Section        0  tn_tasks.o(.text.tn_task_exit)
+    [Anonymous Symbol]                       0x080039dc   Section        0  tn_tasks.o(.text.tn_task_sleep)
+    [Anonymous Symbol]                       0x08003a7c   Section        0  tn_sys.o(.text.tn_tick_int_processing)
+    [Anonymous Symbol]                       0x08003b68   Section        0  tn_timer.o(.text.tn_timer_create)
+    [Anonymous Symbol]                       0x08003bb8   Section        0  tn_timer.o(.text.tn_timer_delete)
+    [Anonymous Symbol]                       0x08003bf8   Section        0  tn_timer.o(.text.tn_timer_start)
+    [Anonymous Symbol]                       0x08003c38   Section        0  cxa_guard.cpp.o(.text.unlikely.__cxa_guard_acquire)
+    [Anonymous Symbol]                       0x08003c98   Section        0  cxa_guard.cpp.o(.text.unlikely.__cxa_guard_release)
+    _DoInit._aInitStr                        0x08003ca0   Data          17  segger_rtt.o(.rodata._DoInit._aInitStr)
+    [Anonymous Symbol]                       0x08003ca0   Section        0  segger_rtt.o(.rodata._DoInit._aInitStr)
+    .L.str.4                                 0x08003d58   Data          71  main.o(.rodata.str1.1)
+    [Anonymous Symbol]                       0x08003d58   Section        0  main.o(.rodata.str1.1)
+    .L.str.12                                0x08003d9f   Data           7  main.o(.rodata.str1.1)
+    .L.str.11                                0x08003da6   Data          23  main.o(.rodata.str1.1)
+    .L__const._ZN9fmem_task9task_funcEv.s    0x08003dbd   Data           5  main.o(.rodata.str1.1)
+    .L.str                                   0x08003dc2   Data          88  bsp.o(.rodata.str1.1)
+    [Anonymous Symbol]                       0x08003dc2   Section        0  bsp.o(.rodata.str1.1)
+    .L.str.13                                0x08003e1a   Data          75  os.o(.rodata.str1.1)
+    [Anonymous Symbol]                       0x08003e1a   Section        0  os.o(.rodata.str1.1)
+    .L.str.4                                 0x08003e65   Data          65  os.o(.rodata.str1.1)
+    .L.str.6                                 0x08003ea6   Data          65  os.o(.rodata.str1.1)
+    .L.str.5                                 0x08003ee7   Data          70  os.o(.rodata.str1.1)
+    .L.str                                   0x08003f2d   Data          65  os.o(.rodata.str1.1)
+    .L.str.7                                 0x08003f6e   Data          70  os.o(.rodata.str1.1)
+    .L.str.8                                 0x08003fab   Data          67  os.o(.rodata.str1.1)
+    .L.str.14                                0x08003fb4   Data          66  os.o(.rodata.str1.1)
+    .L.str.9                                 0x08003fee   Data          72  os.o(.rodata.str1.1)
+    .L.str.3                                 0x08003ff6   Data          66  os.o(.rodata.str1.1)
+    .L.str.11                                0x08004036   Data          66  os.o(.rodata.str1.1)
+    .L.str                                   0x08004038   Data           9  segger_rtt.o(.rodata.str1.1)
+    [Anonymous Symbol]                       0x08004038   Section        0  segger_rtt.o(.rodata.str1.1)
+    .init_array                              0x08004074   Section        0  init_aeabi.o(.init_array)
     Stack_Mem                                0x20000000   Data         200  startup_stm32f411xe.o(STACK)
     STACK                                    0x20000000   Section      200  startup_stm32f411xe.o(STACK)
     Heap_Mem                                 0x200000c8   Data         512  startup_stm32f411xe.o(HEAP)
@@ -2473,25 +2584,28 @@ Image Symbol Table
     reference temporary for csp::stack_ptr   0x200002c8   Data           4  bsp.o(.data._ZGRN3csp9stack_ptrE_)
     [Anonymous Symbol]                       0x200002c8   Section        0  bsp.o(.data._ZGRN3csp9stack_ptrE_)
     .bss                                     0x200002d0   Section       96  libspace.o(.bss)
-    guard variable for main::krnl            0x20000378   Data           4  main.o(.bss._ZGVZ4mainE4krnl)
-    printf_mutex                             0x2000037c   Data          44  retarget_io.o(.bss._ZL12printf_mutex)
-    [Anonymous Symbol]                       0x2000037c   Section        0  retarget_io.o(.bss._ZL12printf_mutex)
-    task_obj                                 0x200003a8   Data         264  main.o(.bss._ZL8task_obj)
-    [Anonymous Symbol]                       0x200003a8   Section        0  main.o(.bss._ZL8task_obj)
-    main::krnl                               0x200004b8   Data         232  main.o(.bss._ZZ4mainE4krnl)
-    [Anonymous Symbol]                       0x200004b8   Section        0  main.o(.bss._ZZ4mainE4krnl)
-    _acDownBuffer                            0x200005a0   Data          16  segger_rtt.o(.bss._acDownBuffer)
-    [Anonymous Symbol]                       0x200005a0   Section        0  segger_rtt.o(.bss._acDownBuffer)
-    _acUpBuffer                              0x200005b0   Data          64  segger_rtt.o(.bss._acUpBuffer)
-    [Anonymous Symbol]                       0x200005b0   Section        0  segger_rtt.o(.bss._acUpBuffer)
-    _tn_cb_deadlock                          0x200005f0   Data           4  tn_sys.o(.bss._tn_cb_deadlock)
-    [Anonymous Symbol]                       0x200005f0   Section        0  tn_sys.o(.bss._tn_cb_deadlock)
-    _tn_cb_stack_overflow                    0x200005f4   Data           4  tn_sys.o(.bss._tn_cb_stack_overflow)
-    [Anonymous Symbol]                       0x200005f4   Section        0  tn_sys.o(.bss._tn_cb_stack_overflow)
-    _tn_deadlocks_cnt                        0x200005fc   Data           4  tn_sys.o(.bss._tn_deadlocks_cnt)
-    [Anonymous Symbol]                       0x200005fc   Section        0  tn_sys.o(.bss._tn_deadlocks_cnt)
-    _tn_tslice_ticks                         0x20000694   Data          10  tn_sys.o(.bss._tn_tslice_ticks)
-    [Anonymous Symbol]                       0x20000694   Section        0  tn_sys.o(.bss._tn_tslice_ticks)
+    guard variable for main::krnl            0x2000037c   Data           4  main.o(.bss._ZGVZ4mainE4krnl)
+    printf_mutex                             0x20000380   Data          44  retarget_io.o(.bss._ZL12printf_mutex)
+    [Anonymous Symbol]                       0x20000380   Section        0  retarget_io.o(.bss._ZL12printf_mutex)
+    fmem_task_obj                            0x200003b0   Data         736  main.o(.bss._ZL13fmem_task_obj)
+    [Anonymous Symbol]                       0x200003b0   Section        0  main.o(.bss._ZL13fmem_task_obj)
+    task_obj                                 0x20000690   Data         304  main.o(.bss._ZL8task_obj)
+    [Anonymous Symbol]                       0x20000690   Section        0  main.o(.bss._ZL8task_obj)
+    __tagsym$$used.0                         0x200007c4   Number         0  main.o(.bss._ZN4task9blink_semE)
+    main::krnl                               0x200007d8   Data         232  main.o(.bss._ZZ4mainE4krnl)
+    [Anonymous Symbol]                       0x200007d8   Section        0  main.o(.bss._ZZ4mainE4krnl)
+    _acDownBuffer                            0x200008c0   Data          16  segger_rtt.o(.bss._acDownBuffer)
+    [Anonymous Symbol]                       0x200008c0   Section        0  segger_rtt.o(.bss._acDownBuffer)
+    _acUpBuffer                              0x200008d0   Data          64  segger_rtt.o(.bss._acUpBuffer)
+    [Anonymous Symbol]                       0x200008d0   Section        0  segger_rtt.o(.bss._acUpBuffer)
+    _tn_cb_deadlock                          0x20000910   Data           4  tn_sys.o(.bss._tn_cb_deadlock)
+    [Anonymous Symbol]                       0x20000910   Section        0  tn_sys.o(.bss._tn_cb_deadlock)
+    _tn_cb_stack_overflow                    0x20000914   Data           4  tn_sys.o(.bss._tn_cb_stack_overflow)
+    [Anonymous Symbol]                       0x20000914   Section        0  tn_sys.o(.bss._tn_cb_stack_overflow)
+    _tn_deadlocks_cnt                        0x2000091c   Data           4  tn_sys.o(.bss._tn_deadlocks_cnt)
+    [Anonymous Symbol]                       0x2000091c   Section        0  tn_sys.o(.bss._tn_deadlocks_cnt)
+    _tn_tslice_ticks                         0x200009b4   Data          10  tn_sys.o(.bss._tn_tslice_ticks)
+    [Anonymous Symbol]                       0x200009b4   Section        0  tn_sys.o(.bss._tn_tslice_ticks)
 
     Global Symbols
 
@@ -2714,107 +2828,161 @@ Image Symbol Table
     SEGGER_RTT_PutChar                       0x08000985   Thumb Code   208  segger_rtt.o(.text.SEGGER_RTT_PutChar)
     SysTick_Handler                          0x08000a55   Thumb Code     4  bsp.o(.text.SysTick_Handler)
     SystemInit                               0x08000a59   Thumb Code     2  system_stm32f4xx.o(.text.SystemInit)
-    os::tslice_set(os::priority, int)        0x08000b09   Thumb Code     4  os.o(.text._ZN2os10tslice_setENS_8priorityEi)
-    os::cb_deadlock(bool, os::mutex*, os::task_base*) 0x08000b0d   Thumb Code     2  os.o(.text._ZN2os11cb_deadlockEbPNS_5mutexEPNS_9task_baseE)
-    os::cb_stack_overflow(os::task_base*)    0x08000b11   Thumb Code     2  os.o(.text._ZN2os17cb_stack_overflowEPNS_9task_baseE)
-    os::tick()                               0x08000b15   Thumb Code     4  os.o(.text._ZN2os4tickEv)
-    os::mutex::acquire(unsigned int)         0x08000b19   Thumb Code     4  os.o(.text._ZN2os5mutex7acquireEj)
-    os::mutex::release()                     0x08000b1d   Thumb Code     4  os.o(.text._ZN2os5mutex7releaseEv)
-    os::mutex::mutex()                       0x08000b21   Thumb Code    28  os.o(.text._ZN2os5mutexC2Ev)
-    os::mutex::mutex__sub_object()           0x08000b21   Thumb Code    28  os.o(.text._ZN2os5mutexC2Ev)
-    os::mutex::~mutex()                      0x08000b7d   Thumb Code    28  os.o(.text._ZN2os5mutexD2Ev)
-    os::mutex::~mutex__sub_object()          0x08000b7d   Thumb Code    28  os.o(.text._ZN2os5mutexD2Ev)
-    os::kernel<kernel, 72u>::cb_deadlock(bool, os::__tn::TN_Mutex*, os::__tn::TN_Task*) 0x08000b99   Thumb Code     4  main.o(.text._ZN2os6kernelI6kernelLj72EE11cb_deadlockEbPNS_4__tn8TN_MutexEPNS3_7TN_TaskE)
-    os::kernel<kernel, 72u>::cb_stack_overflow(os::__tn::TN_Task*) 0x08000b9d   Thumb Code     4  main.o(.text._ZN2os6kernelI6kernelLj72EE17cb_stack_overflowEPNS_4__tn7TN_TaskE)
-    os::task_base::sleep(unsigned int)       0x08000ba1   Thumb Code     4  os.o(.text._ZN2os9task_base5sleepEj)
-    os::task_base::~task_base()              0x08000ba5   Thumb Code    28  os.o(.text._ZN2os9task_baseD2Ev)
-    os::task_base::~task_base__sub_object()  0x08000ba5   Thumb Code    28  os.o(.text._ZN2os9task_baseD2Ev)
-    bsp::led::toggle()                       0x08000bc1   Thumb Code    16  bsp.o(.text._ZN3bsp3led6toggleEv)
-    bsp::led::led()                          0x08000bd1   Thumb Code   100  bsp.o(.text._ZN3bsp3ledC2Ev)
-    bsp::led::led__sub_object()              0x08000bd1   Thumb Code   100  bsp.o(.text._ZN3bsp3ledC2Ev)
-    csp::halt()                              0x08000c35   Thumb Code     4  bsp.o(.text._ZN3csp4haltEv)
-    csp::tick::cb_tick_handl()               0x08000c39   Thumb Code     4  main.o(.text._ZN3csp4tick13cb_tick_handlEv)
-    csp::tick::init(unsigned int)            0x08000c3d   Thumb Code    86  bsp.o(.text._ZN3csp4tick4initEj)
-    task::task_func()                        0x08000c95   Thumb Code    26  main.o(.text._ZN4task9task_funcEv)
-    kernel::sw_init()                        0x08000cb1   Thumb Code     8  main.o(.text._ZN6kernel7sw_initEv)
-    kernel::task_func()                      0x08000cb9   Thumb Code     6  main.o(.text._ZN6kernel9task_funcEv)
-    kernel::kernel__sub_object(unsigned int*, unsigned int) 0x08000cc1   Thumb Code   100  main.o(.text._ZN6kernelCI2N2os6kernelIS_Lj72EEEEPjj)
-    _printf_mutex_acquire                    0x0800108d   Thumb Code    16  retarget_io.o(.text._printf_mutex_acquire)
-    _printf_mutex_release                    0x0800109d   Thumb Code    12  retarget_io.o(.text._printf_mutex_release)
-    _putchar                                 0x080010a9   Thumb Code    56  retarget_io.o(.text._putchar)
-    _tn_arch_stack_init                      0x08001175   Thumb Code   112  tn_arch_cortex_m_c.o(.text._tn_arch_stack_init)
-    _tn_change_running_task_priority         0x080011e5   Thumb Code   138  tn_tasks.o(.text._tn_change_running_task_priority)
-    _tn_change_task_priority                 0x08001271   Thumb Code    16  tn_tasks.o(.text._tn_change_task_priority)
-    _tn_cry_deadlock                         0x08001281   Thumb Code    98  tn_sys.o(.text._tn_cry_deadlock)
-    _tn_is_mutex_locked_by_task              0x080012e5   Thumb Code    40  tn_tasks.o(.text._tn_is_mutex_locked_by_task)
-    _tn_list_add_head                        0x0800130d   Thumb Code    12  tn_list.o(.text._tn_list_add_head)
-    _tn_list_add_tail                        0x08001319   Thumb Code    12  tn_list.o(.text._tn_list_add_tail)
-    _tn_list_is_empty                        0x08001325   Thumb Code    22  tn_list.o(.text._tn_list_is_empty)
-    _tn_list_is_initialized                  0x0800133d   Thumb Code    20  tn_list.o(.text._tn_list_is_initialized)
-    _tn_list_remove_entry                    0x08001351   Thumb Code    12  tn_list.o(.text._tn_list_remove_entry)
-    _tn_list_remove_head                     0x0800135d   Thumb Code    22  tn_list.o(.text._tn_list_remove_head)
-    _tn_list_reset                           0x08001375   Thumb Code     6  tn_list.o(.text._tn_list_reset)
-    _tn_mutex_i_on_task_wait_complete        0x0800137d   Thumb Code   148  tn_mutex.o(.text._tn_mutex_i_on_task_wait_complete)
-    _tn_mutex_on_task_wait_complete          0x08001411   Thumb Code   112  tn_mutex.o(.text._tn_mutex_on_task_wait_complete)
-    _tn_mutex_unlock_all_by_task             0x08001481   Thumb Code    36  tn_mutex.o(.text._tn_mutex_unlock_all_by_task)
-    _tn_sys_on_context_switch                0x080014a5   Thumb Code   146  tn_sys.o(.text._tn_sys_on_context_switch)
-    _tn_task_activate                        0x08001539   Thumb Code   158  tn_tasks.o(.text._tn_task_activate)
-    _tn_task_clear_runnable                  0x080015d9   Thumb Code   138  tn_tasks.o(.text._tn_task_clear_runnable)
-    _tn_task_clear_waiting                   0x08001665   Thumb Code   122  tn_tasks.o(.text._tn_task_clear_waiting)
-    _tn_task_exit_nodelete                   0x080016e1   Thumb Code     6  tn_tasks.o(.text._tn_task_exit_nodelete)
-    _tn_task_set_runnable                    0x080016e9   Thumb Code   100  tn_tasks.o(.text._tn_task_set_runnable)
-    _tn_task_set_waiting                     0x0800174d   Thumb Code   102  tn_tasks.o(.text._tn_task_set_waiting)
-    _tn_task_stack_end_get                   0x080017b5   Thumb Code     4  tn_tasks.o(.text._tn_task_stack_end_get)
-    _tn_timer_cancel                         0x080017b9   Thumb Code    42  tn_timer_static.o(.text._tn_timer_cancel)
-    _tn_timer_create                         0x080017e5   Thumb Code    42  tn_timer.o(.text._tn_timer_create)
-    _tn_timer_is_active                      0x08001811   Thumb Code    26  tn_timer.o(.text._tn_timer_is_active)
-    _tn_timer_start                          0x0800182d   Thumb Code   124  tn_timer_static.o(.text._tn_timer_start)
-    _tn_timers_init                          0x080018a9   Thumb Code    50  tn_timer_static.o(.text._tn_timers_init)
-    _tn_timers_tick_proceed                  0x080018dd   Thumb Code   258  tn_timer_static.o(.text._tn_timers_tick_proceed)
-    _tn_wait_queue_notify_deleted            0x080019e1   Thumb Code    68  tn_sys.o(.text._tn_wait_queue_notify_deleted)
-    abort_message                            0x08001f5d   Thumb Code     4  abort_message.cpp.o(.text.abort_message)
-    main                                     0x08001f61   Thumb Code   126  main.o(.text.main)
-    printf_                                  0x08001fe1   Thumb Code    64  printf.o(.text.printf_)
-    tn_callback_deadlock_set                 0x08002021   Thumb Code    12  tn_sys.o(.text.tn_callback_deadlock_set)
-    tn_callback_stack_overflow_set           0x0800202d   Thumb Code    12  tn_sys.o(.text.tn_callback_stack_overflow_set)
-    tn_mutex_create                          0x08002039   Thumb Code   114  tn_mutex.o(.text.tn_mutex_create)
-    tn_mutex_delete                          0x080020ad   Thumb Code   148  tn_mutex.o(.text.tn_mutex_delete)
-    tn_mutex_lock                            0x08002141   Thumb Code   558  tn_mutex.o(.text.tn_mutex_lock)
-    tn_mutex_unlock                          0x08002371   Thumb Code   136  tn_mutex.o(.text.tn_mutex_unlock)
-    tn_sys_context_get                       0x080023f9   Thumb Code    36  tn_sys.o(.text.tn_sys_context_get)
-    tn_sys_start                             0x0800241d   Thumb Code   190  tn_sys.o(.text.tn_sys_start)
-    tn_sys_tslice_set                        0x080024dd   Thumb Code    54  tn_sys.o(.text.tn_sys_tslice_set)
-    tn_task_create                           0x08002515   Thumb Code   402  tn_tasks.o(.text.tn_task_create)
-    tn_task_create_wname                     0x080026a9   Thumb Code    32  tn_tasks.o(.text.tn_task_create_wname)
-    tn_task_delete                           0x080026c9   Thumb Code   116  tn_tasks.o(.text.tn_task_delete)
-    tn_task_exit                             0x0800273d   Thumb Code   142  tn_tasks.o(.text.tn_task_exit)
-    tn_task_sleep                            0x080027cd   Thumb Code   158  tn_tasks.o(.text.tn_task_sleep)
-    tn_tick_int_processing                   0x0800286d   Thumb Code   234  tn_sys.o(.text.tn_tick_int_processing)
-    __cxa_guard_acquire                      0x08002959   Thumb Code    40  cxa_guard.cpp.o(.text.unlikely.__cxa_guard_acquire)
-    __cxa_guard_release                      0x080029b9   Thumb Code     8  cxa_guard.cpp.o(.text.unlikely.__cxa_guard_release)
-    csp::stack_ptr                           0x080029d4   Data           4  bsp.o(.rodata._ZN3csp9stack_ptrE)
-    _tn_scvd_task                            0x080029d8   Data         160  tn_tasks.o(.rodata._tn_scvd_task)
-    Region$$Table$$Base                      0x08002ba4   Number         0  anon$$obj.o(Region$$Table)
-    Region$$Table$$Limit                     0x08002bc4   Number         0  anon$$obj.o(Region$$Table)
-    SHT$$INIT_ARRAY$$Base                    0x08002bc4   Number         0  main.o(.init_array)
-    SHT$$INIT_ARRAY$$Limit                   0x08002bd0   Number         0  init_aeabi.o(.init_array)
+    os::timer_base::start(unsigned int)      0x08000b41   Thumb Code     6  os.o(.text._ZN2os10timer_base5startEj)
+    os::timer_base::handler_(__tn::TN_Timer*, void*) 0x08000b49   Thumb Code    30  os.o(.text._ZN2os10timer_base8handler_EPN4__tn8TN_TimerEPv)
+    os::timer_base::timer_base(void (*)(void*), unsigned int, os::repeat_timer) 0x08000b69   Thumb Code    60  os.o(.text._ZN2os10timer_baseC2EPFvPvEjNS_12repeat_timerE)
+    os::timer_base::timer_base__sub_object(void (*)(void*), unsigned int, os::repeat_timer) 0x08000b69   Thumb Code    60  os.o(.text._ZN2os10timer_baseC2EPFvPvEjNS_12repeat_timerE)
+    os::timer_base::~timer_base()            0x08000be5   Thumb Code    28  os.o(.text._ZN2os10timer_baseD2Ev)
+    os::timer_base::~timer_base__sub_object() 0x08000be5   Thumb Code    28  os.o(.text._ZN2os10timer_baseD2Ev)
+    os::tslice_set(os::priority, int)        0x08000c01   Thumb Code     4  os.o(.text._ZN2os10tslice_setENS_8priorityEi)
+    os::cb_deadlock(bool, os::mutex*, os::task_base*) 0x08000c05   Thumb Code     2  os.o(.text._ZN2os11cb_deadlockEbPNS_5mutexEPNS_9task_baseE)
+    os::cb_stack_overflow(os::task_base*)    0x08000c09   Thumb Code     2  os.o(.text._ZN2os17cb_stack_overflowEPNS_9task_baseE)
+    os::tick()                               0x08000c0d   Thumb Code     4  os.o(.text._ZN2os4tickEv)
+    os::mutex::acquire(unsigned int)         0x08000c11   Thumb Code     4  os.o(.text._ZN2os5mutex7acquireEj)
+    os::mutex::release()                     0x08000c15   Thumb Code     4  os.o(.text._ZN2os5mutex7releaseEv)
+    os::mutex::mutex()                       0x08000c19   Thumb Code    28  os.o(.text._ZN2os5mutexC2Ev)
+    os::mutex::mutex__sub_object()           0x08000c19   Thumb Code    28  os.o(.text._ZN2os5mutexC2Ev)
+    os::mutex::~mutex()                      0x08000c75   Thumb Code    28  os.o(.text._ZN2os5mutexD2Ev)
+    os::mutex::~mutex__sub_object()          0x08000c75   Thumb Code    28  os.o(.text._ZN2os5mutexD2Ev)
+    os::kernel<kernel, 72u>::cb_deadlock(bool, __tn::TN_Mutex*, __tn::TN_Task*) 0x08000c91   Thumb Code     4  main.o(.text._ZN2os6kernelI6kernelLj72EE11cb_deadlockEbPN4__tn8TN_MutexEPNS3_7TN_TaskE)
+    os::kernel<kernel, 72u>::cb_stack_overflow(__tn::TN_Task*) 0x08000c95   Thumb Code     4  main.o(.text._ZN2os6kernelI6kernelLj72EE17cb_stack_overflowEPN4__tn7TN_TaskE)
+    os::tick_get()                           0x08000c99   Thumb Code     4  os.o(.text._ZN2os8tick_getEv)
+    os::fmem_base::free_cnt_get()            0x08000c9d   Thumb Code     4  os.o(.text._ZN2os9fmem_base12free_cnt_getEv)
+    os::fmem_base::used_cnt_get()            0x08000ca1   Thumb Code     4  os.o(.text._ZN2os9fmem_base12used_cnt_getEv)
+    os::fmem_base::add()                     0x08000ca5   Thumb Code    10  os.o(.text._ZN2os9fmem_base3addEv)
+    os::fmem_base::leave()                   0x08000cb1   Thumb Code    18  os.o(.text._ZN2os9fmem_base5leaveEv)
+    os::fmem_base::append(void*)             0x08000cc5   Thumb Code    38  os.o(.text._ZN2os9fmem_base6appendEPv)
+    os::fmem_base::acquire(void**, unsigned int) 0x08000ced   Thumb Code    66  os.o(.text._ZN2os9fmem_base7acquireEPPvj)
+    os::fmem_base::release(void*)            0x08000d31   Thumb Code    38  os.o(.text._ZN2os9fmem_base7releaseEPv)
+    os::fmem_base::fmem_base(void*, unsigned int, unsigned int) 0x08000d59   Thumb Code    28  os.o(.text._ZN2os9fmem_baseC2EPvjj)
+    os::fmem_base::fmem_base__sub_object(void*, unsigned int, unsigned int) 0x08000d59   Thumb Code    28  os.o(.text._ZN2os9fmem_baseC2EPvjj)
+    os::fmem_base::~fmem_base()              0x08000d75   Thumb Code    28  os.o(.text._ZN2os9fmem_baseD2Ev)
+    os::fmem_base::~fmem_base__sub_object()  0x08000d75   Thumb Code    28  os.o(.text._ZN2os9fmem_baseD2Ev)
+    os::semaphore::acquire(unsigned int)     0x08000d91   Thumb Code    46  os.o(.text._ZN2os9semaphore7acquireEj)
+    os::semaphore::release()                 0x08000dc1   Thumb Code    32  os.o(.text._ZN2os9semaphore7releaseEv)
+    os::semaphore::semaphore(unsigned int, unsigned int) 0x08000de1   Thumb Code    28  os.o(.text._ZN2os9semaphoreC2Ejj)
+    os::semaphore::semaphore__sub_object(unsigned int, unsigned int) 0x08000de1   Thumb Code    28  os.o(.text._ZN2os9semaphoreC2Ejj)
+    os::semaphore::~semaphore()              0x08000dfd   Thumb Code    28  os.o(.text._ZN2os9semaphoreD2Ev)
+    os::semaphore::~semaphore__sub_object()  0x08000dfd   Thumb Code    28  os.o(.text._ZN2os9semaphoreD2Ev)
+    os::task_base::sleep(unsigned int)       0x08000e19   Thumb Code     4  os.o(.text._ZN2os9task_base5sleepEj)
+    os::task_base::~task_base()              0x08000e1d   Thumb Code    28  os.o(.text._ZN2os9task_baseD2Ev)
+    os::task_base::~task_base__sub_object()  0x08000e1d   Thumb Code    28  os.o(.text._ZN2os9task_baseD2Ev)
+    bsp::led::toggle()                       0x08000e39   Thumb Code    16  bsp.o(.text._ZN3bsp3led6toggleEv)
+    bsp::led::led()                          0x08000e49   Thumb Code   100  bsp.o(.text._ZN3bsp3ledC2Ev)
+    bsp::led::led__sub_object()              0x08000e49   Thumb Code   100  bsp.o(.text._ZN3bsp3ledC2Ev)
+    csp::halt()                              0x08000ead   Thumb Code     4  bsp.o(.text._ZN3csp4haltEv)
+    csp::tick::cb_tick_handl()               0x08000eb1   Thumb Code     4  main.o(.text._ZN3csp4tick13cb_tick_handlEv)
+    csp::tick::init(unsigned int)            0x08000eb5   Thumb Code    86  bsp.o(.text._ZN3csp4tick4initEj)
+    task::timer::timer_func()                0x08000f0d   Thumb Code    12  main.o(.text._ZN4task5timer10timer_funcEv)
+    task::task_func()                        0x08000f19   Thumb Code    46  main.o(.text._ZN4task9task_funcEv)
+    task::~task__sub_object()                0x08000f49   Thumb Code    22  main.o(.text._ZN4taskD2Ev)
+    kernel::sw_init()                        0x08000f61   Thumb Code     8  main.o(.text._ZN6kernel7sw_initEv)
+    kernel::task_func()                      0x08000f69   Thumb Code     6  main.o(.text._ZN6kernel9task_funcEv)
+    kernel::kernel__sub_object(unsigned int*, unsigned int) 0x08000f71   Thumb Code   100  main.o(.text._ZN6kernelCI2N2os6kernelIS_Lj72EEEEPjj)
+    fmem_task::print_snapshot()              0x08000fdd   Thumb Code   124  main.o(.text._ZN9fmem_task14print_snapshotEv)
+    fmem_task::task_func()                   0x080010e1   Thumb Code   576  main.o(.text._ZN9fmem_task9task_funcEv)
+    fmem_task::fmem_task__sub_object(char const*) 0x080013b5   Thumb Code   254  main.o(.text._ZN9fmem_taskCI2N2os4taskIS_Lj304ELNS0_8priorityE2EEEEPKc)
+    fmem_task::~fmem_task__sub_object()      0x080014b5   Thumb Code    30  main.o(.text._ZN9fmem_taskD2Ev)
+    _printf_mutex_acquire                    0x08001899   Thumb Code    16  retarget_io.o(.text._printf_mutex_acquire)
+    _printf_mutex_release                    0x080018a9   Thumb Code    12  retarget_io.o(.text._printf_mutex_release)
+    _putchar                                 0x080018b5   Thumb Code    56  retarget_io.o(.text._putchar)
+    _tn_arch_stack_init                      0x08001981   Thumb Code   112  tn_arch_cortex_m_c.o(.text._tn_arch_stack_init)
+    _tn_change_running_task_priority         0x080019f1   Thumb Code   138  tn_tasks.o(.text._tn_change_running_task_priority)
+    _tn_change_task_priority                 0x08001a7d   Thumb Code    16  tn_tasks.o(.text._tn_change_task_priority)
+    _tn_cry_deadlock                         0x08001a8d   Thumb Code    98  tn_sys.o(.text._tn_cry_deadlock)
+    _tn_is_mutex_locked_by_task              0x08001af1   Thumb Code    40  tn_tasks.o(.text._tn_is_mutex_locked_by_task)
+    _tn_list_add_head                        0x08001b19   Thumb Code    12  tn_list.o(.text._tn_list_add_head)
+    _tn_list_add_tail                        0x08001b25   Thumb Code    12  tn_list.o(.text._tn_list_add_tail)
+    _tn_list_is_empty                        0x08001b31   Thumb Code    22  tn_list.o(.text._tn_list_is_empty)
+    _tn_list_is_initialized                  0x08001b49   Thumb Code    20  tn_list.o(.text._tn_list_is_initialized)
+    _tn_list_remove_entry                    0x08001b5d   Thumb Code    12  tn_list.o(.text._tn_list_remove_entry)
+    _tn_list_remove_head                     0x08001b69   Thumb Code    22  tn_list.o(.text._tn_list_remove_head)
+    _tn_list_reset                           0x08001b81   Thumb Code     6  tn_list.o(.text._tn_list_reset)
+    _tn_mutex_i_on_task_wait_complete        0x08001b89   Thumb Code   148  tn_mutex.o(.text._tn_mutex_i_on_task_wait_complete)
+    _tn_mutex_on_task_wait_complete          0x08001c1d   Thumb Code   112  tn_mutex.o(.text._tn_mutex_on_task_wait_complete)
+    _tn_mutex_unlock_all_by_task             0x08001c8d   Thumb Code    36  tn_mutex.o(.text._tn_mutex_unlock_all_by_task)
+    _tn_sys_on_context_switch                0x08001cb1   Thumb Code   146  tn_sys.o(.text._tn_sys_on_context_switch)
+    _tn_task_activate                        0x08001d45   Thumb Code   158  tn_tasks.o(.text._tn_task_activate)
+    _tn_task_clear_runnable                  0x08001de5   Thumb Code   138  tn_tasks.o(.text._tn_task_clear_runnable)
+    _tn_task_clear_waiting                   0x08001e71   Thumb Code   122  tn_tasks.o(.text._tn_task_clear_waiting)
+    _tn_task_exit_nodelete                   0x08001eed   Thumb Code     6  tn_tasks.o(.text._tn_task_exit_nodelete)
+    _tn_task_first_wait_complete             0x08001ef5   Thumb Code   160  tn_tasks.o(.text._tn_task_first_wait_complete)
+    _tn_task_set_runnable                    0x08001f95   Thumb Code   100  tn_tasks.o(.text._tn_task_set_runnable)
+    _tn_task_set_waiting                     0x08001ff9   Thumb Code   102  tn_tasks.o(.text._tn_task_set_waiting)
+    _tn_task_stack_end_get                   0x08002061   Thumb Code     4  tn_tasks.o(.text._tn_task_stack_end_get)
+    _tn_timer_cancel                         0x08002065   Thumb Code    42  tn_timer_static.o(.text._tn_timer_cancel)
+    _tn_timer_create                         0x08002091   Thumb Code    42  tn_timer.o(.text._tn_timer_create)
+    _tn_timer_is_active                      0x080020bd   Thumb Code    26  tn_timer.o(.text._tn_timer_is_active)
+    _tn_timer_start                          0x080020d9   Thumb Code   140  tn_timer_static.o(.text._tn_timer_start)
+    _tn_timers_init                          0x08002165   Thumb Code    80  tn_timer_static.o(.text._tn_timers_init)
+    _tn_timers_tick_proceed                  0x080021b5   Thumb Code   258  tn_timer_static.o(.text._tn_timers_tick_proceed)
+    _tn_wait_queue_notify_deleted            0x080022b9   Thumb Code    68  tn_sys.o(.text._tn_wait_queue_notify_deleted)
+    abort_message                            0x08002835   Thumb Code     4  abort_message.cpp.o(.text.abort_message)
+    main                                     0x08002839   Thumb Code   126  main.o(.text.main)
+    printf_                                  0x080028b9   Thumb Code    64  printf.o(.text.printf_)
+    tn_callback_deadlock_set                 0x080028f9   Thumb Code    12  tn_sys.o(.text.tn_callback_deadlock_set)
+    tn_callback_stack_overflow_set           0x08002905   Thumb Code    12  tn_sys.o(.text.tn_callback_stack_overflow_set)
+    tn_fmem_append                           0x08002911   Thumb Code   174  tn_fmem.o(.text.tn_fmem_append)
+    tn_fmem_create                           0x080029c1   Thumb Code   170  tn_fmem.o(.text.tn_fmem_create)
+    tn_fmem_delete                           0x08002a6d   Thumb Code   112  tn_fmem.o(.text.tn_fmem_delete)
+    tn_fmem_free_blocks_cnt_get              0x08002add   Thumb Code    26  tn_fmem.o(.text.tn_fmem_free_blocks_cnt_get)
+    tn_fmem_get                              0x08002af9   Thumb Code   218  tn_fmem.o(.text.tn_fmem_get)
+    tn_fmem_get_polling                      0x08002bd5   Thumb Code   106  tn_fmem.o(.text.tn_fmem_get_polling)
+    tn_fmem_iappend                          0x08002c41   Thumb Code   174  tn_fmem.o(.text.tn_fmem_iappend)
+    tn_fmem_iget_polling                     0x08002cf1   Thumb Code   168  tn_fmem.o(.text.tn_fmem_iget_polling)
+    tn_fmem_irelease                         0x08002d99   Thumb Code   168  tn_fmem.o(.text.tn_fmem_irelease)
+    tn_fmem_release                          0x08002e41   Thumb Code   168  tn_fmem.o(.text.tn_fmem_release)
+    tn_fmem_used_blocks_cnt_get              0x08002ee9   Thumb Code    30  tn_fmem.o(.text.tn_fmem_used_blocks_cnt_get)
+    tn_mutex_create                          0x08002f09   Thumb Code   114  tn_mutex.o(.text.tn_mutex_create)
+    tn_mutex_delete                          0x08002f7d   Thumb Code   148  tn_mutex.o(.text.tn_mutex_delete)
+    tn_mutex_lock                            0x08003011   Thumb Code   558  tn_mutex.o(.text.tn_mutex_lock)
+    tn_mutex_unlock                          0x08003241   Thumb Code   136  tn_mutex.o(.text.tn_mutex_unlock)
+    tn_sem_create                            0x080032c9   Thumb Code    84  tn_sem.o(.text.tn_sem_create)
+    tn_sem_delete                            0x0800331d   Thumb Code   112  tn_sem.o(.text.tn_sem_delete)
+    tn_sem_isignal                           0x0800338d   Thumb Code   142  tn_sem.o(.text.tn_sem_isignal)
+    tn_sem_iwait_polling                     0x0800341d   Thumb Code   112  tn_sem.o(.text.tn_sem_iwait_polling)
+    tn_sem_signal                            0x0800348d   Thumb Code   142  tn_sem.o(.text.tn_sem_signal)
+    tn_sem_wait                              0x0800351d   Thumb Code   204  tn_sem.o(.text.tn_sem_wait)
+    tn_sys_context_get                       0x080035e9   Thumb Code    36  tn_sys.o(.text.tn_sys_context_get)
+    tn_sys_start                             0x0800360d   Thumb Code   190  tn_sys.o(.text.tn_sys_start)
+    tn_sys_time_get                          0x080036cd   Thumb Code    30  tn_sys.o(.text.tn_sys_time_get)
+    tn_sys_tslice_set                        0x080036ed   Thumb Code    54  tn_sys.o(.text.tn_sys_tslice_set)
+    tn_task_create                           0x08003725   Thumb Code   402  tn_tasks.o(.text.tn_task_create)
+    tn_task_create_wname                     0x080038b9   Thumb Code    32  tn_tasks.o(.text.tn_task_create_wname)
+    tn_task_delete                           0x080038d9   Thumb Code   116  tn_tasks.o(.text.tn_task_delete)
+    tn_task_exit                             0x0800394d   Thumb Code   142  tn_tasks.o(.text.tn_task_exit)
+    tn_task_sleep                            0x080039dd   Thumb Code   158  tn_tasks.o(.text.tn_task_sleep)
+    tn_tick_int_processing                   0x08003a7d   Thumb Code   234  tn_sys.o(.text.tn_tick_int_processing)
+    tn_timer_create                          0x08003b69   Thumb Code    80  tn_timer.o(.text.tn_timer_create)
+    tn_timer_delete                          0x08003bb9   Thumb Code    64  tn_timer.o(.text.tn_timer_delete)
+    tn_timer_start                           0x08003bf9   Thumb Code    64  tn_timer.o(.text.tn_timer_start)
+    __cxa_guard_acquire                      0x08003c39   Thumb Code    40  cxa_guard.cpp.o(.text.unlikely.__cxa_guard_acquire)
+    __cxa_guard_release                      0x08003c99   Thumb Code     8  cxa_guard.cpp.o(.text.unlikely.__cxa_guard_release)
+    csp::stack_ptr                           0x08003cb4   Data           4  bsp.o(.rodata._ZN3csp9stack_ptrE)
+    _tn_scvd_task                            0x08003cb8   Data         160  tn_tasks.o(.rodata._tn_scvd_task)
+    Region$$Table$$Base                      0x08004044   Number         0  anon$$obj.o(Region$$Table)
+    Region$$Table$$Limit                     0x08004064   Number         0  anon$$obj.o(Region$$Table)
+    SHT$$INIT_ARRAY$$Base                    0x08004064   Number         0  main.o(.init_array)
+    SHT$$INIT_ARRAY$$Limit                   0x08004074   Number         0  init_aeabi.o(.init_array)
     Image$$RW_STACK$$Base                    0x20000000   Number         0  anon$$obj.o ABSOLUTE
     __libspace_start                         0x200002d0   Data          96  libspace.o(.bss)
     _SEGGER_RTT                              0x20000330   Data          72  segger_rtt.o(.bss._SEGGER_RTT)
     __temporary_stack_top$libspace           0x20000330   Data           0  libspace.o(.bss)
-    csp::stack_size                          0x200004b0   Data           4  bsp.o(.bss._ZN3csp10stack_sizeE)
-    _tn_curr_run_task                        0x200005f8   Data           4  tn_sys.o(.bss._tn_curr_run_task)
-    _tn_int_stack                            0x20000600   Data           4  tn_sys.o(.bss._tn_int_stack)
-    _tn_int_stack_size                       0x20000604   Data           4  tn_sys.o(.bss._tn_int_stack_size)
-    _tn_next_task_to_run                     0x20000608   Data           4  tn_sys.o(.bss._tn_next_task_to_run)
-    _tn_ready_to_run_bmp                     0x2000060c   Data           4  tn_sys.o(.bss._tn_ready_to_run_bmp)
-    _tn_sys_state                            0x20000610   Data           1  tn_sys.o(.bss._tn_sys_state)
-    _tn_sys_time_count                       0x20000614   Data           4  tn_timer_static.o(.bss._tn_sys_time_count)
-    _tn_tasks_created_cnt                    0x20000618   Data           4  tn_sys.o(.bss._tn_tasks_created_cnt)
-    _tn_tasks_created_list                   0x2000061c   Data           8  tn_sys.o(.bss._tn_tasks_created_list)
-    _tn_tasks_ready_list                     0x20000624   Data          40  tn_sys.o(.bss._tn_tasks_ready_list)
-    _tn_timer_list__gen                      0x2000064c   Data           8  tn_timer_static.o(.bss._tn_timer_list__gen)
-    _tn_timer_list__tick                     0x20000654   Data          64  tn_timer_static.o(.bss._tn_timer_list__tick)
+    guard variable for task::blink_sem       0x20000378   Data           4  main.o(.bss._ZGVN4task9blink_semE)
+    csp::stack_size                          0x200007c0   Data           4  bsp.o(.bss._ZN3csp10stack_sizeE)
+    task::blink_sem                          0x200007c4   Data          20  main.o(.bss._ZN4task9blink_semE)
+    _tn_curr_run_task                        0x20000918   Data           4  tn_sys.o(.bss._tn_curr_run_task)
+    _tn_int_stack                            0x20000920   Data           4  tn_sys.o(.bss._tn_int_stack)
+    _tn_int_stack_size                       0x20000924   Data           4  tn_sys.o(.bss._tn_int_stack_size)
+    _tn_next_task_to_run                     0x20000928   Data           4  tn_sys.o(.bss._tn_next_task_to_run)
+    _tn_ready_to_run_bmp                     0x2000092c   Data           4  tn_sys.o(.bss._tn_ready_to_run_bmp)
+    _tn_sys_state                            0x20000930   Data           1  tn_sys.o(.bss._tn_sys_state)
+    _tn_sys_time_count                       0x20000934   Data           4  tn_timer_static.o(.bss._tn_sys_time_count)
+    _tn_tasks_created_cnt                    0x20000938   Data           4  tn_sys.o(.bss._tn_tasks_created_cnt)
+    _tn_tasks_created_list                   0x2000093c   Data           8  tn_sys.o(.bss._tn_tasks_created_list)
+    _tn_tasks_ready_list                     0x20000944   Data          40  tn_sys.o(.bss._tn_tasks_ready_list)
+    _tn_timer_list__gen                      0x2000096c   Data           8  tn_timer_static.o(.bss._tn_timer_list__gen)
+    _tn_timer_list__tick                     0x20000974   Data          64  tn_timer_static.o(.bss._tn_timer_list__tick)
 
 
 
@@ -2824,297 +2992,370 @@ Memory Map of the image
 
   Image Entry point : 0x08000199
 
-  Load Region LR_IROM1 (Base: 0x08000000, Size: 0x00002bd8, Max: 0x00080000, ABSOLUTE)
+  Load Region LR_IROM1 (Base: 0x08000000, Size: 0x00004080, Max: 0x00080000, ABSOLUTE)
 
-    Execution Region ER_IROM1 (Exec base: 0x08000000, Load base: 0x08000000, Size: 0x00002bd0, Max: 0x00080000, ABSOLUTE)
+    Execution Region ER_IROM1 (Exec base: 0x08000000, Load base: 0x08000000, Size: 0x00004074, Max: 0x00080000, ABSOLUTE)
 
     Exec Addr    Load Addr    Size         Type   Attr      Idx    E Section Name        Object
 
-    0x08000000   0x08000000   0x00000198   Data   RO          958    RESET               startup_stm32f411xe.o
-    0x08000198   0x08000198   0x00000008   Code   RO          996  * !!!main             c_w.l(__main.o)
-    0x080001a0   0x080001a0   0x00000034   Code   RO         1323    !!!scatter          c_w.l(__scatter.o)
-    0x080001d4   0x080001d4   0x0000001a   Code   RO         1325    !!handler_copy      c_w.l(__scatter_copy.o)
+    0x08000000   0x08000000   0x00000198   Data   RO          994    RESET               startup_stm32f411xe.o
+    0x08000198   0x08000198   0x00000008   Code   RO         1032  * !!!main             c_w.l(__main.o)
+    0x080001a0   0x080001a0   0x00000034   Code   RO         1359    !!!scatter          c_w.l(__scatter.o)
+    0x080001d4   0x080001d4   0x0000001a   Code   RO         1361    !!handler_copy      c_w.l(__scatter_copy.o)
     0x080001ee   0x080001ee   0x00000002   PAD
-    0x080001f0   0x080001f0   0x0000001c   Code   RO         1327    !!handler_zi        c_w.l(__scatter_zi.o)
-    0x0800020c   0x0800020c   0x00000002   Code   RO         1232    .ARM.Collect$$libinit$$00000000  c_w.l(libinit.o)
-    0x0800020e   0x0800020e   0x00000000   Code   RO         1028    .ARM.Collect$$libinit$$00000002  c_w.l(libinit2.o)
-    0x0800020e   0x0800020e   0x00000000   Code   RO         1030    .ARM.Collect$$libinit$$00000004  c_w.l(libinit2.o)
-    0x0800020e   0x0800020e   0x00000000   Code   RO         1032    .ARM.Collect$$libinit$$00000006  c_w.l(libinit2.o)
-    0x0800020e   0x0800020e   0x00000008   Code   RO         1033    .ARM.Collect$$libinit$$00000007  c_w.l(libinit2.o)
-    0x08000216   0x08000216   0x00000000   Code   RO         1035    .ARM.Collect$$libinit$$0000000C  c_w.l(libinit2.o)
-    0x08000216   0x08000216   0x00000000   Code   RO         1037    .ARM.Collect$$libinit$$0000000E  c_w.l(libinit2.o)
-    0x08000216   0x08000216   0x00000000   Code   RO         1039    .ARM.Collect$$libinit$$00000010  c_w.l(libinit2.o)
-    0x08000216   0x08000216   0x00000000   Code   RO         1042    .ARM.Collect$$libinit$$00000013  c_w.l(libinit2.o)
-    0x08000216   0x08000216   0x00000000   Code   RO         1044    .ARM.Collect$$libinit$$00000015  c_w.l(libinit2.o)
-    0x08000216   0x08000216   0x00000000   Code   RO         1046    .ARM.Collect$$libinit$$00000017  c_w.l(libinit2.o)
-    0x08000216   0x08000216   0x00000000   Code   RO         1048    .ARM.Collect$$libinit$$00000019  c_w.l(libinit2.o)
-    0x08000216   0x08000216   0x00000000   Code   RO         1050    .ARM.Collect$$libinit$$0000001B  c_w.l(libinit2.o)
-    0x08000216   0x08000216   0x00000000   Code   RO         1052    .ARM.Collect$$libinit$$0000001D  c_w.l(libinit2.o)
-    0x08000216   0x08000216   0x00000000   Code   RO         1054    .ARM.Collect$$libinit$$0000001F  c_w.l(libinit2.o)
-    0x08000216   0x08000216   0x00000000   Code   RO         1056    .ARM.Collect$$libinit$$00000021  c_w.l(libinit2.o)
-    0x08000216   0x08000216   0x00000000   Code   RO         1058    .ARM.Collect$$libinit$$00000023  c_w.l(libinit2.o)
-    0x08000216   0x08000216   0x00000000   Code   RO         1060    .ARM.Collect$$libinit$$00000025  c_w.l(libinit2.o)
-    0x08000216   0x08000216   0x00000000   Code   RO         1062    .ARM.Collect$$libinit$$00000027  c_w.l(libinit2.o)
-    0x08000216   0x08000216   0x00000000   Code   RO         1066    .ARM.Collect$$libinit$$0000002E  c_w.l(libinit2.o)
-    0x08000216   0x08000216   0x00000000   Code   RO         1068    .ARM.Collect$$libinit$$00000030  c_w.l(libinit2.o)
-    0x08000216   0x08000216   0x00000000   Code   RO         1070    .ARM.Collect$$libinit$$00000032  c_w.l(libinit2.o)
-    0x08000216   0x08000216   0x00000004   Code   RO         1071    .ARM.Collect$$libinit$$00000033  c_w.l(libinit2.o)
-    0x0800021a   0x0800021a   0x00000000   Code   RO         1072    .ARM.Collect$$libinit$$00000034  c_w.l(libinit2.o)
-    0x0800021a   0x0800021a   0x00000002   Code   RO         1073    .ARM.Collect$$libinit$$00000035  c_w.l(libinit2.o)
-    0x0800021c   0x0800021c   0x00000002   Code   RO         1308    .ARM.Collect$$libshutdown$$00000000  c_w.l(libshutdown.o)
-    0x0800021e   0x0800021e   0x00000006   Code   RO         1233    .ARM.Collect$$libshutdown$$00000001  c_w.l(libshutdown2.o)
-    0x08000224   0x08000224   0x00000000   Code   RO         1234    .ARM.Collect$$libshutdown$$00000002  c_w.l(libshutdown2.o)
-    0x08000224   0x08000224   0x00000000   Code   RO         1236    .ARM.Collect$$libshutdown$$00000004  c_w.l(libshutdown2.o)
-    0x08000224   0x08000224   0x00000000   Code   RO         1239    .ARM.Collect$$libshutdown$$00000007  c_w.l(libshutdown2.o)
-    0x08000224   0x08000224   0x00000000   Code   RO         1242    .ARM.Collect$$libshutdown$$0000000A  c_w.l(libshutdown2.o)
-    0x08000224   0x08000224   0x00000000   Code   RO         1244    .ARM.Collect$$libshutdown$$0000000C  c_w.l(libshutdown2.o)
-    0x08000224   0x08000224   0x00000000   Code   RO         1247    .ARM.Collect$$libshutdown$$0000000F  c_w.l(libshutdown2.o)
-    0x08000224   0x08000224   0x00000002   Code   RO         1248    .ARM.Collect$$libshutdown$$00000010  c_w.l(libshutdown2.o)
-    0x08000226   0x08000226   0x00000000   Code   RO         1012    .ARM.Collect$$rtentry$$00000000  c_w.l(__rtentry.o)
-    0x08000226   0x08000226   0x00000000   Code   RO         1083    .ARM.Collect$$rtentry$$00000002  c_w.l(__rtentry2.o)
-    0x08000226   0x08000226   0x00000006   Code   RO         1095    .ARM.Collect$$rtentry$$00000004  c_w.l(__rtentry4.o)
-    0x0800022c   0x0800022c   0x00000000   Code   RO         1085    .ARM.Collect$$rtentry$$00000009  c_w.l(__rtentry2.o)
-    0x0800022c   0x0800022c   0x00000004   Code   RO         1086    .ARM.Collect$$rtentry$$0000000A  c_w.l(__rtentry2.o)
-    0x08000230   0x08000230   0x00000000   Code   RO         1088    .ARM.Collect$$rtentry$$0000000C  c_w.l(__rtentry2.o)
-    0x08000230   0x08000230   0x00000008   Code   RO         1089    .ARM.Collect$$rtentry$$0000000D  c_w.l(__rtentry2.o)
-    0x08000238   0x08000238   0x00000002   Code   RO         1256    .ARM.Collect$$rtexit$$00000000  c_w.l(rtexit.o)
-    0x0800023a   0x0800023a   0x00000000   Code   RO         1282    .ARM.Collect$$rtexit$$00000002  c_w.l(rtexit2.o)
-    0x0800023a   0x0800023a   0x00000004   Code   RO         1283    .ARM.Collect$$rtexit$$00000003  c_w.l(rtexit2.o)
-    0x0800023e   0x0800023e   0x00000006   Code   RO         1284    .ARM.Collect$$rtexit$$00000004  c_w.l(rtexit2.o)
+    0x080001f0   0x080001f0   0x0000001c   Code   RO         1363    !!handler_zi        c_w.l(__scatter_zi.o)
+    0x0800020c   0x0800020c   0x00000002   Code   RO         1268    .ARM.Collect$$libinit$$00000000  c_w.l(libinit.o)
+    0x0800020e   0x0800020e   0x00000000   Code   RO         1064    .ARM.Collect$$libinit$$00000002  c_w.l(libinit2.o)
+    0x0800020e   0x0800020e   0x00000000   Code   RO         1066    .ARM.Collect$$libinit$$00000004  c_w.l(libinit2.o)
+    0x0800020e   0x0800020e   0x00000000   Code   RO         1068    .ARM.Collect$$libinit$$00000006  c_w.l(libinit2.o)
+    0x0800020e   0x0800020e   0x00000008   Code   RO         1069    .ARM.Collect$$libinit$$00000007  c_w.l(libinit2.o)
+    0x08000216   0x08000216   0x00000000   Code   RO         1071    .ARM.Collect$$libinit$$0000000C  c_w.l(libinit2.o)
+    0x08000216   0x08000216   0x00000000   Code   RO         1073    .ARM.Collect$$libinit$$0000000E  c_w.l(libinit2.o)
+    0x08000216   0x08000216   0x00000000   Code   RO         1075    .ARM.Collect$$libinit$$00000010  c_w.l(libinit2.o)
+    0x08000216   0x08000216   0x00000000   Code   RO         1078    .ARM.Collect$$libinit$$00000013  c_w.l(libinit2.o)
+    0x08000216   0x08000216   0x00000000   Code   RO         1080    .ARM.Collect$$libinit$$00000015  c_w.l(libinit2.o)
+    0x08000216   0x08000216   0x00000000   Code   RO         1082    .ARM.Collect$$libinit$$00000017  c_w.l(libinit2.o)
+    0x08000216   0x08000216   0x00000000   Code   RO         1084    .ARM.Collect$$libinit$$00000019  c_w.l(libinit2.o)
+    0x08000216   0x08000216   0x00000000   Code   RO         1086    .ARM.Collect$$libinit$$0000001B  c_w.l(libinit2.o)
+    0x08000216   0x08000216   0x00000000   Code   RO         1088    .ARM.Collect$$libinit$$0000001D  c_w.l(libinit2.o)
+    0x08000216   0x08000216   0x00000000   Code   RO         1090    .ARM.Collect$$libinit$$0000001F  c_w.l(libinit2.o)
+    0x08000216   0x08000216   0x00000000   Code   RO         1092    .ARM.Collect$$libinit$$00000021  c_w.l(libinit2.o)
+    0x08000216   0x08000216   0x00000000   Code   RO         1094    .ARM.Collect$$libinit$$00000023  c_w.l(libinit2.o)
+    0x08000216   0x08000216   0x00000000   Code   RO         1096    .ARM.Collect$$libinit$$00000025  c_w.l(libinit2.o)
+    0x08000216   0x08000216   0x00000000   Code   RO         1098    .ARM.Collect$$libinit$$00000027  c_w.l(libinit2.o)
+    0x08000216   0x08000216   0x00000000   Code   RO         1102    .ARM.Collect$$libinit$$0000002E  c_w.l(libinit2.o)
+    0x08000216   0x08000216   0x00000000   Code   RO         1104    .ARM.Collect$$libinit$$00000030  c_w.l(libinit2.o)
+    0x08000216   0x08000216   0x00000000   Code   RO         1106    .ARM.Collect$$libinit$$00000032  c_w.l(libinit2.o)
+    0x08000216   0x08000216   0x00000004   Code   RO         1107    .ARM.Collect$$libinit$$00000033  c_w.l(libinit2.o)
+    0x0800021a   0x0800021a   0x00000000   Code   RO         1108    .ARM.Collect$$libinit$$00000034  c_w.l(libinit2.o)
+    0x0800021a   0x0800021a   0x00000002   Code   RO         1109    .ARM.Collect$$libinit$$00000035  c_w.l(libinit2.o)
+    0x0800021c   0x0800021c   0x00000002   Code   RO         1344    .ARM.Collect$$libshutdown$$00000000  c_w.l(libshutdown.o)
+    0x0800021e   0x0800021e   0x00000006   Code   RO         1269    .ARM.Collect$$libshutdown$$00000001  c_w.l(libshutdown2.o)
+    0x08000224   0x08000224   0x00000000   Code   RO         1270    .ARM.Collect$$libshutdown$$00000002  c_w.l(libshutdown2.o)
+    0x08000224   0x08000224   0x00000000   Code   RO         1272    .ARM.Collect$$libshutdown$$00000004  c_w.l(libshutdown2.o)
+    0x08000224   0x08000224   0x00000000   Code   RO         1275    .ARM.Collect$$libshutdown$$00000007  c_w.l(libshutdown2.o)
+    0x08000224   0x08000224   0x00000000   Code   RO         1278    .ARM.Collect$$libshutdown$$0000000A  c_w.l(libshutdown2.o)
+    0x08000224   0x08000224   0x00000000   Code   RO         1280    .ARM.Collect$$libshutdown$$0000000C  c_w.l(libshutdown2.o)
+    0x08000224   0x08000224   0x00000000   Code   RO         1283    .ARM.Collect$$libshutdown$$0000000F  c_w.l(libshutdown2.o)
+    0x08000224   0x08000224   0x00000002   Code   RO         1284    .ARM.Collect$$libshutdown$$00000010  c_w.l(libshutdown2.o)
+    0x08000226   0x08000226   0x00000000   Code   RO         1048    .ARM.Collect$$rtentry$$00000000  c_w.l(__rtentry.o)
+    0x08000226   0x08000226   0x00000000   Code   RO         1119    .ARM.Collect$$rtentry$$00000002  c_w.l(__rtentry2.o)
+    0x08000226   0x08000226   0x00000006   Code   RO         1131    .ARM.Collect$$rtentry$$00000004  c_w.l(__rtentry4.o)
+    0x0800022c   0x0800022c   0x00000000   Code   RO         1121    .ARM.Collect$$rtentry$$00000009  c_w.l(__rtentry2.o)
+    0x0800022c   0x0800022c   0x00000004   Code   RO         1122    .ARM.Collect$$rtentry$$0000000A  c_w.l(__rtentry2.o)
+    0x08000230   0x08000230   0x00000000   Code   RO         1124    .ARM.Collect$$rtentry$$0000000C  c_w.l(__rtentry2.o)
+    0x08000230   0x08000230   0x00000008   Code   RO         1125    .ARM.Collect$$rtentry$$0000000D  c_w.l(__rtentry2.o)
+    0x08000238   0x08000238   0x00000002   Code   RO         1292    .ARM.Collect$$rtexit$$00000000  c_w.l(rtexit.o)
+    0x0800023a   0x0800023a   0x00000000   Code   RO         1318    .ARM.Collect$$rtexit$$00000002  c_w.l(rtexit2.o)
+    0x0800023a   0x0800023a   0x00000004   Code   RO         1319    .ARM.Collect$$rtexit$$00000003  c_w.l(rtexit2.o)
+    0x0800023e   0x0800023e   0x00000006   Code   RO         1320    .ARM.Collect$$rtexit$$00000004  c_w.l(rtexit2.o)
     0x08000244   0x08000244   0x00000004   PAD
-    0x08000248   0x08000248   0x000000f0   Code   RO          322    .text               tn_arch_cortex_m.o
-    0x08000338   0x08000338   0x00000054   Code   RO          959    .text               startup_stm32f411xe.o
-    0x0800038c   0x0800038c   0x0000000a   Code   RO          985    .text               c_w.l(cxa_atexit.o)
-    0x08000396   0x08000396   0x00000010   Code   RO          992    .text               c_w.l(aeabi_memset.o)
-    0x080003a6   0x080003a6   0x00000006   Code   RO          994    .text               c_w.l(heapauxi.o)
-    0x080003ac   0x080003ac   0x00000024   Code   RO         1001    .text               c_w.l(init_aeabi.o)
-    0x080003d0   0x080003d0   0x0000002e   Code   RO         1020    .text               c_w.l(aeabi_atexit.o)
-    0x080003fe   0x080003fe   0x00000044   Code   RO         1025    .text               c_w.l(rt_memclr.o)
+    0x08000248   0x08000248   0x000000f0   Code   RO          358    .text               tn_arch_cortex_m.o
+    0x08000338   0x08000338   0x00000054   Code   RO          995    .text               startup_stm32f411xe.o
+    0x0800038c   0x0800038c   0x0000000a   Code   RO         1021    .text               c_w.l(cxa_atexit.o)
+    0x08000396   0x08000396   0x00000010   Code   RO         1028    .text               c_w.l(aeabi_memset.o)
+    0x080003a6   0x080003a6   0x00000006   Code   RO         1030    .text               c_w.l(heapauxi.o)
+    0x080003ac   0x080003ac   0x00000024   Code   RO         1037    .text               c_w.l(init_aeabi.o)
+    0x080003d0   0x080003d0   0x0000002e   Code   RO         1056    .text               c_w.l(aeabi_atexit.o)
+    0x080003fe   0x080003fe   0x00000044   Code   RO         1061    .text               c_w.l(rt_memclr.o)
     0x08000442   0x08000442   0x00000002   PAD
-    0x08000444   0x08000444   0x00000008   Code   RO         1102    .text               c_w.l(rt_ddtor_pointer_addr_intlibspace.o)
-    0x0800044c   0x0800044c   0x0000005e   Code   RO         1106    .text               c_w.l(h1_alloc.o)
-    0x080004aa   0x080004aa   0x00000016   Code   RO         1160    .text               c_w.l(abort.o)
-    0x080004c0   0x080004c0   0x00000042   Code   RO         1162    .text               c_w.l(cxa_finalize.o)
-    0x08000502   0x08000502   0x0000004e   Code   RO         1165    .text               c_w.l(rt_memclr_w.o)
-    0x08000550   0x08000550   0x0000000c   Code   RO         1171    .text               c_w.l(sys_exit.o)
-    0x0800055c   0x0800055c   0x00000008   Code   RO         1175    .text               c_w.l(libspace.o)
-    0x08000564   0x08000564   0x0000004a   Code   RO         1180    .text               c_w.l(sys_stackheap_outer.o)
+    0x08000444   0x08000444   0x00000008   Code   RO         1138    .text               c_w.l(rt_ddtor_pointer_addr_intlibspace.o)
+    0x0800044c   0x0800044c   0x0000005e   Code   RO         1142    .text               c_w.l(h1_alloc.o)
+    0x080004aa   0x080004aa   0x00000016   Code   RO         1196    .text               c_w.l(abort.o)
+    0x080004c0   0x080004c0   0x00000042   Code   RO         1198    .text               c_w.l(cxa_finalize.o)
+    0x08000502   0x08000502   0x0000004e   Code   RO         1201    .text               c_w.l(rt_memclr_w.o)
+    0x08000550   0x08000550   0x0000000c   Code   RO         1207    .text               c_w.l(sys_exit.o)
+    0x0800055c   0x0800055c   0x00000008   Code   RO         1211    .text               c_w.l(libspace.o)
+    0x08000564   0x08000564   0x0000004a   Code   RO         1216    .text               c_w.l(sys_stackheap_outer.o)
     0x080005ae   0x080005ae   0x00000002   PAD
-    0x080005b0   0x080005b0   0x00000008   Code   RO         1185    .text               c_w.l(rt_heap_descriptor_intlibspace.o)
-    0x080005b8   0x080005b8   0x00000004   Code   RO         1187    .text               c_w.l(hguard.o)
-    0x080005bc   0x080005bc   0x0000008a   Code   RO         1189    .text               c_w.l(init_alloc.o)
-    0x08000646   0x08000646   0x0000000e   Code   RO         1195    .text               c_w.l(h1_init.o)
-    0x08000654   0x08000654   0x0000004e   Code   RO         1197    .text               c_w.l(h1_free.o)
-    0x080006a2   0x080006a2   0x00000012   Code   RO         1211    .text               c_w.l(exit.o)
-    0x080006b4   0x080006b4   0x0000000e   Code   RO         1213    .text               c_w.l(defsig_abrt_outer.o)
-    0x080006c2   0x080006c2   0x00000002   Code   RO         1253    .text               c_w.l(use_no_semi.o)
-    0x080006c4   0x080006c4   0x00000000   Code   RO         1255    .text               c_w.l(indicate_semi.o)
-    0x080006c4   0x080006c4   0x00000000   Code   RO         1262    .text               c_w.l(maybetermalloc1.o)
-    0x080006c4   0x080006c4   0x00000034   Code   RO         1264    .text               c_w.l(h1_extend.o)
-    0x080006f8   0x080006f8   0x0000000a   Code   RO         1268    .text               c_w.l(defsig_exit.o)
+    0x080005b0   0x080005b0   0x00000008   Code   RO         1221    .text               c_w.l(rt_heap_descriptor_intlibspace.o)
+    0x080005b8   0x080005b8   0x00000004   Code   RO         1223    .text               c_w.l(hguard.o)
+    0x080005bc   0x080005bc   0x0000008a   Code   RO         1225    .text               c_w.l(init_alloc.o)
+    0x08000646   0x08000646   0x0000000e   Code   RO         1231    .text               c_w.l(h1_init.o)
+    0x08000654   0x08000654   0x0000004e   Code   RO         1233    .text               c_w.l(h1_free.o)
+    0x080006a2   0x080006a2   0x00000012   Code   RO         1247    .text               c_w.l(exit.o)
+    0x080006b4   0x080006b4   0x0000000e   Code   RO         1249    .text               c_w.l(defsig_abrt_outer.o)
+    0x080006c2   0x080006c2   0x00000002   Code   RO         1289    .text               c_w.l(use_no_semi.o)
+    0x080006c4   0x080006c4   0x00000000   Code   RO         1291    .text               c_w.l(indicate_semi.o)
+    0x080006c4   0x080006c4   0x00000000   Code   RO         1298    .text               c_w.l(maybetermalloc1.o)
+    0x080006c4   0x080006c4   0x00000034   Code   RO         1300    .text               c_w.l(h1_extend.o)
+    0x080006f8   0x080006f8   0x0000000a   Code   RO         1304    .text               c_w.l(defsig_exit.o)
     0x08000702   0x08000702   0x00000002   PAD
-    0x08000704   0x08000704   0x00000030   Code   RO         1270    .text               c_w.l(defsig_abrt_inner.o)
-    0x08000734   0x08000734   0x0000000e   Code   RO         1274    .text               c_w.l(defsig_rtmem_outer.o)
-    0x08000742   0x08000742   0x00000032   Code   RO         1292    .text               c_w.l(defsig_general.o)
-    0x08000774   0x08000774   0x00000050   Code   RO         1294    .text               c_w.l(defsig_rtmem_inner.o)
-    0x080007c4   0x080007c4   0x0000000e   Code   RO         1296    .text               c_w.l(sys_wrch.o)
+    0x08000704   0x08000704   0x00000030   Code   RO         1306    .text               c_w.l(defsig_abrt_inner.o)
+    0x08000734   0x08000734   0x0000000e   Code   RO         1310    .text               c_w.l(defsig_rtmem_outer.o)
+    0x08000742   0x08000742   0x00000032   Code   RO         1328    .text               c_w.l(defsig_general.o)
+    0x08000774   0x08000774   0x00000050   Code   RO         1330    .text               c_w.l(defsig_rtmem_inner.o)
+    0x080007c4   0x080007c4   0x0000000e   Code   RO         1332    .text               c_w.l(sys_wrch.o)
     0x080007d2   0x080007d2   0x00000002   PAD
-    0x080007d4   0x080007d4   0x000001a0   Code   RO          805    .text.HAL_GPIO_Init  stm32f4xx_hal_gpio.o
-    0x08000974   0x08000974   0x00000010   Code   RO          813    .text.HAL_GPIO_TogglePin  stm32f4xx_hal_gpio.o
-    0x08000984   0x08000984   0x000000d0   Code   RO          270    .text.SEGGER_RTT_PutChar  segger_rtt.o
-    0x08000a54   0x08000a54   0x00000004   Code   RO           55    .text.SysTick_Handler  bsp.o
-    0x08000a58   0x08000a58   0x00000002   Code   RO          964    .text.SystemInit    system_stm32f4xx.o
+    0x080007d4   0x080007d4   0x000001a0   Code   RO          841    .text.HAL_GPIO_Init  stm32f4xx_hal_gpio.o
+    0x08000974   0x08000974   0x00000010   Code   RO          849    .text.HAL_GPIO_TogglePin  stm32f4xx_hal_gpio.o
+    0x08000984   0x08000984   0x000000d0   Code   RO          306    .text.SEGGER_RTT_PutChar  segger_rtt.o
+    0x08000a54   0x08000a54   0x00000004   Code   RO           73    .text.SysTick_Handler  bsp.o
+    0x08000a58   0x08000a58   0x00000002   Code   RO         1000    .text.SystemInit    system_stm32f4xx.o
     0x08000a5a   0x08000a5a   0x00000002   PAD
-    0x08000a5c   0x08000a5c   0x00000020   Code   RO           57    .text._GLOBAL__sub_I_bsp.cpp  bsp.o
-    0x08000a7c   0x08000a7c   0x00000060   Code   RO            8    .text._GLOBAL__sub_I_main.cpp  main.o
-    0x08000adc   0x08000adc   0x0000002a   Code   RO          198    .text._GLOBAL__sub_I_retarget_io.cpp  retarget_io.o
-    0x08000b06   0x08000b06   0x00000002   PAD
-    0x08000b08   0x08000b08   0x00000004   Code   RO           74    .text._ZN2os10tslice_setENS_8priorityEi  os.o
-    0x08000b0c   0x08000b0c   0x00000002   Code   RO           88    .text._ZN2os11cb_deadlockEbPNS_5mutexEPNS_9task_baseE  os.o
-    0x08000b0e   0x08000b0e   0x00000002   PAD
-    0x08000b10   0x08000b10   0x00000002   Code   RO           86    .text._ZN2os17cb_stack_overflowEPNS_9task_baseE  os.o
-    0x08000b12   0x08000b12   0x00000002   PAD
-    0x08000b14   0x08000b14   0x00000004   Code   RO           72    .text._ZN2os4tickEv  os.o
-    0x08000b18   0x08000b18   0x00000004   Code   RO          116    .text._ZN2os5mutex7acquireEj  os.o
-    0x08000b1c   0x08000b1c   0x00000004   Code   RO          118    .text._ZN2os5mutex7releaseEv  os.o
-    0x08000b20   0x08000b20   0x0000005c   Code   RO          120    .text._ZN2os5mutexC2Ev  os.o
-    0x08000b7c   0x08000b7c   0x0000001c   Code   RO          124    .text._ZN2os5mutexD2Ev  os.o
-    0x08000b98   0x08000b98   0x00000004   Code   RO           30    .text._ZN2os6kernelI6kernelLj72EE11cb_deadlockEbPNS_4__tn8TN_MutexEPNS3_7TN_TaskE  main.o
-    0x08000b9c   0x08000b9c   0x00000004   Code   RO           28    .text._ZN2os6kernelI6kernelLj72EE17cb_stack_overflowEPNS_4__tn7TN_TaskE  main.o
-    0x08000ba0   0x08000ba0   0x00000004   Code   RO           90    .text._ZN2os9task_base5sleepEj  os.o
-    0x08000ba4   0x08000ba4   0x0000001c   Code   RO          114    .text._ZN2os9task_baseD2Ev  os.o
-    0x08000bc0   0x08000bc0   0x00000010   Code   RO           53    .text._ZN3bsp3led6toggleEv  bsp.o
-    0x08000bd0   0x08000bd0   0x00000064   Code   RO           45    .text._ZN3bsp3ledC2Ev  bsp.o
-    0x08000c34   0x08000c34   0x00000004   Code   RO           41    .text._ZN3csp4haltEv  bsp.o
-    0x08000c38   0x08000c38   0x00000004   Code   RO            4    .text._ZN3csp4tick13cb_tick_handlEv  main.o
-    0x08000c3c   0x08000c3c   0x00000056   Code   RO           37    .text._ZN3csp4tick4initEj  bsp.o
-    0x08000c92   0x08000c92   0x00000002   PAD
-    0x08000c94   0x08000c94   0x0000001a   Code   RO           26    .text._ZN4task9task_funcEv  main.o
+    0x08000a5c   0x08000a5c   0x00000020   Code   RO           75    .text._GLOBAL__sub_I_bsp.cpp  bsp.o
+    0x08000a7c   0x08000a7c   0x00000098   Code   RO            8    .text._GLOBAL__sub_I_main.cpp  main.o
+    0x08000b14   0x08000b14   0x0000002a   Code   RO          234    .text._GLOBAL__sub_I_retarget_io.cpp  retarget_io.o
+    0x08000b3e   0x08000b3e   0x00000002   PAD
+    0x08000b40   0x08000b40   0x00000006   Code   RO          202    .text._ZN2os10timer_base5startEj  os.o
+    0x08000b46   0x08000b46   0x00000002   PAD
+    0x08000b48   0x08000b48   0x0000001e   Code   RO          200    .text._ZN2os10timer_base8handler_EPN4__tn8TN_TimerEPv  os.o
+    0x08000b66   0x08000b66   0x00000002   PAD
+    0x08000b68   0x08000b68   0x0000007c   Code   RO          204    .text._ZN2os10timer_baseC2EPFvPvEjNS_12repeat_timerE  os.o
+    0x08000be4   0x08000be4   0x0000001c   Code   RO          216    .text._ZN2os10timer_baseD2Ev  os.o
+    0x08000c00   0x08000c00   0x00000004   Code   RO           92    .text._ZN2os10tslice_setENS_8priorityEi  os.o
+    0x08000c04   0x08000c04   0x00000002   Code   RO          106    .text._ZN2os11cb_deadlockEbPNS_5mutexEPNS_9task_baseE  os.o
+    0x08000c06   0x08000c06   0x00000002   PAD
+    0x08000c08   0x08000c08   0x00000002   Code   RO          104    .text._ZN2os17cb_stack_overflowEPNS_9task_baseE  os.o
+    0x08000c0a   0x08000c0a   0x00000002   PAD
+    0x08000c0c   0x08000c0c   0x00000004   Code   RO           90    .text._ZN2os4tickEv  os.o
+    0x08000c10   0x08000c10   0x00000004   Code   RO          134    .text._ZN2os5mutex7acquireEj  os.o
+    0x08000c14   0x08000c14   0x00000004   Code   RO          136    .text._ZN2os5mutex7releaseEv  os.o
+    0x08000c18   0x08000c18   0x0000005c   Code   RO          138    .text._ZN2os5mutexC2Ev  os.o
+    0x08000c74   0x08000c74   0x0000001c   Code   RO          142    .text._ZN2os5mutexD2Ev  os.o
+    0x08000c90   0x08000c90   0x00000004   Code   RO           48    .text._ZN2os6kernelI6kernelLj72EE11cb_deadlockEbPN4__tn8TN_MutexEPNS3_7TN_TaskE  main.o
+    0x08000c94   0x08000c94   0x00000004   Code   RO           46    .text._ZN2os6kernelI6kernelLj72EE17cb_stack_overflowEPN4__tn7TN_TaskE  main.o
+    0x08000c98   0x08000c98   0x00000004   Code   RO           94    .text._ZN2os8tick_getEv  os.o
+    0x08000c9c   0x08000c9c   0x00000004   Code   RO          164    .text._ZN2os9fmem_base12free_cnt_getEv  os.o
+    0x08000ca0   0x08000ca0   0x00000004   Code   RO          166    .text._ZN2os9fmem_base12used_cnt_getEv  os.o
+    0x08000ca4   0x08000ca4   0x0000000a   Code   RO          154    .text._ZN2os9fmem_base3addEv  os.o
     0x08000cae   0x08000cae   0x00000002   PAD
-    0x08000cb0   0x08000cb0   0x00000008   Code   RO           32    .text._ZN6kernel7sw_initEv  main.o
-    0x08000cb8   0x08000cb8   0x00000006   Code   RO           34    .text._ZN6kernel9task_funcEv  main.o
-    0x08000cbe   0x08000cbe   0x00000002   PAD
-    0x08000cc0   0x08000cc0   0x0000006c   Code   RO           24    .text._ZN6kernelCI2N2os6kernelIS_Lj72EEEEPjj  main.o
-    0x08000d2c   0x08000d2c   0x00000118   Code   RO          472    .text._mutex_do_unlock  tn_mutex.o
-    0x08000e44   0x08000e44   0x00000238   Code   RO          236    .text._ntoa_long    printf.o
-    0x0800107c   0x0800107c   0x0000000a   Code   RO          216    .text._out_char     printf.o
-    0x08001086   0x08001086   0x00000002   PAD
-    0x08001088   0x08001088   0x00000002   Code   RO          234    .text._out_null     printf.o
-    0x0800108a   0x0800108a   0x00000002   PAD
-    0x0800108c   0x0800108c   0x00000010   Code   RO          192    .text._printf_mutex_acquire  retarget_io.o
-    0x0800109c   0x0800109c   0x0000000c   Code   RO          194    .text._printf_mutex_release  retarget_io.o
-    0x080010a8   0x080010a8   0x00000038   Code   RO          196    .text._putchar      retarget_io.o
-    0x080010e0   0x080010e0   0x00000092   Code   RO          569    .text._task_wait_timeout  tn_tasks.o
-    0x08001172   0x08001172   0x00000002   PAD
-    0x08001174   0x08001174   0x00000070   Code   RO          327    .text._tn_arch_stack_init  tn_arch_cortex_m_c.o
-    0x080011e4   0x080011e4   0x0000008a   Code   RO          627    .text._tn_change_running_task_priority  tn_tasks.o
-    0x0800126e   0x0800126e   0x00000002   PAD
-    0x08001270   0x08001270   0x00000010   Code   RO          617    .text._tn_change_task_priority  tn_tasks.o
-    0x08001280   0x08001280   0x00000062   Code   RO          542    .text._tn_cry_deadlock  tn_sys.o
-    0x080012e2   0x080012e2   0x00000002   PAD
-    0x080012e4   0x080012e4   0x00000028   Code   RO          629    .text._tn_is_mutex_locked_by_task  tn_tasks.o
-    0x0800130c   0x0800130c   0x0000000c   Code   RO          448    .text._tn_list_add_head  tn_list.o
-    0x08001318   0x08001318   0x0000000c   Code   RO          450    .text._tn_list_add_tail  tn_list.o
-    0x08001324   0x08001324   0x00000016   Code   RO          446    .text._tn_list_is_empty  tn_list.o
-    0x0800133a   0x0800133a   0x00000002   PAD
-    0x0800133c   0x0800133c   0x00000014   Code   RO          442    .text._tn_list_is_initialized  tn_list.o
-    0x08001350   0x08001350   0x0000000c   Code   RO          456    .text._tn_list_remove_entry  tn_list.o
-    0x0800135c   0x0800135c   0x00000016   Code   RO          452    .text._tn_list_remove_head  tn_list.o
-    0x08001372   0x08001372   0x00000002   PAD
-    0x08001374   0x08001374   0x00000006   Code   RO          444    .text._tn_list_reset  tn_list.o
-    0x0800137a   0x0800137a   0x00000002   PAD
-    0x0800137c   0x0800137c   0x00000094   Code   RO          482    .text._tn_mutex_i_on_task_wait_complete  tn_mutex.o
-    0x08001410   0x08001410   0x00000070   Code   RO          484    .text._tn_mutex_on_task_wait_complete  tn_mutex.o
-    0x08001480   0x08001480   0x00000024   Code   RO          480    .text._tn_mutex_unlock_all_by_task  tn_mutex.o
-    0x080014a4   0x080014a4   0x00000092   Code   RO          544    .text._tn_sys_on_context_switch  tn_sys.o
-    0x08001536   0x08001536   0x00000002   PAD
-    0x08001538   0x08001538   0x0000009e   Code   RO          573    .text._tn_task_activate  tn_tasks.o
-    0x080015d6   0x080015d6   0x00000002   PAD
-    0x080015d8   0x080015d8   0x0000008a   Code   RO          579    .text._tn_task_clear_runnable  tn_tasks.o
-    0x08001662   0x08001662   0x00000002   PAD
-    0x08001664   0x08001664   0x0000007a   Code   RO          609    .text._tn_task_clear_waiting  tn_tasks.o
-    0x080016de   0x080016de   0x00000002   PAD
-    0x080016e0   0x080016e0   0x00000006   Code   RO          631    .text._tn_task_exit_nodelete  tn_tasks.o
-    0x080016e6   0x080016e6   0x00000002   PAD
-    0x080016e8   0x080016e8   0x00000064   Code   RO          587    .text._tn_task_set_runnable  tn_tasks.o
-    0x0800174c   0x0800174c   0x00000066   Code   RO          621    .text._tn_task_set_waiting  tn_tasks.o
-    0x080017b2   0x080017b2   0x00000002   PAD
-    0x080017b4   0x080017b4   0x00000004   Code   RO          633    .text._tn_task_stack_end_get  tn_tasks.o
-    0x080017b8   0x080017b8   0x0000002a   Code   RO          677    .text._tn_timer_cancel  tn_timer_static.o
-    0x080017e2   0x080017e2   0x00000002   PAD
-    0x080017e4   0x080017e4   0x0000002a   Code   RO          646    .text._tn_timer_create  tn_timer.o
-    0x0800180e   0x0800180e   0x00000002   PAD
-    0x08001810   0x08001810   0x0000001a   Code   RO          660    .text._tn_timer_is_active  tn_timer.o
-    0x0800182a   0x0800182a   0x00000002   PAD
-    0x0800182c   0x0800182c   0x0000007c   Code   RO          679    .text._tn_timer_start  tn_timer_static.o
-    0x080018a8   0x080018a8   0x00000032   Code   RO          673    .text._tn_timers_init  tn_timer_static.o
-    0x080018da   0x080018da   0x00000002   PAD
-    0x080018dc   0x080018dc   0x00000102   Code   RO          675    .text._tn_timers_tick_proceed  tn_timer_static.o
-    0x080019de   0x080019de   0x00000002   PAD
-    0x080019e0   0x080019e0   0x00000044   Code   RO          536    .text._tn_wait_queue_notify_deleted  tn_sys.o
-    0x08001a24   0x08001a24   0x00000538   Code   RO          214    .text._vsnprintf    printf.o
-    0x08001f5c   0x08001f5c   0x00000004   Code   RO         1079    .text.abort_message  libcppabi_w.l(abort_message.cpp.o)
-    0x08001f60   0x08001f60   0x0000007e   Code   RO            6    .text.main          main.o
-    0x08001fde   0x08001fde   0x00000002   PAD
-    0x08001fe0   0x08001fe0   0x00000040   Code   RO          210    .text.printf_       printf.o
-    0x08002020   0x08002020   0x0000000c   Code   RO          526    .text.tn_callback_deadlock_set  tn_sys.o
-    0x0800202c   0x0800202c   0x0000000c   Code   RO          528    .text.tn_callback_stack_overflow_set  tn_sys.o
-    0x08002038   0x08002038   0x00000072   Code   RO          468    .text.tn_mutex_create  tn_mutex.o
-    0x080020aa   0x080020aa   0x00000002   PAD
-    0x080020ac   0x080020ac   0x00000094   Code   RO          470    .text.tn_mutex_delete  tn_mutex.o
-    0x08002140   0x08002140   0x0000022e   Code   RO          474    .text.tn_mutex_lock  tn_mutex.o
-    0x0800236e   0x0800236e   0x00000002   PAD
-    0x08002370   0x08002370   0x00000088   Code   RO          478    .text.tn_mutex_unlock  tn_mutex.o
-    0x080023f8   0x080023f8   0x00000024   Code   RO          530    .text.tn_sys_context_get  tn_sys.o
-    0x0800241c   0x0800241c   0x000000be   Code   RO          516    .text.tn_sys_start  tn_sys.o
-    0x080024da   0x080024da   0x00000002   PAD
-    0x080024dc   0x080024dc   0x00000036   Code   RO          520    .text.tn_sys_tslice_set  tn_sys.o
-    0x08002512   0x08002512   0x00000002   PAD
-    0x08002514   0x08002514   0x00000192   Code   RO          567    .text.tn_task_create  tn_tasks.o
-    0x080026a6   0x080026a6   0x00000002   PAD
-    0x080026a8   0x080026a8   0x00000020   Code   RO          575    .text.tn_task_create_wname  tn_tasks.o
-    0x080026c8   0x080026c8   0x00000074   Code   RO          611    .text.tn_task_delete  tn_tasks.o
-    0x0800273c   0x0800273c   0x0000008e   Code   RO          605    .text.tn_task_exit  tn_tasks.o
-    0x080027ca   0x080027ca   0x00000002   PAD
-    0x080027cc   0x080027cc   0x0000009e   Code   RO          589    .text.tn_task_sleep  tn_tasks.o
-    0x0800286a   0x0800286a   0x00000002   PAD
-    0x0800286c   0x0800286c   0x000000ea   Code   RO          518    .text.tn_tick_int_processing  tn_sys.o
-    0x08002956   0x08002956   0x00000002   PAD
-    0x08002958   0x08002958   0x00000060   Code   RO         1005    .text.unlikely.__cxa_guard_acquire  libcppabi_w.l(cxa_guard.cpp.o)
-    0x080029b8   0x080029b8   0x00000008   Code   RO         1007    .text.unlikely.__cxa_guard_release  libcppabi_w.l(cxa_guard.cpp.o)
-    0x080029c0   0x080029c0   0x00000011   Data   RO          311    .rodata._DoInit._aInitStr  segger_rtt.o
-    0x080029d1   0x080029d1   0x00000003   PAD
-    0x080029d4   0x080029d4   0x00000004   Data   RO           60    .rodata._ZN3csp9stack_ptrE  bsp.o
-    0x080029d8   0x080029d8   0x000000a0   Data   RO          635    .rodata._tn_scvd_task  tn_tasks.o
-    0x08002a78   0x08002a78   0x00000047   Data   RO           11    .rodata.str1.1      main.o
-    0x08002abf   0x08002abf   0x00000058   Data   RO           62    .rodata.str1.1      bsp.o
-    0x08002b17   0x08002b17   0x00000083   Data   RO          183    .rodata.str1.1      os.o
-    0x08002b9a   0x08002b9a   0x00000009   Data   RO          312    .rodata.str1.1      segger_rtt.o
-    0x08002ba3   0x08002ba3   0x00000001   PAD
-    0x08002ba4   0x08002ba4   0x00000020   Data   RO         1322    Region$$Table       anon$$obj.o
-    0x08002bc4   0x08002bc4   0x00000004   Data   RO           14    .init_array         main.o
-    0x08002bc8   0x08002bc4   0x00000004   Data   RO           63    .init_array         bsp.o
-    0x08002bcc   0x08002bc4   0x00000004   Data   RO          201    .init_array         retarget_io.o
-    0x08002bd0   0x08002bc4   0x00000000   Data   RO          999    .init_array         c_w.l(init_aeabi.o)
+    0x08000cb0   0x08000cb0   0x00000012   Code   RO          152    .text._ZN2os9fmem_base5leaveEv  os.o
+    0x08000cc2   0x08000cc2   0x00000002   PAD
+    0x08000cc4   0x08000cc4   0x00000026   Code   RO          162    .text._ZN2os9fmem_base6appendEPv  os.o
+    0x08000cea   0x08000cea   0x00000002   PAD
+    0x08000cec   0x08000cec   0x00000042   Code   RO          156    .text._ZN2os9fmem_base7acquireEPPvj  os.o
+    0x08000d2e   0x08000d2e   0x00000002   PAD
+    0x08000d30   0x08000d30   0x00000026   Code   RO          160    .text._ZN2os9fmem_base7releaseEPv  os.o
+    0x08000d56   0x08000d56   0x00000002   PAD
+    0x08000d58   0x08000d58   0x0000001c   Code   RO          168    .text._ZN2os9fmem_baseC2EPvjj  os.o
+    0x08000d74   0x08000d74   0x0000001c   Code   RO          170    .text._ZN2os9fmem_baseD2Ev  os.o
+    0x08000d90   0x08000d90   0x0000002e   Code   RO          144    .text._ZN2os9semaphore7acquireEj  os.o
+    0x08000dbe   0x08000dbe   0x00000002   PAD
+    0x08000dc0   0x08000dc0   0x00000020   Code   RO          146    .text._ZN2os9semaphore7releaseEv  os.o
+    0x08000de0   0x08000de0   0x0000001c   Code   RO          148    .text._ZN2os9semaphoreC2Ejj  os.o
+    0x08000dfc   0x08000dfc   0x0000001c   Code   RO          150    .text._ZN2os9semaphoreD2Ev  os.o
+    0x08000e18   0x08000e18   0x00000004   Code   RO          108    .text._ZN2os9task_base5sleepEj  os.o
+    0x08000e1c   0x08000e1c   0x0000001c   Code   RO          132    .text._ZN2os9task_baseD2Ev  os.o
+    0x08000e38   0x08000e38   0x00000010   Code   RO           71    .text._ZN3bsp3led6toggleEv  bsp.o
+    0x08000e48   0x08000e48   0x00000064   Code   RO           63    .text._ZN3bsp3ledC2Ev  bsp.o
+    0x08000eac   0x08000eac   0x00000004   Code   RO           59    .text._ZN3csp4haltEv  bsp.o
+    0x08000eb0   0x08000eb0   0x00000004   Code   RO            4    .text._ZN3csp4tick13cb_tick_handlEv  main.o
+    0x08000eb4   0x08000eb4   0x00000056   Code   RO           55    .text._ZN3csp4tick4initEj  bsp.o
+    0x08000f0a   0x08000f0a   0x00000002   PAD
+    0x08000f0c   0x08000f0c   0x0000000c   Code   RO           40    .text._ZN4task5timer10timer_funcEv  main.o
+    0x08000f18   0x08000f18   0x0000002e   Code   RO           38    .text._ZN4task9task_funcEv  main.o
+    0x08000f46   0x08000f46   0x00000002   PAD
+    0x08000f48   0x08000f48   0x00000016   Code   RO           30    .text._ZN4taskD2Ev  main.o
+    0x08000f5e   0x08000f5e   0x00000002   PAD
+    0x08000f60   0x08000f60   0x00000008   Code   RO           50    .text._ZN6kernel7sw_initEv  main.o
+    0x08000f68   0x08000f68   0x00000006   Code   RO           52    .text._ZN6kernel9task_funcEv  main.o
+    0x08000f6e   0x08000f6e   0x00000002   PAD
+    0x08000f70   0x08000f70   0x0000006c   Code   RO           36    .text._ZN6kernelCI2N2os6kernelIS_Lj72EEEEPjj  main.o
+    0x08000fdc   0x08000fdc   0x00000104   Code   RO           44    .text._ZN9fmem_task14print_snapshotEv  main.o
+    0x080010e0   0x080010e0   0x000002d4   Code   RO           42    .text._ZN9fmem_task9task_funcEv  main.o
+    0x080013b4   0x080013b4   0x000000fe   Code   RO           32    .text._ZN9fmem_taskCI2N2os4taskIS_Lj304ELNS0_8priorityE2EEEEPKc  main.o
+    0x080014b2   0x080014b2   0x00000002   PAD
+    0x080014b4   0x080014b4   0x0000001e   Code   RO           34    .text._ZN9fmem_taskD2Ev  main.o
+    0x080014d2   0x080014d2   0x00000002   PAD
+    0x080014d4   0x080014d4   0x0000005e   Code   RO           25    .text.__cxx_global_var_init  main.o
+    0x08001532   0x08001532   0x00000002   PAD
+    0x08001534   0x08001534   0x00000004   Code   RO          468    .text._cb_before_task_wait_complete  tn_fmem.o
+    0x08001538   0x08001538   0x00000118   Code   RO          508    .text._mutex_do_unlock  tn_mutex.o
+    0x08001650   0x08001650   0x00000238   Code   RO          272    .text._ntoa_long    printf.o
+    0x08001888   0x08001888   0x0000000a   Code   RO          252    .text._out_char     printf.o
+    0x08001892   0x08001892   0x00000002   PAD
+    0x08001894   0x08001894   0x00000002   Code   RO          270    .text._out_null     printf.o
+    0x08001896   0x08001896   0x00000002   PAD
+    0x08001898   0x08001898   0x00000010   Code   RO          228    .text._printf_mutex_acquire  retarget_io.o
+    0x080018a8   0x080018a8   0x0000000c   Code   RO          230    .text._printf_mutex_release  retarget_io.o
+    0x080018b4   0x080018b4   0x00000038   Code   RO          232    .text._putchar      retarget_io.o
+    0x080018ec   0x080018ec   0x00000092   Code   RO          605    .text._task_wait_timeout  tn_tasks.o
+    0x0800197e   0x0800197e   0x00000002   PAD
+    0x08001980   0x08001980   0x00000070   Code   RO          363    .text._tn_arch_stack_init  tn_arch_cortex_m_c.o
+    0x080019f0   0x080019f0   0x0000008a   Code   RO          663    .text._tn_change_running_task_priority  tn_tasks.o
+    0x08001a7a   0x08001a7a   0x00000002   PAD
+    0x08001a7c   0x08001a7c   0x00000010   Code   RO          653    .text._tn_change_task_priority  tn_tasks.o
+    0x08001a8c   0x08001a8c   0x00000062   Code   RO          578    .text._tn_cry_deadlock  tn_sys.o
+    0x08001aee   0x08001aee   0x00000002   PAD
+    0x08001af0   0x08001af0   0x00000028   Code   RO          665    .text._tn_is_mutex_locked_by_task  tn_tasks.o
+    0x08001b18   0x08001b18   0x0000000c   Code   RO          484    .text._tn_list_add_head  tn_list.o
+    0x08001b24   0x08001b24   0x0000000c   Code   RO          486    .text._tn_list_add_tail  tn_list.o
+    0x08001b30   0x08001b30   0x00000016   Code   RO          482    .text._tn_list_is_empty  tn_list.o
+    0x08001b46   0x08001b46   0x00000002   PAD
+    0x08001b48   0x08001b48   0x00000014   Code   RO          478    .text._tn_list_is_initialized  tn_list.o
+    0x08001b5c   0x08001b5c   0x0000000c   Code   RO          492    .text._tn_list_remove_entry  tn_list.o
+    0x08001b68   0x08001b68   0x00000016   Code   RO          488    .text._tn_list_remove_head  tn_list.o
+    0x08001b7e   0x08001b7e   0x00000002   PAD
+    0x08001b80   0x08001b80   0x00000006   Code   RO          480    .text._tn_list_reset  tn_list.o
+    0x08001b86   0x08001b86   0x00000002   PAD
+    0x08001b88   0x08001b88   0x00000094   Code   RO          518    .text._tn_mutex_i_on_task_wait_complete  tn_mutex.o
+    0x08001c1c   0x08001c1c   0x00000070   Code   RO          520    .text._tn_mutex_on_task_wait_complete  tn_mutex.o
+    0x08001c8c   0x08001c8c   0x00000024   Code   RO          516    .text._tn_mutex_unlock_all_by_task  tn_mutex.o
+    0x08001cb0   0x08001cb0   0x00000092   Code   RO          580    .text._tn_sys_on_context_switch  tn_sys.o
+    0x08001d42   0x08001d42   0x00000002   PAD
+    0x08001d44   0x08001d44   0x0000009e   Code   RO          609    .text._tn_task_activate  tn_tasks.o
+    0x08001de2   0x08001de2   0x00000002   PAD
+    0x08001de4   0x08001de4   0x0000008a   Code   RO          615    .text._tn_task_clear_runnable  tn_tasks.o
+    0x08001e6e   0x08001e6e   0x00000002   PAD
+    0x08001e70   0x08001e70   0x0000007a   Code   RO          645    .text._tn_task_clear_waiting  tn_tasks.o
+    0x08001eea   0x08001eea   0x00000002   PAD
+    0x08001eec   0x08001eec   0x00000006   Code   RO          667    .text._tn_task_exit_nodelete  tn_tasks.o
+    0x08001ef2   0x08001ef2   0x00000002   PAD
+    0x08001ef4   0x08001ef4   0x000000a0   Code   RO          661    .text._tn_task_first_wait_complete  tn_tasks.o
+    0x08001f94   0x08001f94   0x00000064   Code   RO          623    .text._tn_task_set_runnable  tn_tasks.o
+    0x08001ff8   0x08001ff8   0x00000066   Code   RO          657    .text._tn_task_set_waiting  tn_tasks.o
+    0x0800205e   0x0800205e   0x00000002   PAD
+    0x08002060   0x08002060   0x00000004   Code   RO          669    .text._tn_task_stack_end_get  tn_tasks.o
+    0x08002064   0x08002064   0x0000002a   Code   RO          713    .text._tn_timer_cancel  tn_timer_static.o
+    0x0800208e   0x0800208e   0x00000002   PAD
+    0x08002090   0x08002090   0x0000002a   Code   RO          682    .text._tn_timer_create  tn_timer.o
+    0x080020ba   0x080020ba   0x00000002   PAD
+    0x080020bc   0x080020bc   0x0000001a   Code   RO          696    .text._tn_timer_is_active  tn_timer.o
+    0x080020d6   0x080020d6   0x00000002   PAD
+    0x080020d8   0x080020d8   0x0000008c   Code   RO          715    .text._tn_timer_start  tn_timer_static.o
+    0x08002164   0x08002164   0x00000050   Code   RO          709    .text._tn_timers_init  tn_timer_static.o
+    0x080021b4   0x080021b4   0x00000102   Code   RO          711    .text._tn_timers_tick_proceed  tn_timer_static.o
+    0x080022b6   0x080022b6   0x00000002   PAD
+    0x080022b8   0x080022b8   0x00000044   Code   RO          572    .text._tn_wait_queue_notify_deleted  tn_sys.o
+    0x080022fc   0x080022fc   0x00000538   Code   RO          250    .text._vsnprintf    printf.o
+    0x08002834   0x08002834   0x00000004   Code   RO         1115    .text.abort_message  libcppabi_w.l(abort_message.cpp.o)
+    0x08002838   0x08002838   0x0000007e   Code   RO            6    .text.main          main.o
+    0x080028b6   0x080028b6   0x00000002   PAD
+    0x080028b8   0x080028b8   0x00000040   Code   RO          246    .text.printf_       printf.o
+    0x080028f8   0x080028f8   0x0000000c   Code   RO          562    .text.tn_callback_deadlock_set  tn_sys.o
+    0x08002904   0x08002904   0x0000000c   Code   RO          564    .text.tn_callback_stack_overflow_set  tn_sys.o
+    0x08002910   0x08002910   0x000000ae   Code   RO          460    .text.tn_fmem_append  tn_fmem.o
+    0x080029be   0x080029be   0x00000002   PAD
+    0x080029c0   0x080029c0   0x000000aa   Code   RO          446    .text.tn_fmem_create  tn_fmem.o
+    0x08002a6a   0x08002a6a   0x00000002   PAD
+    0x08002a6c   0x08002a6c   0x00000070   Code   RO          448    .text.tn_fmem_delete  tn_fmem.o
+    0x08002adc   0x08002adc   0x0000001a   Code   RO          464    .text.tn_fmem_free_blocks_cnt_get  tn_fmem.o
+    0x08002af6   0x08002af6   0x00000002   PAD
+    0x08002af8   0x08002af8   0x000000da   Code   RO          450    .text.tn_fmem_get   tn_fmem.o
+    0x08002bd2   0x08002bd2   0x00000002   PAD
+    0x08002bd4   0x08002bd4   0x0000006a   Code   RO          452    .text.tn_fmem_get_polling  tn_fmem.o
+    0x08002c3e   0x08002c3e   0x00000002   PAD
+    0x08002c40   0x08002c40   0x000000ae   Code   RO          462    .text.tn_fmem_iappend  tn_fmem.o
+    0x08002cee   0x08002cee   0x00000002   PAD
+    0x08002cf0   0x08002cf0   0x000000a8   Code   RO          454    .text.tn_fmem_iget_polling  tn_fmem.o
+    0x08002d98   0x08002d98   0x000000a8   Code   RO          458    .text.tn_fmem_irelease  tn_fmem.o
+    0x08002e40   0x08002e40   0x000000a8   Code   RO          456    .text.tn_fmem_release  tn_fmem.o
+    0x08002ee8   0x08002ee8   0x0000001e   Code   RO          466    .text.tn_fmem_used_blocks_cnt_get  tn_fmem.o
+    0x08002f06   0x08002f06   0x00000002   PAD
+    0x08002f08   0x08002f08   0x00000072   Code   RO          504    .text.tn_mutex_create  tn_mutex.o
+    0x08002f7a   0x08002f7a   0x00000002   PAD
+    0x08002f7c   0x08002f7c   0x00000094   Code   RO          506    .text.tn_mutex_delete  tn_mutex.o
+    0x08003010   0x08003010   0x0000022e   Code   RO          510    .text.tn_mutex_lock  tn_mutex.o
+    0x0800323e   0x0800323e   0x00000002   PAD
+    0x08003240   0x08003240   0x00000088   Code   RO          514    .text.tn_mutex_unlock  tn_mutex.o
+    0x080032c8   0x080032c8   0x00000054   Code   RO          530    .text.tn_sem_create  tn_sem.o
+    0x0800331c   0x0800331c   0x00000070   Code   RO          532    .text.tn_sem_delete  tn_sem.o
+    0x0800338c   0x0800338c   0x0000008e   Code   RO          536    .text.tn_sem_isignal  tn_sem.o
+    0x0800341a   0x0800341a   0x00000002   PAD
+    0x0800341c   0x0800341c   0x00000070   Code   RO          542    .text.tn_sem_iwait_polling  tn_sem.o
+    0x0800348c   0x0800348c   0x0000008e   Code   RO          534    .text.tn_sem_signal  tn_sem.o
+    0x0800351a   0x0800351a   0x00000002   PAD
+    0x0800351c   0x0800351c   0x000000cc   Code   RO          538    .text.tn_sem_wait   tn_sem.o
+    0x080035e8   0x080035e8   0x00000024   Code   RO          566    .text.tn_sys_context_get  tn_sys.o
+    0x0800360c   0x0800360c   0x000000be   Code   RO          552    .text.tn_sys_start  tn_sys.o
+    0x080036ca   0x080036ca   0x00000002   PAD
+    0x080036cc   0x080036cc   0x0000001e   Code   RO          558    .text.tn_sys_time_get  tn_sys.o
+    0x080036ea   0x080036ea   0x00000002   PAD
+    0x080036ec   0x080036ec   0x00000036   Code   RO          556    .text.tn_sys_tslice_set  tn_sys.o
+    0x08003722   0x08003722   0x00000002   PAD
+    0x08003724   0x08003724   0x00000192   Code   RO          603    .text.tn_task_create  tn_tasks.o
+    0x080038b6   0x080038b6   0x00000002   PAD
+    0x080038b8   0x080038b8   0x00000020   Code   RO          611    .text.tn_task_create_wname  tn_tasks.o
+    0x080038d8   0x080038d8   0x00000074   Code   RO          647    .text.tn_task_delete  tn_tasks.o
+    0x0800394c   0x0800394c   0x0000008e   Code   RO          641    .text.tn_task_exit  tn_tasks.o
+    0x080039da   0x080039da   0x00000002   PAD
+    0x080039dc   0x080039dc   0x0000009e   Code   RO          625    .text.tn_task_sleep  tn_tasks.o
+    0x08003a7a   0x08003a7a   0x00000002   PAD
+    0x08003a7c   0x08003a7c   0x000000ea   Code   RO          554    .text.tn_tick_int_processing  tn_sys.o
+    0x08003b66   0x08003b66   0x00000002   PAD
+    0x08003b68   0x08003b68   0x00000050   Code   RO          680    .text.tn_timer_create  tn_timer.o
+    0x08003bb8   0x08003bb8   0x00000040   Code   RO          684    .text.tn_timer_delete  tn_timer.o
+    0x08003bf8   0x08003bf8   0x00000040   Code   RO          686    .text.tn_timer_start  tn_timer.o
+    0x08003c38   0x08003c38   0x00000060   Code   RO         1041    .text.unlikely.__cxa_guard_acquire  libcppabi_w.l(cxa_guard.cpp.o)
+    0x08003c98   0x08003c98   0x00000008   Code   RO         1043    .text.unlikely.__cxa_guard_release  libcppabi_w.l(cxa_guard.cpp.o)
+    0x08003ca0   0x08003ca0   0x00000011   Data   RO          347    .rodata._DoInit._aInitStr  segger_rtt.o
+    0x08003cb1   0x08003cb1   0x00000003   PAD
+    0x08003cb4   0x08003cb4   0x00000004   Data   RO           78    .rodata._ZN3csp9stack_ptrE  bsp.o
+    0x08003cb8   0x08003cb8   0x000000a0   Data   RO          671    .rodata._tn_scvd_task  tn_tasks.o
+    0x08003d58   0x08003d58   0x0000006a   Data   RO           12    .rodata.str1.1      main.o
+    0x08003dc2   0x08003dc2   0x00000058   Data   RO           80    .rodata.str1.1      bsp.o
+    0x08003e1a   0x08003e1a   0x0000021e   Data   RO          219    .rodata.str1.1      os.o
+    0x08004038   0x08004038   0x00000009   Data   RO          348    .rodata.str1.1      segger_rtt.o
+    0x08004041   0x08004041   0x00000003   PAD
+    0x08004044   0x08004044   0x00000020   Data   RO         1358    Region$$Table       anon$$obj.o
+    0x08004064   0x08004064   0x00000004   Data   RO           15    .init_array         main.o
+    0x08004068   0x08004064   0x00000004   Data   RO           29    .init_array         main.o
+    0x0800406c   0x08004064   0x00000004   Data   RO           81    .init_array         bsp.o
+    0x08004070   0x08004064   0x00000004   Data   RO          237    .init_array         retarget_io.o
+    0x08004074   0x08004064   0x00000000   Data   RO         1035    .init_array         c_w.l(init_aeabi.o)
 
 
-    Execution Region RW_BEGIN (Exec base: 0x20000000, Load base: 0x08002bd0, Size: 0x00000000, Max: 0x00000000, ABSOLUTE)
+    Execution Region RW_BEGIN (Exec base: 0x20000000, Load base: 0x08004074, Size: 0x00000000, Max: 0x00000000, ABSOLUTE)
 
     Exec Addr    Load Addr    Size         Type   Attr      Idx    E Section Name        Object
 
     0x20000000        -       0x00000000   Zero   RW            1    RW_BEGIN.bss        anon$$obj.o
 
 
-    Execution Region RW_STACK (Exec base: 0x20000000, Load base: 0x08002bd0, Size: 0x000000c8, Max: 0xffffffff, ABSOLUTE, UNINIT)
+    Execution Region RW_STACK (Exec base: 0x20000000, Load base: 0x08004074, Size: 0x000000c8, Max: 0xffffffff, ABSOLUTE, UNINIT)
 
     Exec Addr    Load Addr    Size         Type   Attr      Idx    E Section Name        Object
 
-    0x20000000        -       0x000000c8   Zero   RW          956    STACK               startup_stm32f411xe.o
+    0x20000000        -       0x000000c8   Zero   RW          992    STACK               startup_stm32f411xe.o
 
 
-    Execution Region RW_HEAP (Exec base: 0x200000c8, Load base: 0x08002bd0, Size: 0x00000200, Max: 0xffffffff, ABSOLUTE, UNINIT)
-
-    Exec Addr    Load Addr    Size         Type   Attr      Idx    E Section Name        Object
-
-    0x200000c8        -       0x00000200   Zero   RW          957    HEAP                startup_stm32f411xe.o
-
-
-    Execution Region RW_IRAM1 (Exec base: 0x200002c8, Load base: 0x08002bd0, Size: 0x000003d8, Max: 0xffffffff, ABSOLUTE)
+    Execution Region RW_HEAP (Exec base: 0x200000c8, Load base: 0x08004074, Size: 0x00000200, Max: 0xffffffff, ABSOLUTE, UNINIT)
 
     Exec Addr    Load Addr    Size         Type   Attr      Idx    E Section Name        Object
 
-    0x200002c8   0x08002bd0   0x00000004   Data   RW           59    .data._ZGRN3csp9stack_ptrE_  bsp.o
-    0x200002cc   0x08002bd4   0x00000004   PAD
-    0x200002d0        -       0x00000060   Zero   RW         1176    .bss                c_w.l(libspace.o)
-    0x20000330        -       0x00000048   Zero   RW          308    .bss._SEGGER_RTT    segger_rtt.o
-    0x20000378        -       0x00000004   Zero   RW           13    .bss._ZGVZ4mainE4krnl  main.o
-    0x2000037c        -       0x0000002c   Zero   RW          200    .bss._ZL12printf_mutex  retarget_io.o
-    0x200003a8        -       0x00000108   Zero   RW           10    .bss._ZL8task_obj   main.o
-    0x200004b0        -       0x00000004   Zero   RW           61    .bss._ZN3csp10stack_sizeE  bsp.o
-    0x200004b4   0x08002bd4   0x00000004   PAD
-    0x200004b8        -       0x000000e8   Zero   RW           12    .bss._ZZ4mainE4krnl  main.o
-    0x200005a0        -       0x00000010   Zero   RW          314    .bss._acDownBuffer  segger_rtt.o
-    0x200005b0        -       0x00000040   Zero   RW          313    .bss._acUpBuffer    segger_rtt.o
-    0x200005f0        -       0x00000004   Zero   RW          554    .bss._tn_cb_deadlock  tn_sys.o
-    0x200005f4        -       0x00000004   Zero   RW          555    .bss._tn_cb_stack_overflow  tn_sys.o
-    0x200005f8        -       0x00000004   Zero   RW          553    .bss._tn_curr_run_task  tn_sys.o
-    0x200005fc        -       0x00000004   Zero   RW          556    .bss._tn_deadlocks_cnt  tn_sys.o
-    0x20000600        -       0x00000004   Zero   RW          546    .bss._tn_int_stack  tn_sys.o
-    0x20000604        -       0x00000004   Zero   RW          547    .bss._tn_int_stack_size  tn_sys.o
-    0x20000608        -       0x00000004   Zero   RW          552    .bss._tn_next_task_to_run  tn_sys.o
-    0x2000060c        -       0x00000004   Zero   RW          558    .bss._tn_ready_to_run_bmp  tn_sys.o
-    0x20000610        -       0x00000001   Zero   RW          551    .bss._tn_sys_state  tn_sys.o
-    0x20000611   0x08002bd4   0x00000003   PAD
-    0x20000614        -       0x00000004   Zero   RW          683    .bss._tn_sys_time_count  tn_timer_static.o
-    0x20000618        -       0x00000004   Zero   RW          557    .bss._tn_tasks_created_cnt  tn_sys.o
-    0x2000061c        -       0x00000008   Zero   RW          550    .bss._tn_tasks_created_list  tn_sys.o
-    0x20000624        -       0x00000028   Zero   RW          548    .bss._tn_tasks_ready_list  tn_sys.o
-    0x2000064c        -       0x00000008   Zero   RW          684    .bss._tn_timer_list__gen  tn_timer_static.o
-    0x20000654        -       0x00000040   Zero   RW          685    .bss._tn_timer_list__tick  tn_timer_static.o
-    0x20000694        -       0x0000000a   Zero   RW          549    .bss._tn_tslice_ticks  tn_sys.o
+    0x200000c8        -       0x00000200   Zero   RW          993    HEAP                startup_stm32f411xe.o
 
 
-    Execution Region RW_END (Exec base: 0x20020000, Load base: 0x08002bd8, Size: 0x00000000, Max: 0x00000000, ABSOLUTE)
+    Execution Region RW_IRAM1 (Exec base: 0x200002c8, Load base: 0x08004078, Size: 0x000006f8, Max: 0xffffffff, ABSOLUTE)
+
+    Exec Addr    Load Addr    Size         Type   Attr      Idx    E Section Name        Object
+
+    0x200002c8   0x08004078   0x00000004   Data   RW           77    .data._ZGRN3csp9stack_ptrE_  bsp.o
+    0x200002cc   0x0800407c   0x00000004   PAD
+    0x200002d0        -       0x00000060   Zero   RW         1212    .bss                c_w.l(libspace.o)
+    0x20000330        -       0x00000048   Zero   RW          344    .bss._SEGGER_RTT    segger_rtt.o
+    0x20000378        -       0x00000004   Zero   RW           28    .bss._ZGVN4task9blink_semE  main.o
+    0x2000037c        -       0x00000004   Zero   RW           14    .bss._ZGVZ4mainE4krnl  main.o
+    0x20000380        -       0x0000002c   Zero   RW          236    .bss._ZL12printf_mutex  retarget_io.o
+    0x200003ac   0x0800407c   0x00000004   PAD
+    0x200003b0        -       0x000002e0   Zero   RW           11    .bss._ZL13fmem_task_obj  main.o
+    0x20000690        -       0x00000130   Zero   RW           10    .bss._ZL8task_obj   main.o
+    0x200007c0        -       0x00000004   Zero   RW           79    .bss._ZN3csp10stack_sizeE  bsp.o
+    0x200007c4        -       0x00000014   Zero   RW           27    .bss._ZN4task9blink_semE  main.o
+    0x200007d8        -       0x000000e8   Zero   RW           13    .bss._ZZ4mainE4krnl  main.o
+    0x200008c0        -       0x00000010   Zero   RW          350    .bss._acDownBuffer  segger_rtt.o
+    0x200008d0        -       0x00000040   Zero   RW          349    .bss._acUpBuffer    segger_rtt.o
+    0x20000910        -       0x00000004   Zero   RW          590    .bss._tn_cb_deadlock  tn_sys.o
+    0x20000914        -       0x00000004   Zero   RW          591    .bss._tn_cb_stack_overflow  tn_sys.o
+    0x20000918        -       0x00000004   Zero   RW          589    .bss._tn_curr_run_task  tn_sys.o
+    0x2000091c        -       0x00000004   Zero   RW          592    .bss._tn_deadlocks_cnt  tn_sys.o
+    0x20000920        -       0x00000004   Zero   RW          582    .bss._tn_int_stack  tn_sys.o
+    0x20000924        -       0x00000004   Zero   RW          583    .bss._tn_int_stack_size  tn_sys.o
+    0x20000928        -       0x00000004   Zero   RW          588    .bss._tn_next_task_to_run  tn_sys.o
+    0x2000092c        -       0x00000004   Zero   RW          594    .bss._tn_ready_to_run_bmp  tn_sys.o
+    0x20000930        -       0x00000001   Zero   RW          587    .bss._tn_sys_state  tn_sys.o
+    0x20000931   0x0800407c   0x00000003   PAD
+    0x20000934        -       0x00000004   Zero   RW          719    .bss._tn_sys_time_count  tn_timer_static.o
+    0x20000938        -       0x00000004   Zero   RW          593    .bss._tn_tasks_created_cnt  tn_sys.o
+    0x2000093c        -       0x00000008   Zero   RW          586    .bss._tn_tasks_created_list  tn_sys.o
+    0x20000944        -       0x00000028   Zero   RW          584    .bss._tn_tasks_ready_list  tn_sys.o
+    0x2000096c        -       0x00000008   Zero   RW          720    .bss._tn_timer_list__gen  tn_timer_static.o
+    0x20000974        -       0x00000040   Zero   RW          721    .bss._tn_timer_list__tick  tn_timer_static.o
+    0x200009b4        -       0x0000000a   Zero   RW          585    .bss._tn_tslice_ticks  tn_sys.o
+
+
+    Execution Region RW_END (Exec base: 0x20020000, Load base: 0x08004080, Size: 0x00000000, Max: 0x00000000, ABSOLUTE)
 
     Exec Addr    Load Addr    Size         Type   Attr      Idx    E Section Name        Object
 
@@ -3129,8 +3370,8 @@ Image component sizes
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   Object Name
 
        242         20         96          4          4       8569   bsp.o
-       382         20         75          0        500      13391   main.o
-       172         64        131          0          0      28857   os.o
+      1854        316        114          0       1300      22632   main.o
+       732        128        542          0          0      31426   os.o
       1980        196          0          0          0      10309   printf.o
        126          0          4          0         44       6584   retarget_io.o
        208          0         26          0        152      30955   segger_rtt.o
@@ -3139,17 +3380,19 @@ Image component sizes
          2          0          0          0          0       2251   system_stm32f4xx.o
        240         20          0          0          0        428   tn_arch_cortex_m.o
        112          0          0          0          0       1238   tn_arch_cortex_m_c.o
+      1518          0          0          0          0      15900   tn_fmem.o
        106          0          0          0          0       2061   tn_list.o
       1532          0          0          0          0      13236   tn_mutex.o
-       850          0          0          0         95       9575   tn_sys.o
-      1820          0        160          0          0      26042   tn_tasks.o
-        68          0          0          0          0       6248   tn_timer.o
-       474          0          0          0         76       4287   tn_timer_static.o
+       796          0          0          0          0       8451   tn_sem.o
+       880          0          0          0         95       9575   tn_sys.o
+      1980          0        160          0          0      26042   tn_tasks.o
+       276          0          0          0          0       6248   tn_timer.o
+       520          0          0          0         76       4394   tn_timer_static.o
 
     ----------------------------------------------------------------------
-      8900        350        936          4       1596     170132   Object Totals
+     13732        710       1388          4       2396     206400   Object Totals
          0          0         32          0          0          0   (incl. Generated)
-        70          0          4          0         13          0   (incl. Padding)
+       112          0          6          0         13          0   (incl. Padding)
 
     ----------------------------------------------------------------------
 
@@ -3223,15 +3466,15 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   
 
-     10280        530        936          4       1692     171060   Grand Totals
-     10280        530        936          4       1692     171060   ELF Image Totals
-     10280        530        936          4          0          0   ROM Totals
+     15112        890       1388          4       2492     207288   Grand Totals
+     15112        890       1388          4       2492     207288   ELF Image Totals
+     15112        890       1388          4          0          0   ROM Totals
 
 ==============================================================================
 
-    Total RO  Size (Code + RO Data)                11216 (  10.95kB)
-    Total RW  Size (RW Data + ZI Data)              1696 (   1.66kB)
-    Total ROM Size (Code + RO Data + RW Data)      11220 (  10.96kB)
+    Total RO  Size (Code + RO Data)                16500 (  16.11kB)
+    Total RW  Size (RW Data + ZI Data)              2496 (   2.44kB)
+    Total ROM Size (Code + RO Data + RW Data)      16504 (  16.12kB)
 
 ==============================================================================
 
