@@ -103,16 +103,18 @@ namespace sheduler
     void dis_save(void);
 #if TN_DYNAMIC_TICK
     void cb_sleep_until(uint32_t _timestamp); // weak
+    uint32_t cb_tick_get(void); // weak
 #endif
 }
 
+#if TN_STACK_OVERFLOW_CHECK
 class task_base;
-class mutex;
-
 void cb_stack_overflow(task_base *const _task); // weak
+#endif
+
+#if TN_MUTEX_DEADLOCK_DETECT
+class mutex;
 void cb_deadlock(const bool _active, mutex *const _mutex, task_base *const _task); // weak
-#if TN_DYNAMIC_TICK
-uint32_t cb_tick_get(void) // weak
 #endif
 
 //-- task from tn_task.h --------------------------------------------------------------------------/
@@ -206,10 +208,16 @@ public:
     {
         __tn::tn_arch_int_dis();
         static_cast<T*>(this)->hw_init();
+#if TN_INIT_INTERRUPT_STACK_SPACE
         __tn::tn_callback_stack_overflow_set(cb_stack_overflow);
+#endif
+#if TN_MUTEX_DEADLOCK_DETECT
         __tn::tn_callback_deadlock_set(cb_deadlock);
+#endif
 #if TN_DYNAMIC_TICK
-        __tn::tn_callback_dyn_tick_set(sheduler::cb_sleep_until, cb_tick_get);
+        __tn::tn_callback_dyn_tick_set(
+        static_cast<__tn::TN_CBTickSchedule *>(sheduler::cb_sleep_until),
+            sheduler::cb_tick_get);
 #endif
         __tn::tn_sys_start(
             _sys_stack_ptr,

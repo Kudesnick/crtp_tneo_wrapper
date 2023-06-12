@@ -398,6 +398,13 @@
 #  define TN_MAX_INLINE          0
 #endif
 
+/**
+ * Environment-specyfic timestamp typedef
+ */
+#ifndef TIMESTAMP_TYPE
+#  define TIMESTAMP_TYPE         unsigned int
+#endif
+
 /*******************************************************************************
  *    Keil UVision-specific configuration
  ******************************************************************************/

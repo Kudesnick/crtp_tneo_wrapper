@@ -26,6 +26,11 @@ res tick::init(const uint32_t _ms)
     return res;
 }
 
+uint32_t tick::tick_get(void)
+{
+    return HAL_GetTick();
+}
+
 __WEAK void tick::cb_tick_handl(void) {};
 
 

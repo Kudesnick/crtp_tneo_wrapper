@@ -18,6 +18,7 @@ namespace tick
 {
     res init(const uint32_t _ms);
     void cb_tick_handl(void); // weak
+    uint32_t tick_get(void);
 };
 
 void halt(void);

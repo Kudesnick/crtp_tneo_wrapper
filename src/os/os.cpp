@@ -55,8 +55,9 @@ namespace sheduler
         shed_state = __tn::tn_sched_dis_save();
     }
 #if TN_DYNAMIC_TICK
-    __WEAK void cb_sleep_until(uint32_t _timestamp)
+    __WEAK __NO_RETURN void cb_sleep_until(uint32_t _timestamp)
     {
+        (void)_timestamp;
         PRINTFAULT("function 'sleep_until' must be overloaded\n");
     }
     __WEAK uint32_t cb_tick_get(void)
@@ -66,17 +67,21 @@ namespace sheduler
 #endif
 }
 
+#if TN_STACK_OVERFLOW_CHECK
 __WEAK void cb_stack_overflow(task_base *const _task)
 {
     (void)_task;
 }
+#endif
 
+#if TN_MUTEX_DEADLOCK_DETECT
 __WEAK void cb_deadlock(const bool _active, mutex *const _mutex, task_base *const _task)
 {
     (void)_active;
     (void)_mutex;
     (void)_task;
 }
+#endif
 
 //-- task_base ------------------------------------------------------------------------------------/
 

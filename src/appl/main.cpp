@@ -12,10 +12,36 @@
 
 //-- init callbacks -------------------------------------------------------------------------------/
 
+#if TN_DYNAMIC_TICK
+
+static uint32_t tick_shedule;
+
+void csp::tick::cb_tick_handl(void)
+{
+    if (csp::tick::tick_get() >= tick_shedule)
+    {
+        os::tick();
+    }
+}
+
+void os::sheduler::cb_sleep_until(uint32_t _timestamp)
+{
+    tick_shedule = _timestamp;
+}
+
+uint32_t os::sheduler::cb_tick_get(void)
+{
+    return csp::tick::tick_get();
+}
+
+#else
+
 void csp::tick::cb_tick_handl(void)
 {
     os::tick();
 }
+
+#endif
 
 //-- kernel object --------------------------------------------------------------------------------/
 
