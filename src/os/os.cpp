@@ -55,27 +55,28 @@ namespace sheduler
         shed_state = __tn::tn_sched_dis_save();
     }
 #if TN_DYNAMIC_TICK
-    __WEAK __NO_RETURN void cb_sleep_until(uint32_t _timestamp)
+    __WEAK __INLINE __NO_RETURN void cb_sleep_until(uint32_t _timestamp)
     {
         (void)_timestamp;
         PRINTFAULT("function 'sleep_until' must be overloaded\n");
     }
-    __WEAK uint32_t cb_tick_get(void)
+    __WEAK __INLINE uint32_t cb_tick_get(void)
     {
         PRINTFAULT("function 'cb_tick_get' must be overloaded\n");
     }
 #endif
 }
 
+
 #if TN_STACK_OVERFLOW_CHECK
-__WEAK void cb_stack_overflow(task_base *const _task)
+__WEAK __INLINE void cb_stack_overflow(task_base *const _task)
 {
     (void)_task;
 }
 #endif
 
 #if TN_MUTEX_DEADLOCK_DETECT
-__WEAK void cb_deadlock(const bool _active, mutex *const _mutex, task_base *const _task)
+__WEAK __INLINE void cb_deadlock(const bool _active, mutex *const _mutex, task_base *const _task)
 {
     (void)_active;
     (void)_mutex;
@@ -543,3 +544,38 @@ timer_base::~timer_base()
 } // namespace os
 
 //-- override weak functions ----------------------------------------------------------------------/
+
+#if TN_STACK_OVERFLOW_CHECK
+void __tn::tn_cb_stack_overflow(__tn::TN_Task *_task)
+{
+    /** @todo Опасное преобразование! Будет работать только если поле __tn::TN_Task task_ будет
+     * первым в классе task_base и класс task_base не будет содержать виртуальных методов
+     */
+    os::cb_stack_overflow(reinterpret_cast<os::task_base *>(_task));
+}
+#endif
+
+#if TN_MUTEX_DEADLOCK_DETECT
+void __tn::tn_cb_deadlock(TN_BOOL _active, struct __tn::TN_Mutex *_mutex, struct __tn::TN_Task *_task)
+{
+    /** @todo Опасное преобразование! Будет работать только если поле __tn::TN_Task task_ будет
+     * первым в классе task_base и класс task_base не будет содержать виртуальных методов
+     */
+    /** @todo Опасное преобразование! Будет работать только если поле __tn::TN_Mutex mutex_
+     * будет первым в классе mutex и класс mutex не будет содержать виртуальных методов
+     */
+    os::cb_deadlock(_active, reinterpret_cast<os::mutex *>(_mutex), reinterpret_cast<os::task_base *>(_task));
+}
+#endif
+
+#if TN_DYNAMIC_TICK
+void __NO_RETURN __tn::tn_cb_tick_schedule(__tn::TN_TickCnt timeout)
+{
+    os::sheduler::cb_sleep_until(timeout);
+}
+
+uint32_t __tn::tn_cb_tick_cnt_get(void)
+{
+    return os::sheduler::cb_tick_get();
+}
+#endif
