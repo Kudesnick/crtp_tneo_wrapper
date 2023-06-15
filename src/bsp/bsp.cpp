@@ -95,5 +95,6 @@ void led::toggle(void)
 extern "C" void SysTick_Handler(void);
 void SysTick_Handler(void)
 {
+    HAL_IncTick();
     csp::tick::cb_tick_handl();
 }

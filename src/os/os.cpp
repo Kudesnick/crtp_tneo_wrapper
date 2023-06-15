@@ -2,9 +2,9 @@
 #include CMSIS_device_header
 
 #if !defined(__CC_ARM) && defined(__ARMCC_VERSION) && !defined(__OPTIMIZE__)
-    #warning This project uses syntax solutions that require an optimization level of at least 1.
-    #warning Otherwise, you will see an increase in ROM and RAM consumption up to two sizes.
-    #warning As well as unjustified performance degradation.
+    #warning This project uses syntax solutions that require an optimization level of at least 1. \
+             Otherwise, you will see an increase in ROM and RAM consumption up to two sizes. \
+             As well as unjustified performance degradation.
 #endif
 
 #include <stdint.h>

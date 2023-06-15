@@ -10,63 +10,10 @@
 #define TEST_PRINTF (0)
 #define TEST_FMEM   (1)
 
-//-- init callbacks -------------------------------------------------------------------------------/
-
-#if TN_DYNAMIC_TICK
-
-static uint32_t tick_shedule;
-
-void csp::tick::cb_tick_handl(void)
-{
-    if (csp::tick::tick_get() >= tick_shedule)
-    {
-        os::tick();
-    }
-}
-
-void os::sheduler::cb_sleep_until(uint32_t _timestamp)
-{
-    tick_shedule = _timestamp;
-}
-
-uint32_t os::sheduler::cb_tick_get(void)
-{
-    return csp::tick::tick_get();
-}
-
-#else
-
-void csp::tick::cb_tick_handl(void)
-{
-    os::tick();
-}
-
-#endif
-
-//-- kernel object --------------------------------------------------------------------------------/
-
-struct kernel: os::kernel<kernel, 0x48>
-{
-    void hw_init(void)
-    {
-        csp::tick::init(1);
-    }
-    static void sw_init(void)
-    {
-        os::tslice_set(os::priority::low, 10);
-    }
-    void task_func(void) __attribute__((__noreturn__))
-    {
-        for(;;)
-            csp::halt();
-    }
-    using os::kernel<kernel, 0x48>::kernel;
-};
-
 //-- timer test -----------------------------------------------------------------------------------/
 
 #if TEST_TIMER
-static struct task: os::task<task, 0x70>
+static struct task: os::task<task, STK(0x70)>
 {
     static inline os::semaphore blink_sem = {1,1};
     
@@ -77,7 +24,7 @@ static struct task: os::task<task, 0x70>
             blink_sem.release();
         }
         using os::timer<timer>::timer;
-    } blink_timer = {200, os::repeat};
+    } blink_timer = {os::nowait, os::repeat};
 
     void task_func(void) __attribute__((__noreturn__))
     {
@@ -85,27 +32,27 @@ static struct task: os::task<task, 0x70>
         for(bsp::led C13;;blink_sem.acquire(os::infinitely))
             C13.toggle();
     }
-    using os::task<task, 0x70>::task;
+    using os::task<task, STK(0x70)>::task;
 } task_obj = "blink_task";
 #endif
 
 //-- tasks for yeld testing -----------------------------------------------------------------------/
 
 #if TEST_YIELD
-static struct  dtask: os::task<dtask, 0x58,os::priority::low>
+static struct  dtask: os::task<dtask, STK(0x58), os::priority::low>
 {
     void task_func(void) __attribute__((__noreturn__))
     {
         for(int i = 0;;i++) if (i & 1) yield();
     }
-    using os::task<dtask, 0x58, os::priority::low>::task;
+    using os::task<dtask, STK(0x58), os::priority::low>::task;
 } dtask_obj[] = {"dummy_task1", "dummy_task2"};
 #endif
 
 //-- task for printf and mutex testing ------------------------------------------------------------/
 
 #if TEST_PRINTF
-static struct printf_task: os::task<printf_task, 0xF8>
+static struct printf_task: os::task<printf_task, STK(0xF8)>
 {
     void task_func(void) __attribute__((__noreturn__))
     {
@@ -117,14 +64,14 @@ static struct printf_task: os::task<printf_task, 0xF8>
             sleep(500);
         }
     }
-    using os::task<printf_task, 0xF8>::task;
+    using os::task<printf_task, STK(0xF8)>::task;
 } printf_task_obj = "printf_task";
 #endif
 
 //-- task for fmem pool testing -------------------------------------------------------------------/
 
 #if TEST_FMEM
-static struct fmem_task: os::task<fmem_task, 0x130>
+static struct fmem_task: os::task<fmem_task, STK(0x130)>
 {
     struct item_t
     {
@@ -194,9 +141,62 @@ static struct fmem_task: os::task<fmem_task, 0x130>
             sleep(500);
         }
     }
-    using os::task<fmem_task, 0x130>::task;
+    using os::task<fmem_task, STK(0x130)>::task;
 } fmem_task_obj = "fmem_task";
 #endif
+
+//-- init callbacks -------------------------------------------------------------------------------/
+
+#if TN_DYNAMIC_TICK
+
+static uint32_t tick_shedule;
+
+void csp::tick::cb_tick_handl(void)
+{
+    if (csp::tick::tick_get() >= tick_shedule && tick_shedule)
+    {
+        os::tick();
+    }
+}
+
+void os::sheduler::cb_sleep_until(uint32_t _timestamp)
+{
+    tick_shedule = _timestamp;
+}
+
+uint32_t os::sheduler::cb_tick_get(void)
+{
+    return csp::tick::tick_get();
+}
+
+#else
+
+void csp::tick::cb_tick_handl(void)
+{
+    os::tick();
+}
+
+#endif
+
+//-- kernel object --------------------------------------------------------------------------------/
+
+struct kernel: os::kernel<kernel, STK(0x48)>
+{
+    void hw_init(void)
+    {
+        csp::tick::init(1);
+    }
+    static void sw_init(void)
+    {
+        os::tslice_set(os::priority::low, 10);
+    }
+    void task_func(void) __attribute__((__noreturn__))
+    {
+        for(;;)
+            csp::halt();
+    }
+    using os::kernel<kernel, STK(0x48)>::kernel;
+};
 
 //-- main -----------------------------------------------------------------------------------------/
 

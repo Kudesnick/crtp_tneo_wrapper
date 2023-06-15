@@ -8,7 +8,7 @@
 /// Консольный ввод/вывод
 #ifdef DEBUG
     #define USR_PUT_RTT 1 ///< Вывод консоли в RTT
-    #define USR_PUT_ITM 1 ///< Вывод консоли в SWO
+    #define USR_PUT_ITM 0 ///< Вывод консоли в SWO
     #define USR_GET_RTT 0 ///< Консольный ввод из RTT
     #define USR_GET_ITM 0 ///< Консольный ввод из SWO
 #else

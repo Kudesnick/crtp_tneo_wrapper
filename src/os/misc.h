@@ -3,6 +3,8 @@
 
 #include "printf.h"
 
+#pragma once
+
 #define countof(array) (sizeof(array) / sizeof(array[0]))
 
 #define BRK for(;;)
@@ -11,6 +13,12 @@
 #define STR(x) STRINGIFY(x)
 #define printerr(_s, ...) printf("\033[31mError:\033[0m '" __FILE__ "'[" STR(__LINE__) "] : " _s __VA_OPT__(,) __VA_ARGS__)
 #define PRINTFAULT(...) printerr(__VA_ARGS__); BRK
+
+#if !defined(__CC_ARM) && defined(__ARMCC_VERSION) && !defined(__OPTIMIZE__)
+    #define STK(sz) (0x400 + (sz))
+#else
+    #define STK(sz) (sz)
+#endif
 
 #define U32 "%#010x"
 

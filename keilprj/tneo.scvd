@@ -132,9 +132,15 @@
     <object name="TNeo">
       <read name="_tn_tasks_created_cnt"  type="int32_t"      symbol="_tn_tasks_created_cnt"/>
       <read name="_tn_sys_state"          type="TN_StateFlag" symbol="_tn_sys_state"/>
-      <read name="_tn_sys_time_count"     type="uint32_t"     symbol="_tn_sys_time_count"/>
       <read name="_tn_int_stack"          type="uint32_t"     symbol="_tn_int_stack"/>
       <read name="_tn_int_stack_size"     type="uint32_t"     symbol="_tn_int_stack_size"/>
+
+      <read name="_tn_sys_time_count" cond="__Symbol_exists(&quot;_tn_sys_time_count&quot;)" type="uint32_t" symbol="_tn_sys_time_count"/>
+      <read name="_hal_tick"          cond="__Symbol_exists(&quot;uwTick&quot;)"             type="uint32_t" symbol="uwTick"/>
+      <var  name="timestamp" type="uint32_t" value="_hal_tick"/>
+      <calc cond="_tn_sys_time_count">
+        timestamp = _tn_sys_time_count;
+      </calc>
 
       <var name="tmp" type="uint32_t" value="0"/>
 
@@ -142,7 +148,7 @@
       <var name="int_stack_usd_bytes" type="uint32_t"  value="0"/>
       
       <calc>
-        tmp = __CalcMemUsed(_tn_int_stack, _tn_int_stack_size * 4, 0xFEEDFACE, 0xFEEDFACE)
+        tmp = __CalcMemUsed(_tn_int_stack, _tn_int_stack_size * 4, 0xFEEDFACE, 0xFEEDFACE);
         int_stack_usd_max = (tmp &gt;&gt; 20) &amp; 0xFF;
         int_stack_usd_bytes = tmp &amp; ((1 &lt;&lt; 20) - 1);
       </calc>
@@ -171,7 +177,7 @@
           tmp = __CalcMemUsed(task[i].stack_low_addr, tmp, 0xFEEDFACE, 0xFEEDFACE);
           task[i].stack_usd_max = (tmp &gt;&gt; 20) &amp; 0xFF;
           task[i].stack_usd_byte = tmp &amp; ((1 &lt;&lt; 20) - 1);
-          task[i].time_load = profiler[i].total_run_time * 100 / (_tn_sys_time_count + 1);
+          task[i].time_load = profiler[i].total_run_time * 100 / (timestamp + 1);
         </calc>
       </list>
 
@@ -183,7 +189,7 @@
         <item property="Kernel" value="">
           <item property="count of created tasks" value="%d[_tn_tasks_created_cnt]"/>
           <item property="system state flags"     value="%E[_tn_sys_state.id]"/>
-          <item property="system time"            value="%d[_tn_sys_time_count]"/>
+          <item property="system time"            value="%d[timestamp]"/>
           <item property="system stack used"      value="%d[int_stack_usd_max]%% (%d[int_stack_usd_bytes] of %d[_tn_int_stack_size * 4] bytes)" alert="int_stack_usd_max &gt; 95"/>
         </item>
 
