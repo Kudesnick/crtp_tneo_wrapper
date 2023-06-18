@@ -7,7 +7,7 @@
 
 #define countof(array) (sizeof(array) / sizeof(array[0]))
 
-#define BRK for(;;)
+#define BRK __asm__ volatile("bkpt #0")
 
 #define STRINGIFY(x) #x
 #define STR(x) STRINGIFY(x)

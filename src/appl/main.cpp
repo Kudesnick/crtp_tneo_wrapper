@@ -7,7 +7,7 @@
 
 #define TEST_TIMER  (1)
 #define TEST_YIELD  (0)
-#define TEST_PRINTF (0)
+#define TEST_PRINTF (1)
 #define TEST_FMEM   (1)
 
 //-- timer test -----------------------------------------------------------------------------------/
@@ -24,11 +24,11 @@ static struct task: os::task<task, STK(0x70)>
             blink_sem.release();
         }
         using os::timer<timer>::timer;
-    } blink_timer = {os::nowait, os::repeat};
+    } blink_timer = {200, os::repeat};
 
     void task_func(void) __attribute__((__noreturn__))
     {
-        blink_timer.start(200);
+        // blink_timer.start(200);
         for(bsp::led C13;;blink_sem.acquire(os::infinitely))
             C13.toggle();
     }
@@ -153,7 +153,7 @@ static uint32_t tick_shedule;
 
 void csp::tick::cb_tick_handl(void)
 {
-    if (csp::tick::tick_get() >= tick_shedule && tick_shedule)
+    if (csp::tick::tick_get() >= tick_shedule)
     {
         os::tick();
     }
