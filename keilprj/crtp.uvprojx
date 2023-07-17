@@ -340,7 +340,7 @@
               <MiscControls>-Wno-c++98-compat -Wno-c++98-compat-pedantic -Wno-c++20-designator -Wno-padded -Wno-declaration-after-statement -Wno-global-constructors -Wno-exit-time-destructors -Wno-gnu-zero-variadic-macro-arguments</MiscControls>
               <Define>DEBUG, HSE_VALUE=25000000, PRINTF_INCLUDE_CONFIG_H, USE_OS</Define>
               <Undefine></Undefine>
-              <IncludePath>..\printf;..\rtt;..\src\bsp;..\src\csp;..\src\os;..\tneo\src;..\tneo\src\arch;..\tneo\src\arch\cortex_m;..\tneo\src\core;..\tneo\src\core\internal</IncludePath>
+              <IncludePath>..\hal_inc;..\printf;..\rtt;..\src\bsp;..\src\csp;..\src\os;..\tneo\src;..\tneo\src\arch;..\tneo\src\arch\cortex_m;..\tneo\src\core;..\tneo\src\core\internal</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -754,61 +754,10 @@
   </Targets>
 
   <RTE>
-    <apis>
-      <api Capiversion="1.0.0" Cclass="Device" Cgroup="STM32Cube Framework" exclusive="1">
-        <package name="STM32F4xx_DFP" schemaVersion="1.7.2" url="https://www.keil.com/pack/" vendor="Keil" version="2.17.0"/>
-        <targetInfos>
-          <targetInfo name="stm32f411"/>
-        </targetInfos>
-      </api>
-    </apis>
+    <apis/>
     <components>
       <component Cclass="CMSIS" Cgroup="CORE" Cvendor="ARM" Cversion="5.6.0" condition="ARMv6_7_8-M Device">
         <package name="CMSIS" schemaVersion="1.7.7" url="http://www.keil.com/pack/" vendor="ARM" version="5.9.0"/>
-        <targetInfos>
-          <targetInfo name="stm32f411"/>
-        </targetInfos>
-      </component>
-      <component Capiversion="1.0.0" Cclass="Device" Cgroup="STM32Cube Framework" Csub="Classic" Cvendor="Keil" Cversion="1.8.1" condition="STM32F4 Framework Classic">
-        <package name="STM32F4xx_DFP" schemaVersion="1.7.2" url="https://www.keil.com/pack/" vendor="Keil" version="2.17.0"/>
-        <targetInfos>
-          <targetInfo name="stm32f411"/>
-        </targetInfos>
-      </component>
-      <component Cclass="Device" Cgroup="STM32Cube HAL" Csub="Common" Cvendor="Keil" Cversion="1.8.1" condition="STM32F4 HAL Common">
-        <package name="STM32F4xx_DFP" schemaVersion="1.7.2" url="https://www.keil.com/pack/" vendor="Keil" version="2.17.0"/>
-        <targetInfos>
-          <targetInfo name="stm32f411"/>
-        </targetInfos>
-      </component>
-      <component Cclass="Device" Cgroup="STM32Cube HAL" Csub="Cortex" Cvendor="Keil" Cversion="1.8.1" condition="STM32F4 HAL">
-        <package name="STM32F4xx_DFP" schemaVersion="1.7.2" url="https://www.keil.com/pack/" vendor="Keil" version="2.17.0"/>
-        <targetInfos>
-          <targetInfo name="stm32f411">
-            <c>
-              <MiscControls>-Wno-missing-noreturn</MiscControls>
-            </c>
-          </targetInfo>
-        </targetInfos>
-      </component>
-      <component Cclass="Device" Cgroup="STM32Cube HAL" Csub="GPIO" Cvendor="Keil" Cversion="1.8.1" condition="STM32F4 HAL">
-        <package name="STM32F4xx_DFP" schemaVersion="1.7.2" url="https://www.keil.com/pack/" vendor="Keil" version="2.17.0"/>
-        <targetInfos>
-          <targetInfo name="stm32f411"/>
-        </targetInfos>
-      </component>
-      <component Cclass="Device" Cgroup="STM32Cube HAL" Csub="PWR" Cvendor="Keil" Cversion="1.8.1" condition="STM32F4 HAL">
-        <package name="STM32F4xx_DFP" schemaVersion="1.7.2" url="https://www.keil.com/pack/" vendor="Keil" version="2.17.0"/>
-        <targetInfos>
-          <targetInfo name="stm32f411">
-            <c>
-              <MiscControls>-Wno-unused-parameter</MiscControls>
-            </c>
-          </targetInfo>
-        </targetInfos>
-      </component>
-      <component Cclass="Device" Cgroup="STM32Cube HAL" Csub="RCC" Cvendor="Keil" Cversion="1.8.1" condition="STM32F4 HAL GPIO">
-        <package name="STM32F4xx_DFP" schemaVersion="1.7.2" url="https://www.keil.com/pack/" vendor="Keil" version="2.17.0"/>
         <targetInfos>
           <targetInfo name="stm32f411"/>
         </targetInfos>
@@ -840,12 +789,10 @@
         <targetInfos/>
       </file>
       <file attr="config" category="header" name="CMSIS\Driver\Config\RTE_Device.h" version="2.4.5">
-        <instance index="0">RTE\Device\STM32F411CEUx\RTE_Device.h</instance>
+        <instance index="0" removed="1">RTE\Device\STM32F411CEUx\RTE_Device.h</instance>
         <component Capiversion="1.0.0" Cclass="Device" Cgroup="STM32Cube Framework" Csub="Classic" Cvendor="Keil" Cversion="1.8.1" condition="STM32F4 Framework Classic"/>
         <package name="STM32F4xx_DFP" schemaVersion="1.7.2" url="https://www.keil.com/pack/" vendor="Keil" version="2.17.0"/>
-        <targetInfos>
-          <targetInfo name="stm32f411"/>
-        </targetInfos>
+        <targetInfos/>
       </file>
       <file attr="config" category="source" condition="STM32F411xE_ARMCC" name="Drivers\CMSIS\Device\ST\STM32F4xx\Source\Templates\arm\startup_stm32f411xe.s" version="2.6.8">
         <instance index="0">RTE\Device\STM32F411CEUx\startup_stm32f411xe.s</instance>
@@ -856,12 +803,10 @@
         </targetInfos>
       </file>
       <file attr="config" category="header" name="MDK\Templates\Inc\stm32f4xx_hal_conf.h" version="1.8.1">
-        <instance index="0">RTE\Device\STM32F411CEUx\stm32f4xx_hal_conf.h</instance>
+        <instance index="0" removed="1">RTE\Device\STM32F411CEUx\stm32f4xx_hal_conf.h</instance>
         <component Capiversion="1.0.0" Cclass="Device" Cgroup="STM32Cube Framework" Csub="Classic" Cvendor="Keil" Cversion="1.8.1" condition="STM32F4 Framework Classic"/>
         <package name="STM32F4xx_DFP" schemaVersion="1.7.2" url="https://www.keil.com/pack/" vendor="Keil" version="2.17.0"/>
-        <targetInfos>
-          <targetInfo name="stm32f411"/>
-        </targetInfos>
+        <targetInfos/>
       </file>
       <file attr="config" category="source" name="Drivers\CMSIS\Device\ST\STM32F4xx\Source\Templates\system_stm32f4xx.c" version="2.6.8">
         <instance index="0">RTE\Device\STM32F411CEUx\system_stm32f4xx.c</instance>

@@ -2,6 +2,7 @@
 
 #include "RTE_Components.h"
 #include CMSIS_device_header
+#include "stm32f4xx_hal_gpio.h"
 
 #include <stdint.h>
 

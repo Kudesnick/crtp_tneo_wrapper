@@ -18,6 +18,8 @@ const uint32_t stack_size = Image$$RW_STACK$$Length - reinterpret_cast<uint32_t>
 
 namespace tick //-----------------------------------------------------------------------------------
 {
+    
+static uint32_t tick_ctn;
 
 res init(const uint32_t _ms)
 {
@@ -33,7 +35,7 @@ res init(const uint32_t _ms)
 
 uint32_t tick_get(void)
 {
-    return HAL_GetTick();
+    return tick_ctn;
 }
 
 __WEAK void cb_tick_handl(void) {};
@@ -68,6 +70,6 @@ void interrupt_global(const bool _enable)
 extern "C" void SysTick_Handler(void);
 void SysTick_Handler(void)
 {
-    HAL_IncTick();
+    csp::tick::tick_ctn++;
     csp::tick::cb_tick_handl();
 }
