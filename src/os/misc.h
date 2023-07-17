@@ -39,4 +39,11 @@ constexpr unsigned long long operator "" _min(unsigned long long min)
     return static_cast<unsigned long long>(min * 1000U * 1000U);
 }
 
+
+enum class res
+{
+    ok  =  0,
+    err = -1
+};
+
 #endif // __cplusplus

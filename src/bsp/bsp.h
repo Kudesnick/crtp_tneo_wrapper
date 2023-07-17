@@ -2,31 +2,6 @@
 
 #include <stdint.h>
 
-namespace csp
-{
-
-enum class res
-{
-    ok  =  0,
-    err = -1
-};
-
-extern uint32_t *const &stack_ptr;
-extern const uint32_t stack_size;
-
-namespace tick
-{
-    res init(const uint32_t _ms);
-    void cb_tick_handl(void); // weak
-    uint32_t tick_get(void);
-};
-
-void halt(void);
-
-void interrupt_global(const bool _enable);
-
-}; // namespace csp
-
 namespace bsp
 {
 
@@ -38,6 +13,13 @@ public:
     void on(void);
     void off(void);
     void toggle(void);
+};
+
+class nor_flash
+{
+public:
+    nor_flash(void);
+    ~nor_flash(void);
 };
 
 }; // namespace bsp

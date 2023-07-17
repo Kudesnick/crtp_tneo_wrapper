@@ -2,6 +2,7 @@
 #include <stdlib.h>
 
 #include "bsp.h"
+#include "csp.h"
 #include "os.h"
 #include "misc.h"
 

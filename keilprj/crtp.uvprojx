@@ -340,7 +340,7 @@
               <MiscControls>-Wno-c++98-compat -Wno-c++98-compat-pedantic -Wno-c++20-designator -Wno-padded -Wno-declaration-after-statement -Wno-global-constructors -Wno-exit-time-destructors -Wno-gnu-zero-variadic-macro-arguments</MiscControls>
               <Define>DEBUG, HSE_VALUE=25000000, PRINTF_INCLUDE_CONFIG_H, USE_OS</Define>
               <Undefine></Undefine>
-              <IncludePath>..\rtt;..\tneo\src;..\tneo\src\arch;..\tneo\src\arch\cortex_m;..\tneo\src\core;..\tneo\src\core\internal;..\src\os;..\src\bsp;..\printf</IncludePath>
+              <IncludePath>..\printf;..\rtt;..\src\bsp;..\src\csp;..\src\os;..\tneo\src;..\tneo\src\arch;..\tneo\src\arch\cortex_m;..\tneo\src\core;..\tneo\src\core\internal</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -393,6 +393,21 @@
         </Group>
         <Group>
           <GroupName>bsp</GroupName>
+          <Files>
+            <File>
+              <FileName>bsp.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\src\bsp\bsp.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>bsp.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\src\bsp\bsp.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>csp</GroupName>
           <GroupOption>
             <CommonProperty>
               <UseCPPCompiler>0</UseCPPCompiler>
@@ -464,16 +479,54 @@
           </GroupOption>
           <Files>
             <File>
-              <FileName>bsp.cpp</FileName>
+              <FileName>csp.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\src\bsp\bsp.cpp</FilePath>
+              <FilePath>..\src\csp\csp.cpp</FilePath>
             </File>
             <File>
-              <FileName>bsp.h</FileName>
+              <FileName>csp.h</FileName>
               <FileType>5</FileType>
-              <FilePath>..\src\bsp\bsp.h</FilePath>
+              <FilePath>..\src\csp\csp.h</FilePath>
+            </File>
+            <File>
+              <FileName>csp_gpio_macro.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\src\csp\csp_gpio_macro.h</FilePath>
+            </File>
+            <File>
+              <FileName>csp_led.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\src\csp\csp_led.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>csp_led.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\src\csp\csp_led.h</FilePath>
+            </File>
+            <File>
+              <FileName>csp_led_conf.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\src\csp\csp_led_conf.h</FilePath>
+            </File>
+            <File>
+              <FileName>csp_spi.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\src\csp\csp_spi.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>csp_spi.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\src\csp\csp_spi.h</FilePath>
+            </File>
+            <File>
+              <FileName>csp_spi_conf.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\src\csp\csp_spi_conf.h</FilePath>
             </File>
           </Files>
+        </Group>
+        <Group>
+          <GroupName>littlefs</GroupName>
         </Group>
         <Group>
           <GroupName>os</GroupName>
