@@ -5,11 +5,13 @@
 #include "csp.h"
 #include "os.h"
 #include "misc.h"
+#include "csp_spi.h"
 
 #define TEST_TIMER  (1)
 #define TEST_YIELD  (0)
 #define TEST_PRINTF (1)
 #define TEST_FMEM   (1)
+#define TEST_SPI    (1)
 
 //-- timer test -----------------------------------------------------------------------------------/
 
@@ -144,6 +146,41 @@ static struct fmem_task: os::task<fmem_task, STK(0x130)>
     }
     using os::task<fmem_task, STK(0x130)>::task;
 } fmem_task_obj = "fmem_task";
+#endif
+
+//-- task for SPI testing ------------------------------------------------------------/
+
+#if TEST_SPI
+static struct spi_task: os::task<spi_task, STK(0x60)>
+{
+    static inline uint8_t RES[]  = {0xAB, 0x00, 0x00, 0x00, 0x00};
+    static inline uint8_t RDID[] = {0x9F, 0x00, 0x00, 0x00};
+    static inline uint8_t REMS[] = {0x90, 0x00, 0x00, 0x00, 0x00, 0x00};
+
+    void task_func(void) __attribute__((__noreturn__))
+    {
+        csp::spi::init();
+        sleep(100);
+        csp::spi::cs_on();
+        csp::spi::send(RES, sizeof(RES), RES);
+        sleep(100);
+        csp::spi::cs_off();
+        csp::spi::cs_on();
+        csp::spi::send(RDID, sizeof(RDID), RDID);
+        sleep(100);
+        csp::spi::cs_off();
+        csp::spi::cs_on();
+        csp::spi::send(REMS, sizeof(REMS), REMS);
+        sleep(100);
+        csp::spi::cs_off();
+        
+        for(;;)
+        {
+            sleep(500);
+        }
+    }
+    using os::task<spi_task, STK(0x60)>::task;
+} spi_task_obj = "spi_task";
 #endif
 
 //-- init callbacks -------------------------------------------------------------------------------/

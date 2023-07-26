@@ -183,7 +183,7 @@ inline void GPIO_AF_INIT(const port _GPIO, const uint32_t _AF_NUM, const uint32_
 
 inline void GPIO_SET(const port _GPIO, const bool _STATE)
 {
-    GPIO_PORT(_GPIO)->BSRR = GPIO_PIN(_GPIO) << (_STATE * 16);
+    GPIO_PORT(_GPIO)->BSRR = GPIO_PIN(_GPIO) << (16 - _STATE * 16);
 }
 
 inline void GPIO_TOGGLE(const port _GPIO)
