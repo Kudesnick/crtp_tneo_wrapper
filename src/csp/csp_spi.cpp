@@ -13,10 +13,10 @@ namespace spi //----------------------------------------------------------------
 static uint8_t *dest;
 static uint32_t len;
 
-static inline void irq_tx_reset(void)
+static inline void irq_dma_reset(const uint8_t _strn)
 {
     // Clear all interrupt flags
-    ((SPI_DMA_TX_STRn <= 3) ? SPI_DMA->LIFCR : SPI_DMA->HIFCR) = ((1UL << 6) - 1) << (6 * (SPI_DMA_TX_STRn & 1)) << (16 * ((SPI_DMA_TX_STRn & 2) >> 1));
+    ((_strn <= 3) ? SPI_DMA->LIFCR : SPI_DMA->HIFCR) = ((1UL << 6) - 1) << (6 * (_strn & 1)) << (16 * ((_strn & 2) >> 1));
 }
 
 static inline void irq_rx_reset(void)
@@ -34,7 +34,7 @@ static void dma_start(const uint32_t _len)
     __NVIC_EnableIRQ(SPI_DMA_RX_IRQn);
     SPI_DMA_RX->CR   |= DMA_SxCR_EN; // Enable DMA
 
-    irq_tx_reset();
+    irq_dma_reset(SPI_DMA_TX_STRn);
     __NVIC_EnableIRQ(SPI_DMA_TX_IRQn);
     SPI_DMA_TX->CR   |= DMA_SxCR_EN; // Enable DMA
 }
@@ -45,12 +45,12 @@ res init(void)
     RCC->APB2ENR |= RCC_APB2ENR_SPI1EN;
     RCC->AHB1ENR |= (SPI_DMA == DMA1) ? RCC_AHB1ENR_DMA1EN : RCC_AHB1ENR_DMA2EN;
     // GPIO
-    GPIO_AF_INIT(SPI_PIN_MOSI, GPIO_AF5_SPI1, GPIO_MODE_AF_PP    , GPIO_NOPULL, GPIO_SPEED_FREQ_HIGH);
-    GPIO_AF_INIT(SPI_PIN_MISO, GPIO_AF5_SPI1, MODE_AF            , GPIO_PULLUP, GPIO_SPEED_FREQ_HIGH);
-    GPIO_AF_INIT(SPI_PIN_SCK , GPIO_AF5_SPI1, GPIO_MODE_AF_PP    , GPIO_NOPULL, GPIO_SPEED_FREQ_HIGH);
-    GPIO_AF_INIT(SPI_PIN_NSS , 0            , GPIO_MODE_OUTPUT_PP, GPIO_NOPULL, GPIO_SPEED_FREQ_HIGH);
+    gpio::init(SPI_PIN_MOSI, GPIO_AF5_SPI1, GPIO_MODE_AF_PP    , GPIO_NOPULL, GPIO_SPEED_FREQ_HIGH);
+    gpio::init(SPI_PIN_MISO, GPIO_AF5_SPI1, MODE_AF            , GPIO_PULLUP, GPIO_SPEED_FREQ_HIGH);
+    gpio::init(SPI_PIN_SCK , GPIO_AF5_SPI1, GPIO_MODE_AF_PP    , GPIO_NOPULL, GPIO_SPEED_FREQ_HIGH);
+    gpio::init(SPI_PIN_NSS , 0            , GPIO_MODE_OUTPUT_PP, GPIO_NOPULL, GPIO_SPEED_FREQ_HIGH);
 
-    GPIO_SET(SPI_PIN_NSS, true);
+    gpio::set(SPI_PIN_NSS, true);
 
     // Reset unit
     SPI_UNIT->CR1 &= ~SPI_CR1_SPE;
@@ -88,8 +88,8 @@ res init(void)
 }
 
 
-void cs_on(void) {GPIO_SET(SPI_PIN_NSS, false);};
-void cs_off(void) {GPIO_SET(SPI_PIN_NSS, true);};
+void cs_on(void) {gpio::set(SPI_PIN_NSS, false);};
+void cs_off(void) {gpio::set(SPI_PIN_NSS, true);};
 
 
 res deinit(void)
@@ -105,7 +105,7 @@ res send(const uint8_t _source[], const uint32_t _len, uint8_t *const _dest)
     dest = _dest;
     len = 0;
     
-    if (dest)
+    if (dest != nullptr)
     {
         len = _len;
         SPI_DMA_RX->M0AR  = reinterpret_cast<uint32_t>(_dest);
@@ -166,5 +166,5 @@ void SPI_DMA_RX_IRQHandler(void)
 extern "C" void SPI_DMA_TX_IRQHandler(void);
 void SPI_DMA_TX_IRQHandler(void)
 {
-    csp::spi::irq_tx_reset();
+    csp::spi::irq_dma_reset(SPI_DMA_TX_STRn);
 }

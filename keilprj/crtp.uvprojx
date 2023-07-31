@@ -489,9 +489,9 @@
               <FilePath>..\src\csp\csp.h</FilePath>
             </File>
             <File>
-              <FileName>csp_gpio_macro.h</FileName>
+              <FileName>csp_gpio.h</FileName>
               <FileType>5</FileType>
-              <FilePath>..\src\csp\csp_gpio_macro.h</FilePath>
+              <FilePath>..\src\csp\csp_gpio.h</FilePath>
             </File>
             <File>
               <FileName>csp_led.cpp</FileName>

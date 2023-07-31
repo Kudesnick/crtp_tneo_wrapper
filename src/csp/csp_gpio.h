@@ -6,6 +6,12 @@
 
 #include <stdint.h>
 
+namespace csp
+{
+
+namespace gpio
+{
+
 enum class port
 {
     na = 0xFF,
@@ -131,18 +137,18 @@ enum class port
 };
 
 
-inline uint8_t        GPIO_PORT_SOURCE(const port _GPIO) {return static_cast<int>(_GPIO) >> 4;}
-inline uint8_t        GPIO_PIN_SOURCE(const port _GPIO)  {return static_cast<int>(_GPIO) & 0xF;}
-inline GPIO_TypeDef * GPIO_PORT(const port _GPIO)        {return ((GPIO_TypeDef *)(GPIOA_BASE + 0x400 * GPIO_PORT_SOURCE(_GPIO)));}
-inline uint32_t       GPIO_PIN(const port _GPIO)         {return 1U << GPIO_PIN_SOURCE(_GPIO);}
-inline uint32_t       GPIO_PORT_RCC(const port _GPIO)    {return 1U << GPIO_PORT_SOURCE(_GPIO);}
-inline uint8_t        GPIO_ADC_CHANNEL(const port _GPIO) {return GPIO_PIN_SOURCE(_GPIO);}
-inline uint8_t        GPIO_EXTI_LINE(const port _GPIO)   {return GPIO_PIN(_GPIO);}
+inline uint8_t        port_source(const port _GPIO) {return static_cast<int>(_GPIO) >> 4;}
+inline uint8_t        pin_source(const port _GPIO)  {return static_cast<int>(_GPIO) & 0xF;}
+inline GPIO_TypeDef * port_addr(const port _GPIO)   {return ((GPIO_TypeDef *)(GPIOA_BASE + 0x400 * port_source(_GPIO)));}
+inline uint32_t       pin(const port _GPIO)         {return 1U << pin_source(_GPIO);}
+inline uint32_t       rcc(const port _GPIO)         {return 1U << port_source(_GPIO);}
+inline uint8_t        adc_channel(const port _GPIO) {return pin_source(_GPIO);}
+inline uint8_t        exti_line(const port _GPIO)   {return pin(_GPIO);}
 
 
-inline uint8_t GPIO_IRQ_CHANNEL(const port _GPIO)
+inline constexpr uint8_t irq_channel(const port _GPIO)
 {
-    static const uint8_t res[]
+    const uint8_t res[]
     {
         EXTI0_IRQn,    
         EXTI1_IRQn,    
@@ -162,15 +168,14 @@ inline uint8_t GPIO_IRQ_CHANNEL(const port _GPIO)
         EXTI15_10_IRQn,
     };
 
-    return res[GPIO_PIN_SOURCE(_GPIO)];
+    return res[pin_source(_GPIO)];
 }
 
-
-inline void GPIO_AF_INIT(const port _GPIO, const uint32_t _AF_NUM, const uint32_t _AF_MODE, const uint32_t _PU, const uint32_t _SPEED)
+inline void init(const port _GPIO, const uint32_t _AF_NUM, const uint32_t _AF_MODE, const uint32_t _PU, const uint32_t _SPEED)
 {
-    RCC->AHB1ENR |= GPIO_PORT_RCC(_GPIO);
-    auto port_ptr = GPIO_PORT(_GPIO);
-    auto pin_src = GPIO_PIN_SOURCE(_GPIO);
+    RCC->AHB1ENR |= rcc(_GPIO);
+    auto port_ptr = port_addr(_GPIO);
+    auto pin_src =  pin_source(_GPIO);
     
     port_ptr->AFR[pin_src >> 3] |= (_AF_NUM) << ((pin_src & 7) * 4);
     port_ptr->MODER   &= ~(3U << (pin_src * 2));
@@ -181,15 +186,19 @@ inline void GPIO_AF_INIT(const port _GPIO, const uint32_t _AF_NUM, const uint32_
     port_ptr->PUPDR   |= _PU << (pin_src * 2);
 }
 
-inline void GPIO_SET(const port _GPIO, const bool _STATE)
+inline void set(const port _GPIO, const bool _STATE)
 {
-    GPIO_PORT(_GPIO)->BSRR = GPIO_PIN(_GPIO) << (16 - _STATE * 16);
+    port_addr(_GPIO)->BSRR = pin(_GPIO) << (16 - _STATE * 16);
 }
 
-inline void GPIO_TOGGLE(const port _GPIO)
+inline void toggle(const port _GPIO)
 {
-    auto port_ptr = GPIO_PORT(_GPIO);
-    auto pin = GPIO_PIN(_GPIO);
+    auto port_ptr = port_addr(_GPIO);
+    auto io_pin = pin(_GPIO);
     const uint32_t odr = port_ptr->ODR;
-    port_ptr->BSRR = ((odr & pin) << 16) | (~odr & pin);
+    port_ptr->BSRR = ((odr & io_pin) << 16) | (~odr & io_pin);
 }
+
+}; // namespace gpio
+
+}; // namespace csp

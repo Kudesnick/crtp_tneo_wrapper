@@ -1,6 +1,6 @@
 #pragma once
 
-#include "csp_gpio_macro.h"
+#include "csp_gpio.h"
 
-#define LED_PIN port::c13
-#define LED_INV true
+constexpr inline auto LED_PIN = csp::gpio::port::c13;
+constexpr inline auto LED_INV = true;

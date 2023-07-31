@@ -1,13 +1,13 @@
 #pragma once
 
-#include "csp_gpio_macro.h"
+#include "csp_gpio.h"
 
 #define SPI_UNIT              SPI1
     
-#define SPI_PIN_MOSI          port::a07
-#define SPI_PIN_MISO          port::a06 // V2.0 MISO脚由PA6改为PB4,方便STM32F411用户同时连接TF卡和FLASH
-#define SPI_PIN_SCK           port::a05
-#define SPI_PIN_NSS           port::a04
+constexpr inline auto SPI_PIN_MOSI = csp::gpio::port::a07;
+constexpr inline auto SPI_PIN_MISO = csp::gpio::port::a06; // V2.0 MISO脚由PA6改为PB4,方便STM32F411用户同时连接TF卡和FLASH
+constexpr inline auto SPI_PIN_SCK  = csp::gpio::port::a05;
+constexpr inline auto SPI_PIN_NSS  = csp::gpio::port::a04;
 
 #define SPI_DMA               DMA2
 
