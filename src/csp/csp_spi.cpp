@@ -7,6 +7,7 @@
 namespace csp //------------------------------------------------------------------------------------
 {
 
+
 template<const uint32_t _mask> static inline uint8_t mask_to_bit()
 {
     return (_mask & 1) ? 0 : 1 + mask_to_bit<(_mask >> 1)>();
@@ -16,13 +17,16 @@ static inline uint32_t addr_calc(const uint32_t _addr, const uint8_t _bit)
 {
     return (_addr & 0xF0000000) + ((_addr & 0x00FFFFFF) << 5) + 0x02000000 + (_bit << 2);
 }
-
-#define BB_REG(ADDR, BIT) (*reinterpret_cast<uint32_t *const>(addr_calc(reinterpret_cast<const uint32_t>(&(ADDR)), (BIT))))
-    
-static inline uint32_t *const bb(volatile uint32_t *const _addr, const uint8_t _bit)
+  
+static inline uint32_t & bb(volatile uint32_t & _addr, const uint8_t _bit)
 {
-    return reinterpret_cast<uint32_t *const>(addr_calc(reinterpret_cast<const uint32_t>(_addr), _bit));
+    return *reinterpret_cast<uint32_t *const>(addr_calc(reinterpret_cast<const uint32_t>(&_addr), _bit));
 }
+
+static inline uint32_t & bbb(volatile uint32_t & _addr, const uint32_t _mask)
+{
+    return bb(_addr, mask_to_bit<_mask>());
+};
 
 
 namespace spi //------------------------------------------------------------------------------------
@@ -99,10 +103,9 @@ res init(void)
     SPI_DMA_TX->PAR   = (uint32_t)&(SPI_UNIT->DR);
     SPI_DMA_TX->CR   |= DMA_SxCR_TCIE;
     SPI_UNIT->CR2    |= SPI_CR2_TXDMAEN;
-    
-//  SPI_UNIT->CR1 |= SPI_CR1_SPE;
-//  BB_REG(SPI_UNIT->CR1, mask_to_bit<SPI_CR1_SPE>()) = 1;
-    *bb(&SPI_UNIT->CR1, mask_to_bit<SPI_CR1_SPE>()) = 1;
+
+    bb(SPI_UNIT->CR1, mask_to_bit<SPI_CR1_SPE>()) = 1;
+    bbb(SPI_UNIT->CR1, SPI_CR1_SPE) = 1;
 
     return res::ok;
 }
