@@ -7,6 +7,16 @@
 namespace csp //------------------------------------------------------------------------------------
 {
 
+template<const uint32_t _mask>
+    static uint8_t mask_to_bit()
+{
+    return (_mask & 1) ? 0 : 1 + mask_to_bit<(_mask >> 1)>();
+}
+
+#define BITBANDING_ADDR_CALC(ADDR, BIT) ((ADDR) & 0xF0000000U) + (((ADDR) & 0x00FFFFFFU) << 5) + 0x02000000U + ((BIT) << 2)
+
+#define BB_REG(ADDR, BIT) (*(uint32_t *)(BITBANDING_ADDR_CALC((uint32_t)(ADDR), (BIT))))
+
 namespace spi //------------------------------------------------------------------------------------
 {
 
@@ -82,7 +92,9 @@ res init(void)
     SPI_DMA_TX->CR   |= DMA_SxCR_TCIE;
     SPI_UNIT->CR2    |= SPI_CR2_TXDMAEN;
     
-    SPI_UNIT->CR1 |= SPI_CR1_SPE;
+//  SPI_UNIT->CR1 |= SPI_CR1_SPE;
+    BB_REG(&SPI_UNIT->CR1, mask_to_bit<SPI_CR1_SPE>()) = 1;
+//  bitband(SPI_UNIT->CR1, mask_to_bit<SPI_CR1_SPE>()) = 1;
 
     return res::ok;
 }

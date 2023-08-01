@@ -489,6 +489,11 @@
               <FilePath>..\src\csp\csp.h</FilePath>
             </File>
             <File>
+              <FileName>csp_bitband.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\src\csp\csp_bitband.h</FilePath>
+            </File>
+            <File>
               <FileName>csp_gpio.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\src\csp\csp_gpio.h</FilePath>
