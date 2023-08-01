@@ -7,15 +7,23 @@
 namespace csp //------------------------------------------------------------------------------------
 {
 
-template<const uint32_t _mask>
-    static uint8_t mask_to_bit()
+template<const uint32_t _mask> static inline uint8_t mask_to_bit()
 {
     return (_mask & 1) ? 0 : 1 + mask_to_bit<(_mask >> 1)>();
 }
 
-#define BITBANDING_ADDR_CALC(ADDR, BIT) ((ADDR) & 0xF0000000U) + (((ADDR) & 0x00FFFFFFU) << 5) + 0x02000000U + ((BIT) << 2)
+static inline uint32_t addr_calc(const uint32_t _addr, const uint8_t _bit)
+{
+    return (_addr & 0xF0000000) + ((_addr & 0x00FFFFFF) << 5) + 0x02000000 + (_bit << 2);
+}
 
-#define BB_REG(ADDR, BIT) (*(uint32_t *)(BITBANDING_ADDR_CALC((uint32_t)(ADDR), (BIT))))
+#define BB_REG(ADDR, BIT) (*reinterpret_cast<uint32_t *const>(addr_calc(reinterpret_cast<const uint32_t>(&(ADDR)), (BIT))))
+    
+static inline uint32_t *const bb(volatile uint32_t *const _addr, const uint8_t _bit)
+{
+    return reinterpret_cast<uint32_t *const>(addr_calc(reinterpret_cast<const uint32_t>(_addr), _bit));
+}
+
 
 namespace spi //------------------------------------------------------------------------------------
 {
@@ -93,8 +101,8 @@ res init(void)
     SPI_UNIT->CR2    |= SPI_CR2_TXDMAEN;
     
 //  SPI_UNIT->CR1 |= SPI_CR1_SPE;
-    BB_REG(&SPI_UNIT->CR1, mask_to_bit<SPI_CR1_SPE>()) = 1;
-//  bitband(SPI_UNIT->CR1, mask_to_bit<SPI_CR1_SPE>()) = 1;
+//  BB_REG(SPI_UNIT->CR1, mask_to_bit<SPI_CR1_SPE>()) = 1;
+    *bb(&SPI_UNIT->CR1, mask_to_bit<SPI_CR1_SPE>()) = 1;
 
     return res::ok;
 }
