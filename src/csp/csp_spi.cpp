@@ -3,56 +3,10 @@
 
 #include "csp.h"
 #include "csp_spi_conf.h"
+#include "csp_bitband.h"
 
 namespace csp //------------------------------------------------------------------------------------
 {
-
-constexpr static inline uint8_t mask_to_bit(const uint32_t _mask)
-{
-    return (_mask & 1 <<  0) ?  0 :
-           (_mask & 1 <<  1) ?  1 :
-           (_mask & 1 <<  2) ?  2 :
-           (_mask & 1 <<  3) ?  3 :
-           (_mask & 1 <<  4) ?  4 :
-           (_mask & 1 <<  5) ?  5 :
-           (_mask & 1 <<  6) ?  6 :
-           (_mask & 1 <<  7) ?  7 :
-           (_mask & 1 <<  8) ?  8 :
-           (_mask & 1 <<  9) ?  9 :
-           (_mask & 1 << 10) ? 10 :
-           (_mask & 1 << 11) ? 11 :
-           (_mask & 1 << 12) ? 12 :
-           (_mask & 1 << 13) ? 13 :
-           (_mask & 1 << 14) ? 14 :
-           (_mask & 1 << 15) ? 15 :
-           (_mask & 1 << 16) ? 16 :
-           (_mask & 1 << 17) ? 17 :
-           (_mask & 1 << 18) ? 18 :
-           (_mask & 1 << 19) ? 19 :
-           (_mask & 1 << 20) ? 20 :
-           (_mask & 1 << 21) ? 21 :
-           (_mask & 1 << 22) ? 22 :
-           (_mask & 1 << 23) ? 23 :
-           (_mask & 1 << 24) ? 24 :
-           (_mask & 1 << 25) ? 25 :
-           (_mask & 1 << 26) ? 26 :
-           (_mask & 1 << 27) ? 27 :
-           (_mask & 1 << 28) ? 28 :
-           (_mask & 1 << 29) ? 29 :
-           (_mask & 1 << 30) ? 30 :
-           (_mask & 1 << 31) ? 31 : 0;
-}
-
-constexpr static inline uint32_t addr_calc(const uint32_t _addr, const uint8_t _bit)
-{
-    return (_addr & 0xF0000000) + ((_addr & 0x00FFFFFF) << 5) + 0x02000000 + (_bit << 2);
-}
-  
-static inline uint32_t & bb(volatile uint32_t & _addr, const uint32_t _mask)
-{
-    return *reinterpret_cast<uint32_t *const>(addr_calc(reinterpret_cast<const uint32_t>(&_addr), mask_to_bit(_mask)));
-}
-
 
 namespace spi //------------------------------------------------------------------------------------
 {
@@ -79,18 +33,18 @@ static void dma_start(const uint32_t _len)
 
     irq_rx_reset();
     __NVIC_EnableIRQ(SPI_DMA_RX_IRQn);
-    SPI_DMA_RX->CR   |= DMA_SxCR_EN; // Enable DMA
+    bb::set(SPI_DMA_RX->CR, DMA_SxCR_EN); // Enable DMA
 
     irq_dma_reset(SPI_DMA_TX_STRn);
     __NVIC_EnableIRQ(SPI_DMA_TX_IRQn);
-    SPI_DMA_TX->CR   |= DMA_SxCR_EN; // Enable DMA
+    bb::set(SPI_DMA_TX->CR, DMA_SxCR_EN); // Enable DMA
 }
 
 res init(void)
 {
     // GPIO init
-    RCC->APB2ENR |= RCC_APB2ENR_SPI1EN;
-    RCC->AHB1ENR |= (SPI_DMA == DMA1) ? RCC_AHB1ENR_DMA1EN : RCC_AHB1ENR_DMA2EN;
+    bb::set(RCC->APB2ENR, RCC_APB2ENR_SPI1EN);
+    bb::set(RCC->AHB1ENR, (SPI_DMA == DMA1) ? RCC_AHB1ENR_DMA1EN : RCC_AHB1ENR_DMA2EN);
     // GPIO
     gpio::init(SPI_PIN_MOSI, GPIO_AF5_SPI1, GPIO_MODE_AF_PP    , GPIO_NOPULL, GPIO_SPEED_FREQ_HIGH);
     gpio::init(SPI_PIN_MISO, GPIO_AF5_SPI1, MODE_AF            , GPIO_PULLUP, GPIO_SPEED_FREQ_HIGH);
@@ -100,8 +54,8 @@ res init(void)
     gpio::set(SPI_PIN_NSS, true);
 
     // Reset unit
-    SPI_UNIT->CR1 &= ~SPI_CR1_SPE;
-    while(SPI_UNIT->CR1 &= ~SPI_CR1_SPE);
+    bb::clr(SPI_UNIT->CR1, SPI_CR1_SPE);
+    while(bb::get(SPI_UNIT->CR1, SPI_CR1_SPE));
     // SPI init MODE_MASTER, CPOL0, CPHA0, MSB_LSB, DATA_8_BITS, Max speed
     SPI_UNIT->CR1 = SPI_CR1_MSTR | SPI_CR1_SSM | SPI_CR1_SSI;
 #ifdef DEBUG
@@ -109,15 +63,15 @@ res init(void)
 #endif
 
     // Rx DMA init
-    SPI_DMA_RX->CR   &= ~DMA_SxCR_EN; // Disable DMA
-    while(SPI_DMA_RX->CR & DMA_SxCR_EN);
+    bb::clr(SPI_DMA_RX->CR, DMA_SxCR_EN); // Disable DMA
+    while(bb::get(SPI_DMA_RX->CR, DMA_SxCR_EN));
     SPI_DMA_RX->CR    = (SPI_DMA_RX_CH << DMA_SxCR_CHSEL_Pos) | DMA_SxCR_MINC
                         | (3 << DMA_SxCR_PL_Pos)
                         /* | DMA_SxCR_DIR_1 | DMA_SxCR_DIR_0 */; // Peripheral-to-memory
     SPI_DMA_RX->FCR   = 0;
     SPI_DMA_RX->PAR   = (uint32_t)&(SPI_UNIT->DR);
-    SPI_DMA_RX->CR   |= DMA_SxCR_TCIE;
-    SPI_UNIT->CR2    |= SPI_CR2_RXDMAEN;
+    bb::set(SPI_DMA_RX->CR, DMA_SxCR_TCIE);
+    bb::set(SPI_UNIT->CR2, SPI_CR2_RXDMAEN);
 
     // Tx DMA init
     SPI_DMA_TX->CR   &= ~DMA_SxCR_EN; // Disable DMA
@@ -126,10 +80,10 @@ res init(void)
                         /* | DMA_SxCR_DIR_1 */ | DMA_SxCR_DIR_0; // Memory-to-peripheral
     SPI_DMA_TX->FCR   = 0;
     SPI_DMA_TX->PAR   = (uint32_t)&(SPI_UNIT->DR);
-    SPI_DMA_TX->CR   |= DMA_SxCR_TCIE;
-    SPI_UNIT->CR2    |= SPI_CR2_TXDMAEN;
+    bb::set(SPI_DMA_TX->CR, DMA_SxCR_TCIE);
+    bb::set(SPI_UNIT->CR2, SPI_CR2_TXDMAEN);
 
-    bb(SPI_UNIT->CR1, SPI_CR1_SPE) = 1;
+    bb::set(SPI_UNIT->CR1, SPI_CR1_SPE);
 
     return res::ok;
 }
@@ -147,7 +101,7 @@ res deinit(void)
 
 res send(const uint8_t _source[], const uint32_t _len, uint8_t *const _dest)
 {
-    if (SPI1->SR & SPI_SR_BSY) return res::err;
+    if (bb::get(SPI1->SR, SPI_SR_BSY)) return res::err;
 
     dest = _dest;
     len = 0;
@@ -156,17 +110,17 @@ res send(const uint8_t _source[], const uint32_t _len, uint8_t *const _dest)
     {
         len = _len;
         SPI_DMA_RX->M0AR  = reinterpret_cast<uint32_t>(_dest);
-        SPI_DMA_RX->CR   |= DMA_SxCR_MINC;        
+        bb::set(SPI_DMA_RX->CR, DMA_SxCR_MINC);        
     }
     else
     {
         static uint8_t dummy;
         SPI_DMA_RX->M0AR  = reinterpret_cast<uint32_t>(&dummy);
-        SPI_DMA_RX->CR   &= ~DMA_SxCR_MINC;
+        bb::clr(SPI_DMA_RX->CR, DMA_SxCR_MINC);
     }
 
     SPI_DMA_TX->M0AR  = reinterpret_cast<uint32_t>(_source);
-    SPI_DMA_TX->CR   |= DMA_SxCR_MINC;
+    bb::set(SPI_DMA_TX->CR, DMA_SxCR_MINC);
 
     dma_start(_len);
     return res::ok;
@@ -174,7 +128,7 @@ res send(const uint8_t _source[], const uint32_t _len, uint8_t *const _dest)
 
 res read(const uint8_t _dummy, uint8_t _dest[], const uint32_t _len)
 {
-    if (SPI1->SR & SPI_SR_BSY) return res::err;
+    if (bb::get(SPI1->SR, SPI_SR_BSY)) return res::err;
 
     static const uint8_t dummy = _dummy;
 
@@ -182,10 +136,10 @@ res read(const uint8_t _dummy, uint8_t _dest[], const uint32_t _len)
     len = _len;
     
     SPI_DMA_RX->M0AR  = reinterpret_cast<uint32_t>(_dest);
-    SPI_DMA_RX->CR   |= DMA_SxCR_MINC;
+    bb::set(SPI_DMA_RX->CR, DMA_SxCR_MINC);
 
     SPI_DMA_TX->M0AR  = reinterpret_cast<uint32_t>(&dummy);
-    SPI_DMA_TX->CR   &= ~DMA_SxCR_MINC;
+    bb::clr(SPI_DMA_TX->CR, DMA_SxCR_MINC);
 
     dma_start(_len);
     return res::ok;
