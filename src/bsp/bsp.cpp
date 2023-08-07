@@ -1,6 +1,3 @@
-#include "RTE_Components.h"
-#include CMSIS_device_header
-
 #include "bsp.h"
 #include "csp_led.h"
 

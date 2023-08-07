@@ -16,18 +16,17 @@
 //-- timer test -----------------------------------------------------------------------------------/
 
 #if TEST_TIMER
-static struct task: os::task<task, STK(0x70)>
+static struct blink_task: os::task<blink_task, STK(0x70)>
 {
     static inline os::semaphore blink_sem = {1,1};
     
-    struct timer: os::timer<timer>
+    struct timer: os::timer<timer, 200, os::repeat>
     {
         void timer_func(void)
         {
             blink_sem.release();
         }
-        using os::timer<timer>::timer;
-    } blink_timer = {200, os::repeat};
+    } blink_timer;
 
     void task_func(void) __attribute__((__noreturn__))
     {
@@ -35,8 +34,8 @@ static struct task: os::task<task, STK(0x70)>
         for(bsp::led C13;;blink_sem.acquire(os::infinitely))
             C13.toggle();
     }
-    using os::task<task, STK(0x70)>::task;
-} task_obj = "blink_task";
+    using os::task<blink_task, STK(0x70)>::task;
+} blink_task_obj = "blink_task";
 #endif
 
 //-- tasks for yeld testing -----------------------------------------------------------------------/

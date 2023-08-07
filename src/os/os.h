@@ -507,10 +507,10 @@ public:
 };
 
 
-template <class T> class timer : public timer_base
+template <class T, const uint32_t _timeout = os::nowait, const repeat_timer _repeat = os::norepeat> class timer : public timer_base
 {
 public:
-    timer(const uint32_t _timeout = os::nowait, const repeat_timer _repeat = os::norepeat):
+    timer():
         timer_base(member_to_func(&T::timer_func), _timeout, _repeat){}
 };
 

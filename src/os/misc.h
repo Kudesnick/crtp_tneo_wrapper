@@ -29,6 +29,11 @@ constexpr unsigned long long operator "" _KiB(unsigned long long bytes)
     return static_cast<unsigned long long>(bytes * 1024U);
 }
 
+constexpr unsigned long long operator "" _sec(unsigned long long sec)
+{
+    return static_cast<unsigned long long>(sec * 1000U);
+}
+
 constexpr unsigned long long operator "" _sec(long double sec)
 {
     return static_cast<unsigned long long>(sec * 1000U);
@@ -36,7 +41,12 @@ constexpr unsigned long long operator "" _sec(long double sec)
 
 constexpr unsigned long long operator "" _min(unsigned long long min)
 {
-    return static_cast<unsigned long long>(min * 1000U * 1000U);
+    return static_cast<unsigned long long>(min * 60_sec);
+}
+
+constexpr unsigned long long operator "" _hr(unsigned long long hr)
+{
+    return static_cast<unsigned long long>(hr * 60_min);
 }
 
 
