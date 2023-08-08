@@ -465,7 +465,7 @@ public:
 
     rc send_acquire(T &_data, const uint32_t _timeout = nowait)
     {
-        return queue_base::receive_release(fmem, &_data, _timeout);
+        return queue_base::send_acquire(fmem, &_data, _timeout);
     }
     
     rc receive_release(T &_data, const uint32_t _timeout = nowait)
