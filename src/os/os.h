@@ -3,6 +3,7 @@
 
 #include <stdint.h>
 #include <cstddef>
+#include <type_traits>
 
 namespace __tn
 {
@@ -156,10 +157,11 @@ public:
 };
 
 
-template <class T, uint32_t _stack_size, os::priority _priority = os::priority::normal>
+template <typename T, uint32_t _stack_size, os::priority _priority = os::priority::normal>
 class task : public task_base, private stack<_stack_size>
 {
 public:
+    task(void) = delete;
     task(const char *const _name = nullptr)
     {
         if (__tn::tn_task_create_wname(
@@ -175,6 +177,10 @@ public:
             _TN_FATAL_ERROR("task not created\n");
         }
     }
+    ~task()
+    {
+        static_assert(std::is_member_function_pointer_v<decltype(&T::task_func)>, "task_func should be implemented");
+    }
 };
 
 //-- kernel ---------------------------------------------------------------------------------------/
@@ -183,6 +189,7 @@ template <class T, uint32_t _stack_size>
 class kernel: public task<T, _stack_size, priority::idle>
 {
 public:
+    kernel(void) = delete;
     kernel(uint32_t *const _sys_stack_ptr, const uint32_t _sys_stack_size):
         task<T, _stack_size, priority::idle>("idle")
     {
@@ -193,6 +200,11 @@ public:
             _sys_stack_size / 4,
             T::sw_init
             );
+    }
+    ~kernel()
+    {
+        static_assert(std::is_member_function_pointer_v<decltype(&T::hw_init)>, "`hw_init` should be implemented");
+        // static_assert(std::is_member_function_pointer_v<decltype(&T::sw_init)>, "`sw_init` should be implemented");
     }
 };
 
@@ -230,6 +242,7 @@ public:
     rc acquire(const uint32_t _timeout = nowait);
     rc release(void);
 
+    semaphore(void) = delete;
     semaphore(const uint32_t start_, const uint32_t max_);
     ~semaphore();
 };
@@ -256,6 +269,7 @@ public:
     int32_t free_cnt_get(void);
     int32_t used_cnt_get(void);
 
+    fmem_base(void) = delete;
     fmem_base(void *_start_addr, uint32_t _block_size, uint32_t _blocks_cnt);
     ~fmem_base();
 };
@@ -355,6 +369,7 @@ public:
         return (_item.owner == this) ? _item.release() : rc::illegal_use;
     }
     
+    fmem_typed(void) = delete;
     fmem_typed(T *const _start_addr, const uint32_t _blocks_cnt):
         fmem_base(static_cast<void *>(_start_addr), sizeof(T), _blocks_cnt){}
 };
@@ -377,9 +392,17 @@ class eventgrp
 private:
     __tn::TN_EventGrp eventgrp_;
 
-    friend class queue_base;
     /// @todo заменить на:
     /// friend rc queue_base::evengrp_connect(eventgrp &_eventgrp, const uint32_t _pattern);
+    friend class queue_base;
+
+    enum class op_mode
+    {
+        set    = __tn::TN_EVENTGRP_OP_SET,
+        clr    = __tn::TN_EVENTGRP_OP_CLEAR,
+        toggle = __tn::TN_EVENTGRP_OP_TOGGLE,
+    };
+    rc modify(const op_mode _op_mode, const uint32_t _pattern);
 
 public:
     enum class wait_mode
@@ -390,16 +413,13 @@ public:
         w_and_clr = __tn::TN_EVENTGRP_WMODE_AND | __tn::TN_EVENTGRP_WMODE_AUTOCLR,
     };
 
-    enum class op_mode
-    {
-        set    = __tn::TN_EVENTGRP_OP_SET,
-        clr    = __tn::TN_EVENTGRP_OP_CLEAR,
-        toggle = __tn::TN_EVENTGRP_OP_TOGGLE,
-    };
+    eventgrp(void) = delete;
+    eventgrp(const uint32_t _pattern = 0);
+    rc wait(const uint32_t _pattern, const wait_mode _wait_mode, const uint32_t _timeout = nowait, uint32_t *const _f_pattern = nullptr);
+    rc set(const uint32_t _pattern);
+    rc clr(const uint32_t _pattern);
+    rc toggle(const uint32_t _pattern);
 
-    eventgrp(const uint32_t _pattern);
-    rc wait(const uint32_t _pattern, const wait_mode _wait_mode, uint32_t *const _f_pattern, const uint32_t _timeout = nowait);
-    rc modify(const op_mode _op_mode, const uint32_t _pattern);
     ~eventgrp();
 };
 
@@ -410,6 +430,7 @@ class queue_base
 private:
     __tn::TN_DQueue queue_;
 protected:
+    queue_base(void) = delete;
     queue_base(void **_p_fifo, const uint32_t);
     rc send(void *const _p_data, const uint32_t _timeout = nowait);
     rc receive(void **_pp_data, const uint32_t _timeout = nowait);
@@ -429,6 +450,7 @@ template <class T> class queue_typed: public queue_base
 static_assert(sizeof(T) <= sizeof(void *), "size of queue's item type must be less or equal than 4 bytes");
 
 public:
+    queue_typed(void) = delete;
     queue_typed(void *_p_fifo = nullptr, const uint32_t _items = 0): queue_base(&_p_fifo, _items)
     {}
 
@@ -444,12 +466,13 @@ public:
 };
 
 
-template <class T, uint32_t cnt> class queue: public queue_typed<T>
+//-- 4-byte queue
+template <class T, const uint32_t cnt> class queue: public queue_typed<T>
 {
 private:
     void *fifo_[cnt];
 public:
-    queue(): queue_typed<T>(fifo_, cnt){}
+    queue(void): queue_typed<T>(fifo_, cnt){}
 };
 
 
@@ -458,30 +481,32 @@ template <class T> class fmem_queue_typed: public queue_base
 public:
     fmem_typed<T> &fmem;
 
+    fmem_queue_typed(void) = delete;
     fmem_queue_typed(fmem_typed<T> &_fmem, T *_p_fifo = nullptr, const uint32_t _items = 0):
         fmem(_fmem),
         queue_base(&_p_fifo, _items)
     {}
 
-    rc send_acquire(T &_data, const uint32_t _timeout = nowait)
+    rc send(T &_data, const uint32_t _timeout = nowait)
     {
         return queue_base::send_acquire(fmem, &_data, _timeout);
     }
     
-    rc receive_release(T &_data, const uint32_t _timeout = nowait)
+    rc receive(T &_data, const uint32_t _timeout = nowait)
     {
         return queue_base::receive_release(fmem, &_data, _timeout);
     }
 };
 
 
-template <class T, uint32_t queue_cnt, uint32_t fmem_cnt> class fmem_queue: public fmem_queue_typed<T>
+//-- more 4-byte queue
+template <class T, uint32_t const queue_cnt, const uint32_t fmem_cnt> class fmem_queue: public fmem_queue_typed<T>
 {
 private:
     void *fifo_[queue_cnt];
     fmem<T, fmem_cnt> fmem_;
 public:
-    fmem_queue(): fmem_queue_typed<T>(fmem_, fifo_, queue_cnt){}
+    fmem_queue(void): fmem_queue_typed<T>(fmem_, fifo_, queue_cnt){}
 };
 
 //-- timers from tn_tmer.h ------------------------------------------------------------------------/
@@ -496,6 +521,7 @@ private:
     static void handler_(__tn::TN_Timer *_timer, void *_arg);
 
 public:
+    timer_base(void) = delete;
     timer_base(void(*_func)(void*), const uint32_t _timeout = os::nowait, const repeat_timer _repeat = os::norepeat);
     rc start(void);
     rc start(const uint32_t _timeout);
@@ -510,8 +536,7 @@ public:
 template <class T, const uint32_t _timeout = os::nowait, const repeat_timer _repeat = os::norepeat> class timer : public timer_base
 {
 public:
-    timer():
-        timer_base(member_to_func(&T::timer_func), _timeout, _repeat){}
+    timer(void): timer_base(member_to_func(&T::timer_func), _timeout, _repeat){}
 };
 
 

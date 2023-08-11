@@ -319,7 +319,14 @@ eventgrp::eventgrp(const uint32_t _pattern)
     }
 }
 
-rc eventgrp::wait(const uint32_t _pattern, const wait_mode _wait_mode, uint32_t *const _f_pattern, const uint32_t _timeout)
+rc eventgrp::modify(const op_mode _op_mode, const uint32_t _pattern)
+{
+    return static_cast<rc>(__tn::tn_is_task_context() ?
+        __tn::tn_eventgrp_modify(&eventgrp_,  static_cast<__tn::TN_EGrpOp>(_op_mode), _pattern) :
+        __tn::tn_eventgrp_imodify(&eventgrp_, static_cast<__tn::TN_EGrpOp>(_op_mode), _pattern));
+}
+
+rc eventgrp::wait(const uint32_t _pattern, const wait_mode _wait_mode, const uint32_t _timeout, uint32_t *const _f_pattern)
 {
     if (_timeout == os::nowait)
     {
@@ -337,12 +344,9 @@ rc eventgrp::wait(const uint32_t _pattern, const wait_mode _wait_mode, uint32_t 
     }
 }
 
-rc eventgrp::modify(const op_mode _op_mode, const uint32_t _pattern)
-{
-    return static_cast<rc>(__tn::tn_is_task_context() ?
-        __tn::tn_eventgrp_modify(&eventgrp_,  static_cast<__tn::TN_EGrpOp>(_op_mode), _pattern) :
-        __tn::tn_eventgrp_imodify(&eventgrp_, static_cast<__tn::TN_EGrpOp>(_op_mode), _pattern));
-}
+rc eventgrp::set(const uint32_t _pattern) {return modify(op_mode::set, _pattern);}
+rc eventgrp::clr(const uint32_t _pattern) {return modify(op_mode::clr, _pattern);}
+rc eventgrp::toggle(const uint32_t _pattern) {return modify(op_mode::toggle, _pattern);}
 
 eventgrp::~eventgrp()
 {
