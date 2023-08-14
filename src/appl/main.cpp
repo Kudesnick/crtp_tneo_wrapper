@@ -8,10 +8,11 @@
 #include "csp_spi.h"
 
 #define TEST_TIMER  (1)
-#define TEST_YIELD  (0)
+#define TEST_YIELD  (1)
 #define TEST_PRINTF (1)
 #define TEST_FMEM   (1)
 #define TEST_SPI    (1)
+#define TEST_QUEUE  (1)
 
 //-- timer test -----------------------------------------------------------------------------------/
 
@@ -180,6 +181,45 @@ static struct spi_task: os::task<spi_task, STK(0x60)>
     }
     using os::task<spi_task, STK(0x60)>::task;
 } spi_task_obj = "spi_task";
+#endif
+
+//-- task for queue testing ------------------------------------------------------------/
+
+#if TEST_QUEUE
+static struct queue_task: os::task<queue_task, STK(0xF0)>
+{
+    os::queue<uint32_t, 4> small_queue;
+    
+    void task_func(void) __attribute__((__noreturn__))
+    {
+        for(;;)
+        {
+            sleep(1000);
+            for (uint32_t i = 0; i < 6; i++, sleep(100))
+            {
+                auto res = small_queue.send(i, 300);
+                switch(res)
+                {
+                    case os::rc::ok: printf("%d value sended to small_queue\n", i); break;
+                    case os::rc::timeout: printf("%d value not sended to small_queue (timeout)\n", i); break;
+                    default: printf("Test failed! %d value not sended to small_queue (something wrong)\n", i); break;
+                }
+            }
+            for (uint32_t i = 0; i < 6; i++, sleep(100))
+            {
+                uint32_t tmp;
+                auto res = small_queue.receive(tmp, 300);
+                switch(res)
+                {
+                    case os::rc::ok: printf("%d value received from small_queue\n", tmp); break;
+                    case os::rc::timeout: printf("Value not received from small_queue (timeout)\n"); break;
+                    default: printf("Test failed! Value not received from small_queue (something wrong)\n", i); break;
+                }
+            }
+        }
+    }
+    using os::task<queue_task, STK(0xF0)>::task;
+} queue_task_obj = "queue_task";
 #endif
 
 //-- init callbacks -------------------------------------------------------------------------------/

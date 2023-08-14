@@ -431,7 +431,7 @@ private:
     __tn::TN_DQueue queue_;
 protected:
     queue_base(void) = delete;
-    queue_base(void **_p_fifo, const uint32_t);
+    queue_base(void **_pp_fifo, const uint32_t);
     rc send(void *const _p_data, const uint32_t _timeout = nowait);
     rc receive(void **_pp_data, const uint32_t _timeout = nowait);
     rc send_acquire(fmem_base &_fmem, void *_p_data, const uint32_t _timeout = nowait);
@@ -451,7 +451,7 @@ static_assert(sizeof(T) <= sizeof(void *), "size of queue's item type must be le
 
 public:
     queue_typed(void) = delete;
-    queue_typed(void *_p_fifo = nullptr, const uint32_t _items = 0): queue_base(&_p_fifo, _items)
+    queue_typed(void **_p_fifo = nullptr, const uint32_t _items = 0): queue_base(_p_fifo, _items)
     {}
 
     rc send(T &_data, const uint32_t _timeout = nowait)

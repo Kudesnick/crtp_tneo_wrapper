@@ -358,9 +358,9 @@ eventgrp::~eventgrp()
 
 //-- queue from tn_dqueue.h -----------------------------------------------------------------------/
 
-queue_base::queue_base(void **_p_fifo, const uint32_t _items)
+queue_base::queue_base(void **_pp_fifo, const uint32_t _items)
 {
-    if (__tn::tn_queue_create(&queue_, _p_fifo, static_cast<int32_t>(_items)) != __tn::TN_RC_OK)
+    if (__tn::tn_queue_create(&queue_, _pp_fifo, static_cast<int32_t>(_items)) != __tn::TN_RC_OK)
     {
          PRINTFAULT("queue not created\n");
     }

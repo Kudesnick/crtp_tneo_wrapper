@@ -337,8 +337,8 @@
             <v6WtE>0</v6WtE>
             <v6Rtti>0</v6Rtti>
             <VariousControls>
-              <MiscControls>-Wno-c++98-compat -Wno-c++98-compat-pedantic -Wno-c++20-designator -Wno-padded -Wno-declaration-after-statement -Wno-global-constructors -Wno-exit-time-destructors -Wno-gnu-zero-variadic-macro-arguments</MiscControls>
-              <Define>DEBUG, HSE_VALUE=25000000, PRINTF_INCLUDE_CONFIG_H, USE_OS</Define>
+              <MiscControls>-include ../src/os/global.h</MiscControls>
+              <Define>DEBUG</Define>
               <Undefine></Undefine>
               <IncludePath>..\hal_inc;..\printf;..\rtt;..\src\bsp;..\src\csp;..\src\os;..\tneo\src;..\tneo\src\arch;..\tneo\src\arch\cortex_m;..\tneo\src\core;..\tneo\src\core\internal</IncludePath>
             </VariousControls>
@@ -550,6 +550,11 @@
               <FileName>crtp.sct</FileName>
               <FileType>5</FileType>
               <FilePath>..\src\os\crtp.sct</FilePath>
+            </File>
+            <File>
+              <FileName>global.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\src\os\global.h</FilePath>
             </File>
             <File>
               <FileName>misc.h</FileName>
