@@ -451,7 +451,7 @@ static_assert(sizeof(T) <= sizeof(void *), "size of queue's item type must be le
 
 public:
     queue_typed(void) = delete;
-    queue_typed(void **_p_fifo = nullptr, const uint32_t _items = 0): queue_base(_p_fifo, _items)
+    queue_typed(void **_pp_fifo = nullptr, const uint32_t _items = 0): queue_base(_pp_fifo, _items)
     {}
 
     rc send(T &_data, const uint32_t _timeout = nowait)
@@ -482,9 +482,9 @@ public:
     fmem_typed<T> &fmem;
 
     fmem_queue_typed(void) = delete;
-    fmem_queue_typed(fmem_typed<T> &_fmem, T *_p_fifo = nullptr, const uint32_t _items = 0):
-        fmem(_fmem),
-        queue_base(&_p_fifo, _items)
+    fmem_queue_typed(fmem_typed<T> &_fmem, T **_pp_fifo = nullptr, const uint32_t _items = 0):
+        queue_base(reinterpret_cast<void **>(_pp_fifo), _items),
+        fmem(_fmem)
     {}
 
     rc send(T &_data, const uint32_t _timeout = nowait)
@@ -503,7 +503,7 @@ public:
 template <class T, uint32_t const queue_cnt, const uint32_t fmem_cnt> class fmem_queue: public fmem_queue_typed<T>
 {
 private:
-    void *fifo_[queue_cnt];
+    T *fifo_[queue_cnt];
     fmem<T, fmem_cnt> fmem_;
 public:
     fmem_queue(void): fmem_queue_typed<T>(fmem_, fifo_, queue_cnt){}

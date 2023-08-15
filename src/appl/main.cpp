@@ -13,6 +13,7 @@
 #define TEST_FMEM   (1)
 #define TEST_SPI    (1)
 #define TEST_QUEUE  (1)
+#define TEST_FQUEUE (1)
 
 //-- timer test -----------------------------------------------------------------------------------/
 
@@ -220,6 +221,51 @@ static struct queue_task: os::task<queue_task, STK(0xF0)>
     }
     using os::task<queue_task, STK(0xF0)>::task;
 } queue_task_obj = "queue_task";
+#endif
+
+//-- task for fmem_queue testing ------------------------------------------------------------/
+
+#if TEST_FQUEUE
+static struct fqueue_task: os::task<fqueue_task, STK(0x200)>
+{
+    struct msg_t
+    {
+        uint32_t f0, f1, f2;
+    };
+    
+    os::fmem_queue<msg_t, 4, 4> large_queue;
+    
+    void task_func(void) __attribute__((__noreturn__))
+    {
+        for(;;)
+        {
+            sleep(1000);
+            for (uint32_t i = 1; i < 7; i++, sleep(100))
+            {
+                msg_t msg = {i, i << 1, i << 2};
+                auto res = large_queue.send(msg, 300);
+                switch(res)
+                {
+                    case os::rc::ok: printf("{%d, %d, %d} value sended to small_queue\n", msg.f0, msg.f1, msg.f2); break;
+                    case os::rc::timeout: printf("{%d, %d, %d} value not sended to small_queue (timeout)\n", msg.f0, msg.f1, msg.f2); break;
+                    default: printf("Test failed! {%d, %d, %d} value not sended to small_queue (something wrong)\n", msg.f0, msg.f1, msg.f2); break;
+                }
+            }
+            for (uint32_t i = 0; i < 6; i++, sleep(100))
+            {
+                msg_t msg;
+                auto res = large_queue.receive(msg, 300);
+                switch(res)
+                {
+                    case os::rc::ok: printf("{%d, %d, %d} value received from small_queue\n", msg.f0, msg.f1, msg.f2); break;
+                    case os::rc::timeout: printf("Value not received from small_queue (timeout)\n"); break;
+                    default: printf("Test failed! Value not received from small_queue (something wrong)\n", i); break;
+                }
+            }
+        }
+    }
+    using os::task<fqueue_task, STK(0x200)>::task;
+} fqueue_task_obj = "fqueue_task";
 #endif
 
 //-- init callbacks -------------------------------------------------------------------------------/
