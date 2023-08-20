@@ -1,14 +1,18 @@
 #pragma once
 
 #include <stdint.h>
+#include "os.h"
+#include "misc.h"
 
 namespace bsp
 {
 
 class mx25
 {
-public:
-    enum class cmd: uint8_t
+protected:
+    os::mutex mutex;
+
+    enum cmd: uint8_t
     {
         // Read/Write Array Commands
         READ            = 0x03, // normal read
@@ -36,7 +40,7 @@ public:
         RES             = 0xAB, // read electronic ID
         REMS            = 0x90, // read electronic manufacturer & device ID
         RDSFDP          = 0x5A, // Read SFDP Mode (JEDEC Standard)
-        ENSO            = 0xB1, // enter secured OTP 
+        ENSO            = 0xB1, // enter secured OTP
         EXSO            = 0xC1, // exit secured OTP
         RDSCUR          = 0x2B, // read security register
         WRSCUR          = 0x2F, // write security register
@@ -54,7 +58,18 @@ public:
         RSTEN           = 0x66, // Reset Enable
         RST             = 0x99, // Reset Memory
     };
-    mx25();
+public:
+    res reset(const cmd _reset_for = NOP);
+
+    struct id
+    {
+        uint8_t manufacturer_id;
+        uint8_t type;
+        uint8_t density;
+    };
+    res read_id(id &_id);
+
+    mx25(void);
     ~mx25();
 };
 

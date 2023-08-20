@@ -13,10 +13,11 @@ namespace spi
     void cs_on(void);
     void cs_off(void);
 
-    res send(const uint8_t _source[], const uint32_t _len, uint8_t *const _dest = nullptr);
-    res read(const uint8_t _dummy, uint8_t _dest[], const uint32_t _len);
+    res send(const uint8_t _cmd);
+    res send(const uint8_t *const _source, const uint32_t _len, uint8_t *const _dest = nullptr);
+    res read(uint8_t *const _dest, const uint32_t _len, const uint8_t _dummy = 0);
 
-    void cb_complete(uint8_t *const _dest, const uint32_t _dest_len); // weak
+    void cb_complete(void); // weak
 }
 
 }; // namespace csp
