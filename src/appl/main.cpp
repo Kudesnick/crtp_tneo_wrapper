@@ -8,12 +8,13 @@
 #include "csp_spi.h"
 
 #define TEST_TIMER  (1)
-#define TEST_YIELD  (1)
+#define TEST_YIELD  (0)
 #define TEST_PRINTF (1)
 #define TEST_FMEM   (1)
 #define TEST_SPI    (1)
 #define TEST_QUEUE  (1)
 #define TEST_FQUEUE (1)
+#define TEST_SUSP   (1)
 
 //-- timer test -----------------------------------------------------------------------------------/
 
@@ -43,14 +44,18 @@ static struct blink_task: os::task<blink_task, STK(0x70)>
 //-- tasks for yeld testing -----------------------------------------------------------------------/
 
 #if TEST_YIELD
-static struct  dtask: os::task<dtask, STK(0x58), os::priority::low>
+static struct  dtask: os::task<dtask, STK(0x58)>
 {
     void task_func(void) __attribute__((__noreturn__))
     {
         for(int i = 0;;i++) if (i & 1) yield();
     }
-    using os::task<dtask, STK(0x58), os::priority::low>::task;
-} dtask_obj[] = {"dummy_task1", "dummy_task2"};
+    using os::task<dtask, STK(0x58)>::task;
+} dtask_obj[] =
+{
+    {"dummy_task1", os::priority::low},
+    {"dummy_task2", os::priority::low},
+};
 #endif
 
 //-- task for printf and mutex testing ------------------------------------------------------------/
@@ -226,7 +231,7 @@ static struct queue_task: os::task<queue_task, STK(0xF0)>
 //-- task for fmem_queue testing ------------------------------------------------------------/
 
 #if TEST_FQUEUE
-static struct fqueue_task: os::task<fqueue_task, STK(0x200)>
+static struct fqueue_task: os::task<fqueue_task, STK(0xF8)>
 {
     struct msg_t
     {
@@ -264,8 +269,33 @@ static struct fqueue_task: os::task<fqueue_task, STK(0x200)>
             }
         }
     }
-    using os::task<fqueue_task, STK(0x200)>::task;
+    using os::task<fqueue_task, STK(0xF8)>::task;
 } fqueue_task_obj = "fqueue_task";
+#endif
+
+//-- suspended task -------------------------------------------------------------------------------/ 
+
+#if TEST_SUSP
+static struct susp_ctl_task : os::task<susp_ctl_task, STK(0x60)>
+{
+    struct susp_task : os::task<susp_task, STK(0xC0)>
+    {
+        void task_func(void)
+        {
+            printf("susp_task is runing\n");
+        }
+        using os::task<susp_task, STK(0xC0)>::task;
+    } susp_task_obj = {"susp_task", os::priority::normal, os::task_base::opt::nostart};
+
+    void task_func(void) __attribute__((__noreturn__))
+    {
+        for (;;sleep(1000))
+        {
+            susp_task_obj.activate();
+        }
+    }
+    using os::task<susp_ctl_task, STK(0x60)>::task;
+} susp_ctl_task_obj = "susp_ctl_task";
 #endif
 
 //-- init callbacks -------------------------------------------------------------------------------/

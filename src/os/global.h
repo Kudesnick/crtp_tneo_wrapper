@@ -12,5 +12,5 @@
 #pragma clang diagnostic ignored "-Wglobal-constructors"
 #pragma clang diagnostic ignored "-Wexit-time-destructors"
 #pragma clang diagnostic ignored "-Wgnu-zero-variadic-macro-arguments"
-#pragma clang diagnostic ignored "-Wswitch-enum"
-// #pragma clang diagnostic ignored "-Wswitch"
+#pragma clang diagnostic ignored "-Wswitch-enum" // #pragma clang diagnostic ignored "-Wswitch"
+#pragma clang diagnostic ignored "-Wundef"

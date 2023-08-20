@@ -137,7 +137,12 @@ public:
         yield      = __tn::TN_TASK_STATE_YIELD,
         runtoyield = __tn::TN_TASK_STATE_RUNTOYIELD,
         err        = -1,
-        
+    };
+    
+    enum class opt: int8_t
+    {
+        nostart = 0,
+        start   = 1,
     };
 
     rc static sleep(const uint32_t _tick);
@@ -157,12 +162,12 @@ public:
 };
 
 
-template <typename T, uint32_t _stack_size, os::priority _priority = os::priority::normal>
+template <typename T, uint32_t _stack_size>
 class task : public task_base, private stack<_stack_size>
 {
 public:
-    task(void) = delete;
-    task(const char *const _name = nullptr)
+    task(void): task(nullptr){}
+    task(const char *const _name, const priority _priority = priority::normal, const opt _opt = opt::start)
     {
         if (__tn::tn_task_create_wname(
                 &task_,
@@ -171,6 +176,7 @@ public:
                 reinterpret_cast<__tn::TN_UWord *>(this->stack_ptr),
                 this->stack_size / sizeof(uint32_t),
                 this,
+                (_opt == opt::start) ? __tn::TN_TASK_CREATE_OPT_START : __tn::TN_TASK_CREATE_OPT_SUSPENDED,
                 _name
                 ) != __tn::TN_RC_OK)
         {
@@ -186,12 +192,12 @@ public:
 //-- kernel ---------------------------------------------------------------------------------------/
 
 template <class T, uint32_t _stack_size>
-class kernel: public task<T, _stack_size, priority::idle>
+class kernel: public task<T, _stack_size>
 {
 public:
     kernel(void) = delete;
     kernel(uint32_t *const _sys_stack_ptr, const uint32_t _sys_stack_size):
-        task<T, _stack_size, priority::idle>("idle")
+        task<T, _stack_size>("idle", priority::idle)
     {
         __tn::tn_arch_int_dis();
         static_cast<T*>(this)->hw_init();
