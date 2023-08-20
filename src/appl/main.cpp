@@ -6,15 +6,17 @@
 #include "os.h"
 #include "misc.h"
 #include "csp_spi.h"
+#include "mx25l128.h"
 
 #define TEST_TIMER  (1)
 #define TEST_YIELD  (0)
-#define TEST_PRINTF (1)
-#define TEST_FMEM   (1)
-#define TEST_SPI    (1)
-#define TEST_QUEUE  (1)
-#define TEST_FQUEUE (1)
-#define TEST_SUSP   (1)
+#define TEST_PRINTF (0)
+#define TEST_FMEM   (0)
+#define TEST_SPI    (0)
+#define TEST_MX25   (1)
+#define TEST_QUEUE  (0)
+#define TEST_FQUEUE (0)
+#define TEST_SUSP   (0)
 
 //-- timer test -----------------------------------------------------------------------------------/
 
@@ -163,7 +165,7 @@ static struct spi_task: os::task<spi_task, STK(0x60)>
     static inline uint8_t RDID[] = {0x9F, 0x00, 0x00, 0x00};
     static inline uint8_t REMS[] = {0x90, 0x00, 0x00, 0x00, 0x00, 0x00};
 
-    void task_func(void) __attribute__((__noreturn__))
+    void task_func(void)
     {
         csp::spi::init();
         sleep(100);
@@ -179,14 +181,29 @@ static struct spi_task: os::task<spi_task, STK(0x60)>
         csp::spi::send(REMS, sizeof(REMS), REMS);
         sleep(100);
         csp::spi::cs_off();
-        
-        for(;;)
-        {
-            sleep(500);
-        }
     }
     using os::task<spi_task, STK(0x60)>::task;
 } spi_task_obj = "spi_task";
+#endif
+
+//-- task for mx25l128 testing ------------------------------------------------------------/
+
+#if TEST_MX25
+static struct mx25_task: os::task<mx25_task, STK(0x200)>
+{
+private:
+    bsp::mx25 flash;
+public:    
+    void task_func(void)
+    {
+        flash.reset();
+        bsp::mx25::id id;
+        flash.read_id(id);
+        
+        printf("manufacturer id: 0x%X, type: 0x%X, density: 0x%X\n", id.manufacturer_id, id.type, id.density);
+    }
+    using os::task<mx25_task, STK(0x200)>::task;
+} mx25_task_obj = "mx25_task";
 #endif
 
 //-- task for queue testing ------------------------------------------------------------/

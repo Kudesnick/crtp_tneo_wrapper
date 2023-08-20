@@ -9,12 +9,12 @@ res mx25::reset(const cmd _reset_for)
 
     csp::spi::cs_on();
     csp::spi::send(RSTEN);
-    /// @todo
+    os::task_base::sleep(2); /// @todo
     csp::spi::cs_off();
     os::task_base::sleep(1); // tSHSL < 30 ns
     csp::spi::cs_on();
     csp::spi::send(RST);
-    /// @todo
+    os::task_base::sleep(2); /// @todo
     csp::spi::cs_off();
     switch (_reset_for) // tREADY2
     {
@@ -35,9 +35,9 @@ res mx25::read_id(mx25::id &_id)
     
     csp::spi::cs_on();
     csp::spi::send(RDID);
-    /// @todo
+    os::task_base::sleep(2); /// @todo
     csp::spi::read(reinterpret_cast<uint8_t *>(&_id), sizeof(_id));
-    /// @todo
+    os::task_base::sleep(2); /// @todo
     csp::spi::cs_off();
     
     return mutex.release() == os::rc::ok ? res::ok : res::err;
