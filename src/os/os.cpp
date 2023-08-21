@@ -283,6 +283,11 @@ rc fmem_base::append(void *_p_data)
     return static_cast<rc>(__tn::tn_is_task_context() ? __tn::tn_fmem_append(&fmem_, _p_data) : __tn::tn_fmem_iappend(&fmem_, _p_data));
 }
 
+rc fmem_base::reset(void)
+{
+    return static_cast<rc>(__tn::tn_fmem_reset(&fmem_));
+}
+
 int32_t fmem_base::free_cnt_get(void)
 {
     return __tn::tn_fmem_free_blocks_cnt_get(&fmem_);
@@ -453,6 +458,11 @@ rc queue_base::evengrp_connect(eventgrp &_eventgrp, const uint32_t _pattern)
 rc queue_base::evengrp_disconnect(void)
 {
     return static_cast<rc>(__tn::tn_queue_eventgrp_disconnect(&queue_));
+}
+
+rc queue_base::reset(void)
+{
+    return static_cast<rc>(__tn::tn_queue_reset(&queue_));
 }
 
 queue_base::~queue_base()

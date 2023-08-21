@@ -220,6 +220,7 @@ static struct queue_task: os::task<queue_task, STK(0xF0)>
         for(;;)
         {
             sleep(1000);
+            
             for (uint32_t i = 0; i < 6; i++, sleep(100))
             {
                 auto res = small_queue.send(i, 300);
@@ -230,6 +231,21 @@ static struct queue_task: os::task<queue_task, STK(0xF0)>
                     default: printf("Test failed! %d value not sended to small_queue (something wrong)\n", i); break;
                 }
             }
+            
+            small_queue.reset();
+            printf("small_queue is reset\n");
+            
+            for (uint32_t i = 0; i < 6; i++, sleep(100))
+            {
+                auto res = small_queue.send(i, 300);
+                switch(res)
+                {
+                    case os::rc::ok: printf("%d value sended to small_queue\n", i); break;
+                    case os::rc::timeout: printf("%d value not sended to small_queue (timeout)\n", i); break;
+                    default: printf("Test failed! %d value not sended to small_queue (something wrong)\n", i); break;
+                }
+            }
+            
             for (uint32_t i = 0; i < 6; i++, sleep(100))
             {
                 uint32_t tmp;
@@ -264,6 +280,7 @@ static struct fqueue_task: os::task<fqueue_task, STK(0xF8)>
         for(;;)
         {
             sleep(1000);
+            
             for (uint32_t i = 1; i < 7; i++, sleep(100))
             {
                 msg_t msg = {i, i << 1, i << 2};
@@ -275,6 +292,22 @@ static struct fqueue_task: os::task<fqueue_task, STK(0xF8)>
                     default: printf("Test failed! {%d, %d, %d} value not sended to small_queue (something wrong)\n", msg.f0, msg.f1, msg.f2); break;
                 }
             }
+            
+            large_queue.reset();
+            printf("large_queue is reset\n");
+            
+            for (uint32_t i = 1; i < 7; i++, sleep(100))
+            {
+                msg_t msg = {i, (i << 1) + 0xF0, (i << 2) + 0xF0};
+                auto res = large_queue.send(msg, 300);
+                switch(res)
+                {
+                    case os::rc::ok: printf("{%d, %d, %d} value sended to small_queue\n", msg.f0, msg.f1, msg.f2); break;
+                    case os::rc::timeout: printf("{%d, %d, %d} value not sended to small_queue (timeout)\n", msg.f0, msg.f1, msg.f2); break;
+                    default: printf("Test failed! {%d, %d, %d} value not sended to small_queue (something wrong)\n", msg.f0, msg.f1, msg.f2); break;
+                }
+            }
+            
             for (uint32_t i = 0; i < 6; i++, sleep(100))
             {
                 msg_t msg;

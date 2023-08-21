@@ -271,6 +271,7 @@ public:
     rc acquire_memcpy(void **_p_data, void *_p_source, const uint32_t _timeout = nowait);
     rc release(void *_p_data);
     rc append(void *_p_data);
+    rc reset(void);
 
     int32_t free_cnt_get(void);
     int32_t used_cnt_get(void);
@@ -447,6 +448,7 @@ public:
     int32_t used_cnt_get(void);
     rc evengrp_connect(eventgrp &_eventgrp, const uint32_t _pattern);
     rc evengrp_disconnect(void);
+    rc reset(void);
     ~queue_base();
 };
 
@@ -501,6 +503,13 @@ public:
     rc receive(T &_data, const uint32_t _timeout = nowait)
     {
         return queue_base::receive_release(fmem, &_data, _timeout);
+    }
+
+    rc reset(void)
+    {
+        auto res = queue_base::reset();
+        if (res == os::rc::ok) res = fmem.reset();
+        return res;
     }
 };
 
