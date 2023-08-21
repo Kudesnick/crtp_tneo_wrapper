@@ -156,7 +156,7 @@ static struct fmem_task: os::task<fmem_task, STK(0x130)>
 } fmem_task_obj = "fmem_task";
 #endif
 
-//-- task for SPI testing ------------------------------------------------------------/
+//-- task for SPI testing -------------------------------------------------------------------------/
 
 #if TEST_SPI
 static struct spi_task: os::task<spi_task, STK(0x60)>
@@ -186,27 +186,29 @@ static struct spi_task: os::task<spi_task, STK(0x60)>
 } spi_task_obj = "spi_task";
 #endif
 
-//-- task for mx25l128 testing ------------------------------------------------------------/
+//-- task for mx25l128 testing --------------------------------------------------------------------/
 
 #if TEST_MX25
-static struct mx25_task: os::task<mx25_task, STK(0x200)>
+static struct mx25_task: os::task<mx25_task, STK(0xF8)>
 {
 private:
     bsp::mx25 flash;
 public:    
     void task_func(void)
     {
+        sleep(1_sec);
+
         flash.reset();
         bsp::mx25::id id;
         flash.read_id(id);
         
         printf("manufacturer id: 0x%X, type: 0x%X, density: 0x%X\n", id.manufacturer_id, id.type, id.density);
     }
-    using os::task<mx25_task, STK(0x200)>::task;
+    using os::task<mx25_task, STK(0xF8)>::task;
 } mx25_task_obj = "mx25_task";
 #endif
 
-//-- task for queue testing ------------------------------------------------------------/
+//-- task for queue testing -----------------------------------------------------------------------/
 
 #if TEST_QUEUE
 static struct queue_task: os::task<queue_task, STK(0xF0)>
@@ -245,7 +247,7 @@ static struct queue_task: os::task<queue_task, STK(0xF0)>
 } queue_task_obj = "queue_task";
 #endif
 
-//-- task for fmem_queue testing ------------------------------------------------------------/
+//-- task for fmem_queue testing ------------------------------------------------------------------/
 
 #if TEST_FQUEUE
 static struct fqueue_task: os::task<fqueue_task, STK(0xF8)>

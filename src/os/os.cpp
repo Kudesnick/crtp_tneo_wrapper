@@ -311,6 +311,8 @@ fmem_base::~fmem_base()
 
 //-- event group from tn_eventgrp.h ---------------------------------------------------------------/
 
+eventgrp::eventgrp(void): eventgrp(0) {}
+
 eventgrp::eventgrp(const uint32_t _pattern)
 {
     if (__tn::tn_eventgrp_create(&eventgrp_, _pattern) != __tn::TN_RC_OK)

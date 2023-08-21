@@ -419,8 +419,8 @@ public:
         w_and_clr = __tn::TN_EVENTGRP_WMODE_AND | __tn::TN_EVENTGRP_WMODE_AUTOCLR,
     };
 
-    eventgrp(void) = delete;
-    eventgrp(const uint32_t _pattern = 0);
+    eventgrp(void);
+    eventgrp(const uint32_t _pattern);
     rc wait(const uint32_t _pattern, const wait_mode _wait_mode, const uint32_t _timeout = nowait, uint32_t *const _f_pattern = nullptr);
     rc set(const uint32_t _pattern);
     rc clr(const uint32_t _pattern);

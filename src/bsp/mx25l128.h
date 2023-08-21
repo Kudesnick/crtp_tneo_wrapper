@@ -3,6 +3,7 @@
 #include <stdint.h>
 #include "os.h"
 #include "misc.h"
+#include "csp_spi.h"
 
 namespace bsp
 {
@@ -11,8 +12,13 @@ class mx25
 {
 protected:
     os::mutex mutex;
+    static inline os::eventgrp waitevnt;
+    const uint32_t event_pattern;
+    static inline constexpr auto def_delay = 500;
 
-    enum cmd: uint8_t
+    friend void csp::spi::cb_complete(void);
+
+    enum class cmd: uint8_t
     {
         // Read/Write Array Commands
         READ            = 0x03, // normal read
@@ -58,8 +64,11 @@ protected:
         RSTEN           = 0x66, // Reset Enable
         RST             = 0x99, // Reset Memory
     };
+    
+    void send_wait(const uint32_t _tout = def_delay);
+    void send_cmd(const cmd _cmd);
 public:
-    res reset(const cmd _reset_for = NOP);
+    res reset(const cmd _reset_for = cmd::NOP);
 
     struct id
     {
@@ -69,7 +78,7 @@ public:
     };
     res read_id(id &_id);
 
-    mx25(void);
+    mx25(const uint32_t _evnt_pattern = 1);
     ~mx25();
 };
 

@@ -10,7 +10,7 @@ namespace csp //----------------------------------------------------------------
 
 namespace spi //------------------------------------------------------------------------------------
 {
-    
+
 static uint8_t dummy;
 
 static inline void irq_dma_reset(const uint8_t _strn)
@@ -97,19 +97,6 @@ res deinit(void)
     return res::err;
 }
 
-res send(const uint8_t _cmd)
-{
-    if (bb::get(SPI1->SR, SPI_SR_BSY)) return res::err;
-
-    SPI_DMA_RX->M0AR  = reinterpret_cast<uint32_t>(&dummy);
-    bb::clr(SPI_DMA_RX->CR, DMA_SxCR_MINC);
-
-    SPI_DMA_TX->M0AR  = reinterpret_cast<uint32_t>(&_cmd);
-    bb::set(SPI_DMA_TX->CR, DMA_SxCR_MINC);
-
-    dma_start(1);
-    return res::ok;
-}
 
 res send(const uint8_t *const _source, const uint32_t _len, uint8_t *const _dest)
 {
@@ -149,7 +136,7 @@ res read(uint8_t *const _dest, const uint32_t _len, const uint8_t _dummy)
     return res::ok;
 }
 
-__WEAK void cb_send(void)
+__WEAK void cb_complete(void)
 {
 }
 
@@ -163,7 +150,7 @@ extern "C" void SPI_DMA_RX_IRQHandler(void);
 void SPI_DMA_RX_IRQHandler(void)
 {
     csp::spi::irq_rx_reset();
-    csp::spi::cb_send();
+    csp::spi::cb_complete();
 }
 
 extern "C" void SPI_DMA_TX_IRQHandler(void);
