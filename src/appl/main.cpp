@@ -9,14 +9,14 @@
 #include "mx25l128.h"
 
 #define TEST_TIMER  (1)
-#define TEST_YIELD  (0)
-#define TEST_PRINTF (0)
-#define TEST_FMEM   (0)
-#define TEST_SPI    (0)
+#define TEST_YIELD  (1)
+#define TEST_PRINTF (1)
+#define TEST_FMEM   (1)
+#define TEST_SPI    (1)
 #define TEST_MX25   (1)
-#define TEST_QUEUE  (0)
-#define TEST_FQUEUE (0)
-#define TEST_SUSP   (0)
+#define TEST_QUEUE  (1)
+#define TEST_FQUEUE (1)
+#define TEST_SUSP   (1)
 
 //-- timer test -----------------------------------------------------------------------------------/
 
