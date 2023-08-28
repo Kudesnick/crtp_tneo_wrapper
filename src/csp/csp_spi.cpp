@@ -88,8 +88,8 @@ res init(void)
 }
 
 
-void cs_on(void) {gpio::set(SPI_PIN_NSS, false);};
-void cs_off(void) {gpio::set(SPI_PIN_NSS, true);};
+res cs_on(void) {gpio::set(SPI_PIN_NSS, false); return res::ok;};
+res cs_off(void) {gpio::set(SPI_PIN_NSS, true); return res::ok;};
 
 
 res deinit(void)

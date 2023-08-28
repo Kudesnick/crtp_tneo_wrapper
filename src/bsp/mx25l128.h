@@ -10,6 +10,8 @@ namespace bsp
 
 class mx25
 {
+private:
+    res result_;
 protected:
     os::mutex mutex;
     static inline os::eventgrp waitevnt;
@@ -65,18 +67,44 @@ protected:
         RST             = 0x99, // Reset Memory
     };
     
-    void send_wait(const uint32_t _tout = def_delay);
-    void send_cmd(const cmd _cmd);
+    res begin(void);
+    res end(void);
+    res send_wait(const uint32_t _tout = def_delay);
+    res send_cmd(const cmd _cmd);
+    void concat_addr(uint8_t _cmd[4], const uint32_t _addr);
 public:
-    res reset(const cmd _reset_for = cmd::NOP);
-
     struct id
     {
         uint8_t manufacturer_id;
         uint8_t type;
         uint8_t density;
     };
+
+    struct sr
+    {
+        uint8_t WIP : 1; ///< write in progress bit
+        uint8_t WEL : 1; ///< write enable latch
+        uint8_t BP  : 4; ///< level of protected block
+        uint8_t QE  : 1; ///< Quad Enable
+        uint8_t SRWD: 1; ///< status register write protec
+    };
+
+    struct cr
+    {
+        uint8_t ODS: 2; ///< output driver strength
+        uint8_t    : 1; ///< 
+        uint8_t TB : 1; ///< top/bottom selected
+        uint8_t TBE: 1; ///< Preamble bit Enable
+        uint8_t    : 1; ///< 
+        uint8_t DC : 2; ///< Dummy cycle
+    };
+
+    res reset(const cmd _reset_for = cmd::NOP);
     res read_id(id &_id);
+    res read_sr(sr &_sr);
+    res read_cr(cr &_cr);
+    res read(const uint32_t _addr, uint8_t *const _buf, const uint32_t _len);
+    res write(const uint32_t _addr, uint8_t *const _buf, const uint8_t _len);
 
     mx25(const uint32_t _evnt_pattern = 1);
     ~mx25();

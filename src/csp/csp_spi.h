@@ -10,8 +10,8 @@ namespace spi
 {
     res init(void);
     res deinit(void);
-    void cs_on(void);
-    void cs_off(void);
+    res cs_on(void);
+    res cs_off(void);
 
     res send(const uint8_t *const _source, const uint32_t _len, uint8_t *const _dest = nullptr);
     res read(uint8_t *const _dest, const uint32_t _len, const uint8_t _dummy = 0);

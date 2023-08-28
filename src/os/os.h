@@ -5,6 +5,8 @@
 #include <cstddef>
 #include <type_traits>
 
+#include "misc.h"
+
 namespace __tn
 {
 #include "tn.h"
@@ -87,10 +89,16 @@ enum wait: uint32_t
     infinitely = TN_WAIT_INFINITE,
 };
 
-enum repeat_timer: bool
+enum repeat_timer: int8_t
 {
-    repeat = true,
-    norepeat = false,
+    norepeat = 0,
+    repeat   = 1,
+};
+
+enum class opt: int8_t
+{
+    nostart = 0,
+    start   = 1,
 };
 
 void tick(void); // tn_tick_int_processing
@@ -138,12 +146,6 @@ public:
         runtoyield = __tn::TN_TASK_STATE_RUNTOYIELD,
         err        = -1,
     };
-    
-    enum class opt: int8_t
-    {
-        nostart = 0,
-        start   = 1,
-    };
 
     rc static sleep(const uint32_t _tick);
     rc static yield(void);
@@ -162,7 +164,7 @@ public:
 };
 
 
-template <typename T, uint32_t _stack_size>
+template <class T, uint32_t _stack_size>
 class task : public task_base, private stack<_stack_size>
 {
 public:
@@ -524,11 +526,11 @@ public:
     fmem_queue(void): fmem_queue_typed<T>(fmem_, fifo_, queue_cnt){}
 };
 
-//-- timers from tn_tmer.h ------------------------------------------------------------------------/
+//-- timers from tn_timer.h ------------------------------------------------------------------------/
 
 class timer_base
 {
-private:
+protected:
     __tn::TN_Timer timer_;
     uint32_t timeout_;
     repeat_timer repeat_;
@@ -548,10 +550,35 @@ public:
 };
 
 
-template <class T, const uint32_t _timeout = os::nowait, const repeat_timer _repeat = os::norepeat> class timer : public timer_base
+template <class T, const uint32_t _timeout = os::nowait, const repeat_timer _repeat = os::norepeat, const opt _opt = opt::nostart> class timer : public timer_base
 {
 public:
-    timer(void): timer_base(member_to_func(&T::timer_func), _timeout, _repeat){}
+    timer(void): timer_base(member_to_func(&T::timer_func), _timeout, _repeat)
+    {
+        if constexpr (_timeout != os::nowait && _timeout != os::infinitely && _opt == opt::start)
+        {
+            if (__tn::tn_timer_start(&timer_, _timeout) != __tn::TN_RC_OK)
+            {
+                PRINTFAULT("timer not started after created\n");
+            }
+        }
+    }
+
+    timer(const uint32_t _i_timeout, const repeat_timer _i_repeat = os::norepeat):
+        timer_base(member_to_func(&T::timer_func), _i_timeout, _i_repeat)
+    {}
+
+    timer(const uint32_t _i_timeout, const repeat_timer _i_repeat, const opt _i_opt = opt::nostart):
+        timer_base(member_to_func(&T::timer_func), _i_timeout, _i_repeat)
+    {
+        if (_i_timeout != os::nowait && _i_timeout != os::infinitely && _i_opt == opt::start)
+        {
+            if (__tn::tn_timer_start(&timer_, _i_timeout) != __tn::TN_RC_OK)
+            {
+                PRINTFAULT("timer not started after created\n");
+            }
+        }
+    }
 };
 
 

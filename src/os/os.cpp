@@ -473,7 +473,7 @@ queue_base::~queue_base()
     }
 }
 
-//-- timers from tn_tmer.h ------------------------------------------------------------------------/
+//-- timers from tn_timer.h ------------------------------------------------------------------------/
 
 void timer_base::handler_(__tn::TN_Timer *_timer, void *_func)
 {
@@ -500,16 +500,6 @@ timer_base::timer_base(void(*_func)(void*), const uint32_t _timeout, const repea
             ) != __tn::TN_RC_OK)
     {
         PRINTFAULT("timer not created\n");
-    }
-    else
-    {
-        if (_timeout != os::nowait)
-        {
-            if (__tn::tn_timer_start(&timer_, _timeout) != __tn::TN_RC_OK)
-            {
-                PRINTFAULT("timer not started after created\n");
-            }
-        }
     }
 }
 
