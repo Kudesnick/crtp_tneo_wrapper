@@ -82,7 +82,7 @@ static struct printf_task: os::task<printf_task, STK(0xF8)>
 //-- task for fmem pool testing -------------------------------------------------------------------/
 
 #if TEST_FMEM
-static struct fmem_task: os::task<fmem_task, STK(0x130)>
+static struct fmem_task: os::task<fmem_task, STK(0x120)>
 {
     struct item_t
     {
@@ -152,14 +152,14 @@ static struct fmem_task: os::task<fmem_task, STK(0x130)>
             sleep(500);
         }
     }
-    using os::task<fmem_task, STK(0x130)>::task;
+    using os::task<fmem_task, STK(0x120)>::task;
 } fmem_task_obj = "fmem_task";
 #endif
 
 //-- task for SPI testing -------------------------------------------------------------------------/
 
 #if TEST_SPI
-static struct spi_task: os::task<spi_task, STK(0x60)>
+static struct spi_task: os::task<spi_task, STK(0x68)>
 {
     static inline uint8_t RES[]  = {0xAB, 0x00, 0x00, 0x00, 0x00};
     static inline uint8_t RDID[] = {0x9F, 0x00, 0x00, 0x00};
@@ -182,7 +182,7 @@ static struct spi_task: os::task<spi_task, STK(0x60)>
         sleep(100);
         csp::spi::cs_off();
     }
-    using os::task<spi_task, STK(0x60)>::task;
+    using os::task<spi_task, STK(0x68)>::task;
 } spi_task_obj = "spi_task";
 #endif
 
@@ -268,9 +268,10 @@ static struct queue_task: os::task<queue_task, STK(0xF0)>
 #if TEST_FQUEUE
 static struct fqueue_task: os::task<fqueue_task, STK(0xF8)>
 {
-    struct msg_t
+    struct __attribute__((packed, aligned(1))) msg_t
     {
         uint32_t f0, f1, f2;
+        uint8_t noalign_field;
     };
     
     os::fmem_queue<msg_t, 4, 4> large_queue;
@@ -281,15 +282,17 @@ static struct fqueue_task: os::task<fqueue_task, STK(0xF8)>
         {
             sleep(1000);
             
+            printf("msg_t size = %d", sizeof(msg_t));
+            
             for (uint32_t i = 1; i < 7; i++, sleep(100))
             {
-                msg_t msg = {i, i << 1, i << 2};
+                msg_t msg = {i, i << 1, i << 2, static_cast<typeof(msg_t::noalign_field)>(i)};
                 auto res = large_queue.send(msg, 300);
                 switch(res)
                 {
-                    case os::rc::ok: printf("{%d, %d, %d} value sended to small_queue\n", msg.f0, msg.f1, msg.f2); break;
-                    case os::rc::timeout: printf("{%d, %d, %d} value not sended to small_queue (timeout)\n", msg.f0, msg.f1, msg.f2); break;
-                    default: printf("Test failed! {%d, %d, %d} value not sended to small_queue (something wrong)\n", msg.f0, msg.f1, msg.f2); break;
+                    case os::rc::ok: printf("{%d, %d, %d} value sended to extended_queue\n", msg.f0, msg.f1, msg.f2); break;
+                    case os::rc::timeout: printf("{%d, %d, %d} value not sended to extended_queue (timeout)\n", msg.f0, msg.f1, msg.f2); break;
+                    default: printf("Test failed! {%d, %d, %d} value not sended to extended_queue (something wrong)\n", msg.f0, msg.f1, msg.f2); break;
                 }
             }
             
@@ -298,13 +301,13 @@ static struct fqueue_task: os::task<fqueue_task, STK(0xF8)>
             
             for (uint32_t i = 1; i < 7; i++, sleep(100))
             {
-                msg_t msg = {i, (i << 1) + 0xF0, (i << 2) + 0xF0};
+                msg_t msg = {i, (i << 1) + 0xF0, (i << 2) + 0xF0, static_cast<typeof(msg_t::noalign_field)>(i)};
                 auto res = large_queue.send(msg, 300);
                 switch(res)
                 {
-                    case os::rc::ok: printf("{%d, %d, %d} value sended to small_queue\n", msg.f0, msg.f1, msg.f2); break;
-                    case os::rc::timeout: printf("{%d, %d, %d} value not sended to small_queue (timeout)\n", msg.f0, msg.f1, msg.f2); break;
-                    default: printf("Test failed! {%d, %d, %d} value not sended to small_queue (something wrong)\n", msg.f0, msg.f1, msg.f2); break;
+                    case os::rc::ok: printf("{%d, %d, %d} value sended to extended_queue\n", msg.f0, msg.f1, msg.f2); break;
+                    case os::rc::timeout: printf("{%d, %d, %d} value not sended to extended_queue (timeout)\n", msg.f0, msg.f1, msg.f2); break;
+                    default: printf("Test failed! {%d, %d, %d} value not sended to extended_queue (something wrong)\n", msg.f0, msg.f1, msg.f2); break;
                 }
             }
             
@@ -314,9 +317,9 @@ static struct fqueue_task: os::task<fqueue_task, STK(0xF8)>
                 auto res = large_queue.receive(msg, 300);
                 switch(res)
                 {
-                    case os::rc::ok: printf("{%d, %d, %d} value received from small_queue\n", msg.f0, msg.f1, msg.f2); break;
-                    case os::rc::timeout: printf("Value not received from small_queue (timeout)\n"); break;
-                    default: printf("Test failed! Value not received from small_queue (something wrong)\n", i); break;
+                    case os::rc::ok: printf("{%d, %d, %d} value received from extended_queue\n", msg.f0, msg.f1, msg.f2); break;
+                    case os::rc::timeout: printf("Value not received from extended_queue (timeout)\n"); break;
+                    default: printf("Test failed! Value not received from extended_queue (something wrong)\n", i); break;
                 }
             }
         }
@@ -337,7 +340,7 @@ static struct susp_ctl_task : os::task<susp_ctl_task, STK(0x60)>
             printf("susp_task is runing\n");
         }
         using os::task<susp_task, STK(0xC0)>::task;
-    } susp_task_obj = {"susp_task", os::priority::normal, os::task_base::opt::nostart};
+    } susp_task_obj = {"susp_task", os::priority::normal, os::opt::nostart};
 
     void task_func(void) __attribute__((__noreturn__))
     {

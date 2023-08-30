@@ -17,7 +17,15 @@ namespace os
 
 //-- utils ----------------------------------------------------------------------------------------/
 
-template <uint32_t sz>
+template <class T, class aT, const uint32_t cnt = 1>
+struct align_buf
+{
+    static inline constexpr auto item_size = ((sizeof(T) - 1) / (sizeof(aT)) + 1) * sizeof(aT);
+private:
+    aT raw[item_size / sizeof(aT)][cnt];
+};
+
+template <const uint32_t sz>
 struct stack
 {
     static_assert(sz % sizeof(uint64_t) == 0, "mempool item must be a multiple of 8 bytes");
@@ -287,7 +295,6 @@ public:
 template <class T> class fmem_typed: public fmem_base
 {
 static_assert(sizeof(T) >= sizeof(void *), "mempool item must be 4 bytes or greater");
-static_assert(sizeof(T) % sizeof(uint32_t) == 0, "size of mempool item must be a multiple of 4 bytes");
 
 public:
     class item
@@ -380,18 +387,18 @@ public:
     
     fmem_typed(void) = delete;
     fmem_typed(T *const _start_addr, const uint32_t _blocks_cnt):
-        fmem_base(static_cast<void *>(_start_addr), sizeof(T), _blocks_cnt){}
+        fmem_base(static_cast<void *>(_start_addr), align_buf<T, uint32_t>::item_size, _blocks_cnt){}
 };
 
 
 template <class T, uint32_t cnt> class fmem: public fmem_typed<T>
 {
-static_assert(cnt > 0, "count of mempool items must be greater than 0");
+static_assert(cnt >= 2, "count of mempool items must be greater or equal to 2");
 
 private:
-    T pool_[cnt];
+    align_buf<T, uint32_t, cnt> pool_;
 public:
-    fmem(void): fmem_typed<T>(pool_, cnt){}
+    fmem(void): fmem_typed<T>(reinterpret_cast<T *const>(&pool_), cnt){}
 };
 
 //-- event group from tn_eventgrp.h ---------------------------------------------------------------/

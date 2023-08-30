@@ -14,3 +14,4 @@
 #pragma clang diagnostic ignored "-Wgnu-zero-variadic-macro-arguments"
 #pragma clang diagnostic ignored "-Wswitch-enum" // #pragma clang diagnostic ignored "-Wswitch"
 #pragma clang diagnostic ignored "-Wundef"
+#pragma clang diagnostic ignored "-Wlanguage-extension-token"
