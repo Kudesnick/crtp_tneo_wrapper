@@ -92,6 +92,7 @@ static struct fmem_task: os::task<fmem_task, STK(0x120)>
 
     os::fmem<item_t, 3> pool_1;
     os::fmem<item_t, 3> pool_2;
+    os::fmem<item_t, 0> pool_3;
     
     item_t raw_pool[3];
 
@@ -102,6 +103,7 @@ static struct fmem_task: os::task<fmem_task, STK(0x120)>
         printf("snapshot:\n");
         printf("mempool_1 " U32 " used: %d, free: %d\n", &pool_1, pool_1.used_cnt_get(), pool_1.free_cnt_get());
         printf("mempool_2 " U32 " used: %d, free: %d\n", &pool_2, pool_2.used_cnt_get(), pool_2.free_cnt_get());
+        printf("mempool_3 " U32 " used: %d, free: %d\n", &pool_3, pool_3.used_cnt_get(), pool_3.free_cnt_get());
         int cnt = 0;
         for (auto &i : items)
         {
@@ -141,7 +143,7 @@ static struct fmem_task: os::task<fmem_task, STK(0x120)>
             items[i].acquire(pool_2, os::infinitely);
         }
         printf("After accure raw_pool ");
-        print_snapshot();        
+        print_snapshot();
         
         for(uint32_t i = 0;;i++)
         {
@@ -274,6 +276,7 @@ static struct fqueue_task: os::task<fqueue_task, STK(0xF8)>
     };
     
     os::fmem_queue<msg_t, 4, 4> large_queue;
+    os::fmem_queue<msg_t, 0, 0> empty_large_queue;
     
     void task_func(void) __attribute__((__noreturn__))
     {
@@ -281,7 +284,7 @@ static struct fqueue_task: os::task<fqueue_task, STK(0xF8)>
         {
             sleep(1000);
             
-            printf("msg_t size = %d", sizeof(msg_t));
+            printf("msg_t size = %d\n", sizeof(msg_t));
             
             for (uint32_t i = 1; i < 7; i++, sleep(100))
             {

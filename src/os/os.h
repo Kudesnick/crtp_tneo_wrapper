@@ -17,12 +17,15 @@ namespace os
 
 //-- utils ----------------------------------------------------------------------------------------/
 
-template <class T, class aT, const uint32_t cnt = 1>
+template <class T, class aT, const uint32_t cnt = 0>
 struct align_buf
 {
     static inline constexpr auto item_size = ((sizeof(T) - 1) / (sizeof(aT)) + 1) * sizeof(aT);
 private:
-    aT raw[item_size / sizeof(aT)][cnt];
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wzero-length-array"
+    aT raw[cnt][item_size / sizeof(aT)];
+#pragma clang diagnostic pop
 };
 
 template <const uint32_t sz>
@@ -393,12 +396,10 @@ public:
 
 template <class T, uint32_t cnt> class fmem: public fmem_typed<T>
 {
-static_assert(cnt >= 2, "count of mempool items must be greater or equal to 2");
-
 private:
     align_buf<T, uint32_t, cnt> pool_;
 public:
-    fmem(void): fmem_typed<T>(reinterpret_cast<T *const>(&pool_), cnt){}
+    fmem(void): fmem_typed<T>(cnt ? reinterpret_cast<T *const>(&pool_) : nullptr, cnt){}
 };
 
 //-- event group from tn_eventgrp.h ---------------------------------------------------------------/
@@ -527,10 +528,13 @@ public:
 template <class T, uint32_t const queue_cnt, const uint32_t fmem_cnt> class fmem_queue: public fmem_queue_typed<T>
 {
 private:
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wzero-length-array"
     T *fifo_[queue_cnt];
+#pragma clang diagnostic pop
     fmem<T, fmem_cnt> fmem_;
 public:
-    fmem_queue(void): fmem_queue_typed<T>(fmem_, fifo_, queue_cnt){}
+    fmem_queue(void): fmem_queue_typed<T>(fmem_, queue_cnt ? fifo_ : nullptr, queue_cnt){}
 };
 
 //-- timers from tn_timer.h ------------------------------------------------------------------------/
