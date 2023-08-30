@@ -25,7 +25,7 @@ static struct blink_task: os::task<blink_task, STK(0x70)>
 {
     static inline os::semaphore blink_sem = {1,1};
     
-    struct timer: os::timer<timer, 200, os::repeat>
+    struct timer: os::timer<timer, 200, os::repeat, os::opt::start>
     {
         void timer_func(void)
         {
@@ -35,7 +35,6 @@ static struct blink_task: os::task<blink_task, STK(0x70)>
 
     void task_func(void) __attribute__((__noreturn__))
     {
-        // blink_timer.start(200);
         for(bsp::led C13;;blink_sem.acquire(os::infinitely))
             C13.toggle();
     }
