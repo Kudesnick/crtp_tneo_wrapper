@@ -21,7 +21,19 @@
 //-- timer test -----------------------------------------------------------------------------------/
 
 #if TEST_TIMER
-static struct blink_task: os::task<blink_task, STK(0x70)>
+// For example of two-level CRTP "inheritance"
+template <class T, uint32_t _stack_size> struct blink_tmpl: os::task<T, _stack_size>
+{
+    bsp::led &blinker;
+    blink_tmpl(bsp::led &_blinker): 
+        os::task<T, _stack_size>("blink_task"),
+        blinker(_blinker)
+    {}
+};
+
+static bsp::led C13;
+
+static struct blink_task: blink_tmpl<blink_task, STK(0x68)>
 {
     static inline os::semaphore blink_sem = {1,1};
     
@@ -35,11 +47,11 @@ static struct blink_task: os::task<blink_task, STK(0x70)>
 
     void task_func(void) __attribute__((__noreturn__))
     {
-        for(bsp::led C13;;blink_sem.acquire(os::infinitely))
-            C13.toggle();
+        for(;;blink_sem.acquire(os::infinitely))
+            blinker.toggle();
     }
-    using os::task<blink_task, STK(0x70)>::task;
-} blink_task_obj = "blink_task";
+    using blink_tmpl<blink_task, STK(0x68)>::blink_tmpl;
+    } blink_task_obj = C13;
 #endif
 
 //-- tasks for yeld testing -----------------------------------------------------------------------/
