@@ -261,7 +261,7 @@ rc fmem_base::acquire(void **_p_data, const uint32_t _timeout)
     }
 }
 
-rc fmem_base::acquire_memcpy(void **_p_data, void *_p_source, const uint32_t _timeout)
+rc fmem_base::acquire_memcpy(void **_p_data, const void *_p_source, const uint32_t _timeout)
 {
     rc ret = acquire(_p_data, _timeout);
     
@@ -405,7 +405,7 @@ rc queue_base::receive(void **_pp_data, const uint32_t _timeout)
     }
 }
 
-rc queue_base::send_acquire(fmem_base &_fmem, void *_p_data, const uint32_t _timeout)
+rc queue_base::send_acquire(fmem_base &_fmem, const void *_p_data, const uint32_t _timeout)
 {
     uint32_t timestamp = tick_get();
     void *ptr;

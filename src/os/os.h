@@ -281,7 +281,7 @@ protected:
 public:
 
     rc acquire(void **_p_data, const uint32_t _timeout = nowait);
-    rc acquire_memcpy(void **_p_data, void *_p_source, const uint32_t _timeout = nowait);
+    rc acquire_memcpy(void **_p_data, const void *_p_source, const uint32_t _timeout = nowait);
     rc release(void *_p_data);
     rc append(void *_p_data);
     rc reset(void);
@@ -451,7 +451,7 @@ protected:
     queue_base(void **_pp_fifo, const uint32_t);
     rc send(void *const _p_data, const uint32_t _timeout = nowait);
     rc receive(void **_pp_data, const uint32_t _timeout = nowait);
-    rc send_acquire(fmem_base &_fmem, void *_p_data, const uint32_t _timeout = nowait);
+    rc send_acquire(fmem_base &_fmem, const void *_p_data, const uint32_t _timeout = nowait);
     rc receive_release(fmem_base &_fmem, void *_p_data, const uint32_t _timeout = nowait);
 public:
     int32_t free_cnt_get(void);
@@ -472,7 +472,7 @@ public:
     queue_typed(void **_pp_fifo = nullptr, const uint32_t _items = 0): queue_base(_pp_fifo, _items)
     {}
 
-    rc send(T &_data, const uint32_t _timeout = nowait)
+    rc send(const T &_data, const uint32_t _timeout = nowait)
     {
         return queue_base::send(reinterpret_cast<void *>(_data), _timeout);
     }
@@ -505,7 +505,7 @@ public:
         fmem(_fmem)
     {}
 
-    rc send(T &_data, const uint32_t _timeout = nowait)
+    rc send(const T &_data, const uint32_t _timeout = nowait)
     {
         return queue_base::send_acquire(fmem, &_data, _timeout);
     }
@@ -589,6 +589,11 @@ public:
                 PRINTFAULT("timer not started after created\n");
             }
         }
+    }
+    
+    ~timer()
+    {
+        static_assert(std::is_member_function_pointer_v<decltype(&T::timer_func)>, "timer_func should be implemented");
     }
 };
 
