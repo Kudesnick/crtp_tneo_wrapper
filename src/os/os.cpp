@@ -154,7 +154,7 @@ task_base::~task_base()
 {
     if (__tn::tn_task_delete(&task_) != __tn::TN_RC_OK)
     {
-        PRINTFAULT("rask destructor error\n");
+        PRINTFAULT("task destructor error\n");
     }
 }
 

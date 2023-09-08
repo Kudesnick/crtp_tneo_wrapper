@@ -153,8 +153,6 @@ public:
         suspend    = __tn::TN_TASK_STATE_SUSPEND,
         waitsusp   = __tn::TN_TASK_STATE_WAITSUSP,
         dormant    = __tn::TN_TASK_STATE_DORMANT,
-        yield      = __tn::TN_TASK_STATE_YIELD,
-        runtoyield = __tn::TN_TASK_STATE_RUNTOYIELD,
         err        = -1,
     };
 

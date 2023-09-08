@@ -8,6 +8,7 @@
 #include "csp_spi.h"
 #include "mx25l128.h"
 
+#define NO_RROBIN   (1)
 #define TEST_TIMER  (1)
 #define TEST_YIELD  (1)
 #define TEST_PRINTF (1)
@@ -29,6 +30,10 @@ template <class T, uint32_t _stack_size> struct blink_tmpl: os::task<T, _stack_s
         os::task<T, _stack_size>("blink_task"),
         blinker(_blinker)
     {}
+    ~blink_tmpl()
+    {
+        static_assert(std::is_member_function_pointer_v<decltype(&T::task_func)>, "task_func should be implemented");
+    }
 };
 
 static bsp::led C13;
@@ -48,7 +53,11 @@ static struct blink_task: blink_tmpl<blink_task, STK(0x68)>
     void task_func(void) __attribute__((__noreturn__))
     {
         for(;;blink_sem.acquire(os::infinitely))
+        {
             blinker.toggle();
+            yield();
+            sleep(10);
+        }
     }
     using blink_tmpl<blink_task, STK(0x68)>::blink_tmpl;
     } blink_task_obj = C13;
@@ -347,13 +356,13 @@ static struct fqueue_task: os::task<fqueue_task, STK(0xF8)>
 #if TEST_SUSP
 static struct susp_ctl_task : os::task<susp_ctl_task, STK(0x60)>
 {
-    struct susp_task : os::task<susp_task, STK(0xC0)>
+    struct susp_task : os::task<susp_task, STK(0xA0)>
     {
         void task_func(void)
         {
             printf("susp_task is runing\n");
         }
-        using os::task<susp_task, STK(0xC0)>::task;
+        using os::task<susp_task, STK(0xA0)>::task;
     } susp_task_obj = {"susp_task", os::priority::normal, os::opt::nostart};
 
     void task_func(void) __attribute__((__noreturn__))
@@ -410,7 +419,12 @@ struct kernel: os::kernel<kernel, STK(0x48)>
     }
     static void sw_init(void)
     {
-        os::tslice_set(os::priority::low, 10);
+#if !NO_RROBIN
+        os::tslice_set(os::priority::low     , 10);
+        os::tslice_set(os::priority::normal  , 10);
+        os::tslice_set(os::priority::high    , 10);
+        os::tslice_set(os::priority::relatime, 10);
+#endif
     }
     void task_func(void) __attribute__((__noreturn__))
     {
