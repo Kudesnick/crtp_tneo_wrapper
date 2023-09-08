@@ -55,6 +55,8 @@ Revision: $Rev: 24316 $
 
 */
 
+//-------- <<< Use Configuration Wizard in Context Menu >>> ----------
+
 #ifndef SEGGER_RTT_CONF_H
 #define SEGGER_RTT_CONF_H
 
@@ -91,21 +93,34 @@ Revision: $Rev: 24316 $
   #define SEGGER_RTT_MAX_NUM_DOWN_BUFFERS           (1)     // Max. number of down-buffers (H->T) available on this target  (Default: 3)
 #endif
 
+// <h> RTT configuration
+
+//   <o> Output buffer size (in Bytes) <0x0-0xFFFFFFFF:1>
+//   <i> Size of the buffer for terminal output of target, up to host (Default: 1k)
 #ifndef   BUFFER_SIZE_UP
   #define BUFFER_SIZE_UP                            (64)    // Size of the buffer for terminal output of target, up to host (Default: 1k)
 #endif
+
+//   <o> Input buffer size (in Bytes) <0x0-0xFFFFFFFF:1>
+//   <i> Size of the buffer for terminal input to target from host (Usually keyboard input) (Default: 16)
 
 #ifndef   BUFFER_SIZE_DOWN
   #define BUFFER_SIZE_DOWN                          (16)    // Size of the buffer for terminal input to target from host (Usually keyboard input) (Default: 16)
 #endif
 
-#ifndef   SEGGER_RTT_PRINTF_BUFFER_SIZE
-  #define SEGGER_RTT_PRINTF_BUFFER_SIZE             (0u)    // Size of buffer for RTT printf to bulk-send chars via RTT     (Default: 64)
+//  <o> RTT channel 0 mode
+//      <0=>Skip
+//      <1=>Trim
+//      <2=>Block
+//  <i> Mode for pre-initialized terminal channel (buffer 0)
+#ifndef   SEGGER_RTT_MODE_DEFAULT
+  #define SEGGER_RTT_MODE_DEFAULT                   (0u)    // Mode for pre-initialized terminal channel (buffer 0)
 #endif
 
-#ifndef   SEGGER_RTT_MODE_DEFAULT
-//  #define SEGGER_RTT_MODE_DEFAULT                   SEGGER_RTT_MODE_BLOCK_IF_FIFO_FULL // Mode for pre-initialized terminal channel (buffer 0)
-  #define SEGGER_RTT_MODE_DEFAULT                   SEGGER_RTT_MODE_NO_BLOCK_SKIP      // Mode for pre-initialized terminal channel (buffer 0)
+//  </h>
+
+#ifndef   SEGGER_RTT_PRINTF_BUFFER_SIZE
+  #define SEGGER_RTT_PRINTF_BUFFER_SIZE             (0u)    // Size of buffer for RTT printf to bulk-send chars via RTT     (Default: 64)
 #endif
 
 /*********************************************************************
