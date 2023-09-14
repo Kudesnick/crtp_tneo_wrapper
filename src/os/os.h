@@ -177,6 +177,14 @@ template <class T, uint32_t _stack_size>
 class task : public task_base, private stack<_stack_size>
 {
 public:
+    constexpr inline void *obj_ptr(void)
+    {
+        #pragma clang diagnostic push
+        #pragma clang diagnostic ignored "-Wold-style-cast"
+        return (void *)((uint32_t)this - (uint32_t)&((T *)nullptr)->task_);
+        #pragma clang diagnostic pop
+    }
+
     task(void): task(nullptr){}
     task(const char *const _name, const priority _priority = priority::normal, const opt _opt = opt::start)
     {
@@ -186,7 +194,7 @@ public:
                 static_cast<int>(_priority),
                 reinterpret_cast<__tn::TN_UWord *>(this->stack_ptr),
                 this->stack_size / sizeof(uint32_t),
-                this,
+                obj_ptr(),
                 (_opt == opt::start) ? __tn::TN_TASK_CREATE_OPT_START : __tn::TN_TASK_CREATE_OPT_SUSPENDED,
                 _name
                 ) != __tn::TN_RC_OK)
@@ -541,6 +549,7 @@ class timer_base
 {
 protected:
     __tn::TN_Timer timer_;
+    void(*func_)(void*);
     uint32_t timeout_;
     repeat_timer repeat_;
 
@@ -548,7 +557,7 @@ protected:
 
 public:
     timer_base(void) = delete;
-    timer_base(void(*_func)(void*), const uint32_t _timeout = os::nowait, const repeat_timer _repeat = os::norepeat);
+    timer_base(void(*_func)(void*), void *_param, const uint32_t _timeout = os::nowait, const repeat_timer _repeat = os::norepeat);
     rc start(void);
     rc start(const uint32_t _timeout);
     rc start(const uint32_t _timeout, const repeat_timer _repeat);
@@ -562,7 +571,15 @@ public:
 template <class T, const uint32_t _timeout = os::nowait, const repeat_timer _repeat = os::norepeat, const opt _opt = opt::nostart> class timer : public timer_base
 {
 public:
-    timer(void): timer_base(member_to_func(&T::timer_func), _timeout, _repeat)
+    constexpr inline void *obj_ptr(void)
+    {
+        #pragma clang diagnostic push
+        #pragma clang diagnostic ignored "-Wold-style-cast"
+        return (void *)((uint32_t)this - (uint32_t)&((T *)nullptr)->timer_);
+        #pragma clang diagnostic pop
+    }
+
+    timer(void): timer_base(member_to_func(&T::timer_func), obj_ptr(), _timeout, _repeat)
     {
         if constexpr (_timeout != os::nowait && _timeout != os::infinitely && _opt == opt::start)
         {
@@ -574,11 +591,11 @@ public:
     }
 
     timer(const uint32_t _i_timeout, const repeat_timer _i_repeat = os::norepeat):
-        timer_base(member_to_func(&T::timer_func), _i_timeout, _i_repeat)
+        timer_base(member_to_func(&T::timer_func), obj_ptr(), _i_timeout, _i_repeat)
     {}
 
     timer(const uint32_t _i_timeout, const repeat_timer _i_repeat, const opt _i_opt = opt::nostart):
-        timer_base(member_to_func(&T::timer_func), _i_timeout, _i_repeat)
+        timer_base(member_to_func(&T::timer_func), obj_ptr(), _i_timeout, _i_repeat)
     {
         if (_i_timeout != os::nowait && _i_timeout != os::infinitely && _i_opt == opt::start)
         {

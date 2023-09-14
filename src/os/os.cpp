@@ -475,14 +475,11 @@ queue_base::~queue_base()
 
 //-- timers from tn_timer.h ------------------------------------------------------------------------/
 
-void timer_base::handler_(__tn::TN_Timer *_timer, void *_func)
+void timer_base::handler_(__tn::TN_Timer *_timer, void *_param)
 {
     timer_base *const &timer_obj = reinterpret_cast<timer_base *>(_timer);
     
-    if (_func)
-    {
-        reinterpret_cast<void(*)(void*)>(_func)(timer_obj);
-    }
+    timer_obj->func_(_param);
     
     if (timer_obj->repeat_)
     {
@@ -490,13 +487,13 @@ void timer_base::handler_(__tn::TN_Timer *_timer, void *_func)
     }
 }
 
-timer_base::timer_base(void(*_func)(void*), const uint32_t _timeout, const repeat_timer _repeat):
-    timeout_(_timeout), repeat_(_repeat)
+timer_base::timer_base(void(*_func)(void*), void *_param, const uint32_t _timeout, const repeat_timer _repeat):
+    func_(_func), timeout_(_timeout), repeat_(_repeat)
 {
     if (__tn::tn_timer_create(
             &timer_,
             handler_,
-            reinterpret_cast<void *>(_func)
+            _param
             ) != __tn::TN_RC_OK)
     {
         PRINTFAULT("timer not created\n");
