@@ -65,13 +65,14 @@ enum class rc: int8_t
    internal    =  __tn::TN_RC_INTERNAL,
 };
 
-enum class priority: uint8_t
+enum class priority: int8_t
 {
-    idle     = 4,
-    low      = 3,
-    normal   = 2,
-    high     = 1,
-    relatime = 0,
+    base     = -1,
+    realtime =  0,
+    high     =  1,
+    normal   =  2,
+    low      =  3,
+    idle     =  4,
 };
 
 enum class sys_state: uint8_t
